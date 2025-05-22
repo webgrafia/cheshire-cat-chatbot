@@ -1,6 +1,6 @@
 <?php
 
-namespace CheshireCatWp;
+namespace webgrafia\cheshirecat;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 /**
  * Handle AJAX request for sending a message to Cheshire Cat.
  */
-function cheshire_send_message()
+function cheshirecat_send_message()
 {
     check_ajax_referer('cheshire_ajax_nonce', 'nonce');
 
@@ -21,10 +21,10 @@ function cheshire_send_message()
         $cheshire_plugin_token = get_option('cheshire_plugin_token');
 
         if (empty($cheshire_plugin_url) || empty($cheshire_plugin_token)) {
-            wp_send_json_error(__('Cheshire Cat URL or Token not set.', 'cheshire-cat-wp'));
+            wp_send_json_error(__('Cheshire Cat URL or Token not set.', 'cheshire-cat-chatbot'));
         }
 
-        $cheshire_cat = new CustomCheshireCat($cheshire_plugin_url, $cheshire_plugin_token);
+        $cheshire_cat = new inc\classes\CHESHIRECAT_CustomCheshireCat($cheshire_plugin_url, $cheshire_plugin_token);
 
         try {
             $response = $cheshire_cat->sendMessage($message);
@@ -33,8 +33,40 @@ function cheshire_send_message()
             wp_send_json_error($e->getMessage());
         }
     } else {
-        wp_send_json_error(__('Message not provided.', 'cheshire-cat-wp'));
+        wp_send_json_error(__('Message not provided.', 'cheshire-cat-chatbot'));
     }
 }
-add_action('wp_ajax_cheshire_send_message', __NAMESPACE__ . '\cheshire_send_message');
-add_action('wp_ajax_nopriv_cheshire_send_message', __NAMESPACE__ . '\cheshire_send_message');
+add_action('wp_ajax_cheshire_send_message', __NAMESPACE__ . '\cheshirecat_send_message');
+add_action('wp_ajax_nopriv_cheshire_send_message', __NAMESPACE__ . '\cheshirecat_send_message');
+
+/**
+ * Handle AJAX request for the cheshire_plugin_ajax action.
+ */
+function cheshire_plugin_ajax()
+{
+    check_ajax_referer('cheshire_ajax_nonce', 'nonce');
+
+    if (isset($_POST['message'])) {
+        $message = sanitize_text_field(wp_unslash($_POST['message']));
+
+        $cheshire_plugin_url = get_option('cheshire_plugin_url');
+        $cheshire_plugin_token = get_option('cheshire_plugin_token');
+
+        if (empty($cheshire_plugin_url) || empty($cheshire_plugin_token)) {
+            wp_send_json_error(__('Cheshire Cat URL or Token not set.', 'cheshire-cat-chatbot'));
+        }
+
+        $cheshire_cat = new inc\classes\CHESHIRECAT_CustomCheshireCat($cheshire_plugin_url, $cheshire_plugin_token);
+
+        try {
+            $response = $cheshire_cat->sendMessage($message);
+            wp_send_json_success($response);
+        } catch (\Exception $e) {
+            wp_send_json_error($e->getMessage());
+        }
+    } else {
+        wp_send_json_error(__('Message not provided.', 'cheshire-cat-chatbot'));
+    }
+}
+add_action('wp_ajax_cheshire_plugin_ajax', __NAMESPACE__ . '\cheshire_plugin_ajax');
+add_action('wp_ajax_nopriv_cheshire_plugin_ajax', __NAMESPACE__ . '\cheshire_plugin_ajax');

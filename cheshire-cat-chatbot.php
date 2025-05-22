@@ -1,20 +1,20 @@
 <?php
 /*
-Plugin Name: Cheshire Cat WP
+Plugin Name: Cheshire Cat Chatbot
 Description: A WordPress plugin to integrate the Cheshire Cat AI chatbot, offering seamless conversational AI for your site.
-Version: 0.3
+Version: 0.4
 Author: Marco Buttarini
 Author URI: https://bititup.it/
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
-Text Domain: cheshire-cat-wp
+Text Domain: cheshire-cat-chatbot
 Domain Path: /languages
 Requires at least: 5.8
 Requires PHP: 7.4
-Tested up to: 6.5.2
+Tested up to: 6.8
 */
 
-namespace CheshireCatWp;
+namespace webgrafia\cheshirecat;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -31,7 +31,7 @@ require_once __DIR__ . '/inc/classes/CustomCheshireCat.php';
 /**
  * Enqueue scripts and styles.
  */
-function cheshire_enqueue_scripts()
+function cheshirecat_enqueue_scripts()
 {
     wp_enqueue_script('cheshire-chat-js', plugins_url('/assets/js/chat.js', __FILE__), array('jquery'), '1.0', true);
     wp_enqueue_style('cheshire-chat-css', plugins_url('/assets/css/chat.css', __FILE__), array(), '1.0');
@@ -43,23 +43,15 @@ function cheshire_enqueue_scripts()
     wp_enqueue_style('font-awesome-css', plugins_url('/assets/css/font-awesome/all.min.css', __FILE__), array(), '1.0');
 
     // Add dynamic CSS
-    wp_add_inline_style('cheshire-chat-css', cheshire_generate_dynamic_css());
+    wp_add_inline_style('cheshire-chat-css', cheshirecat_generate_dynamic_css());
 }
-add_action('wp_enqueue_scripts', __NAMESPACE__ . '\cheshire_enqueue_scripts');
+add_action('wp_enqueue_scripts', __NAMESPACE__ . '\cheshirecat_enqueue_scripts');
 
-/**
- * Load plugin textdomain.
- */
-function cheshire_load_textdomain()
-{
-    load_plugin_textdomain('cheshire-cat-wp', false, dirname(plugin_basename(__FILE__)) . '/languages/');
-}
-add_action('plugins_loaded', __NAMESPACE__ . '\cheshire_load_textdomain');
 
 /**
  * Generate dynamic CSS based on the saved style settings.
  */
-function cheshire_generate_dynamic_css()
+function cheshirecat_generate_dynamic_css()
 {
     $chat_background_color = get_option('cheshire_chat_background_color', '#ffffff');
     $chat_text_color = get_option('cheshire_chat_text_color', '#333333');
@@ -70,26 +62,26 @@ function cheshire_generate_dynamic_css()
 
     $custom_css = "
         #cheshire-chat-container {
-            background-color: {$chat_background_color};
-            font-family: {$chat_font_family};
+            background-color: " . esc_attr($chat_background_color) . ";
+            font-family: " . esc_attr($chat_font_family) . ";
         }
         #cheshire-chat-messages {
-            background-color: {$chat_background_color};
+            background-color: " . esc_attr($chat_background_color) . ";
         }
         .user-message {
-            background-color: {$chat_user_message_color};
+            background-color: " . esc_attr($chat_user_message_color) . ";
         }
         .bot-message {
-            background-color: {$chat_bot_message_color};
+            background-color: " . esc_attr($chat_bot_message_color) . ";
         }
         #cheshire-chat-send {
-            color: {$chat_button_color};
+            color: " . esc_attr($chat_button_color) . ";
         }
         #cheshire-chat-input {
-            color: {$chat_text_color};
+            color: " . esc_attr($chat_text_color) . ";
         }
         .bot-message, .error-message {
-            color: {$chat_text_color};
+            color: " . esc_attr($chat_text_color) . ";
         }
         .user-message {
             color: #fff;
@@ -102,8 +94,8 @@ function cheshire_generate_dynamic_css()
 /**
  * Display the welcome message.
  */
-function cheshire_display_welcome_message()
+function cheshirecat_display_welcome_message()
 {
-    $welcome_message = get_option('cheshire_chat_welcome_message', __('Hello! How can I help you?', 'cheshire-cat-wp'));
+    $welcome_message = get_option('cheshire_chat_welcome_message', __('Hello! How can I help you?', 'cheshire-cat-chatbot'));
     echo '<div class="bot-message"><p>' . esc_html($welcome_message) . '</p></div>';
 }

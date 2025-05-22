@@ -1,6 +1,6 @@
 <?php
 
-namespace CheshireCatWp\inc;
+namespace webgrafia\cheshirecat\inc;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {

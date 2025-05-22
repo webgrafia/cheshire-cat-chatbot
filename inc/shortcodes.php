@@ -1,29 +1,38 @@
 <?php
+
+namespace webgrafia\cheshirecat;
+
+// Exit if accessed directly.
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 // Shortcode to display the chat
-function cheshire_chat_shortcode()
+function cheshirecat_chat_shortcode()
 {
     ob_start();
+
     ?>
     <div id="cheshire-chat-container">
         <div id="cheshire-chat-messages">
-            <?php \CheshireCatWp\cheshire_display_welcome_message(); ?>
+            <?php cheshirecat_display_welcome_message(); ?>
         </div>
         <div id="cheshire-chat-input-container">
-            <input type="text" id="cheshire-chat-input" placeholder="<?php esc_attr_e('Type your message...', 'cheshire-cat-wp'); ?>">
+            <input type="text" id="cheshire-chat-input" placeholder="<?php esc_attr_e('Type your message...', 'cheshire-cat-chatbot'); ?>">
             <button id="cheshire-chat-send"></button>
         </div>
     </div>
     <?php
     return ob_get_clean();
 }
-add_shortcode('cheshire_chat', 'cheshire_chat_shortcode');
+add_shortcode('cheshire_chat', __NAMESPACE__ . '\cheshirecat_chat_shortcode');
 
 // Add the chat to all pages if the option is enabled
-function cheshire_add_global_chat()
+function cheshirecat_add_global_chat()
 {
     $cheshire_global_chat = get_option('cheshire_plugin_global_chat');
     if ($cheshire_global_chat === 'on') {
         echo do_shortcode('[cheshire_chat]');
     }
 }
-add_action('wp_footer', 'cheshire_add_global_chat');
+add_action('wp_footer', __NAMESPACE__ . '\cheshirecat_add_global_chat');

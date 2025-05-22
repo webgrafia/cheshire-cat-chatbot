@@ -1,0 +1,216 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Cheshire Cat Chatbot\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-22 18:16+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.11; wp-6.8.1\n"
+"X-Domain: cheshire-cat-chatbot"
+
+#: inc/admin/overview.php:35
+msgid ""
+"<strong>Cheshire Cat Token:</strong> The API token for your Cheshire Cat AI "
+"instance."
+msgstr ""
+
+#: inc/admin/overview.php:34
+msgid ""
+"<strong>Cheshire Cat URL:</strong> The URL where your Cheshire Cat AI "
+"instance is running."
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"A WordPress plugin to integrate the Cheshire Cat AI chatbot, offering "
+"seamless conversational AI for your site."
+msgstr ""
+
+#: inc/admin/overview.php:27
+msgid "Before You Begin"
+msgstr ""
+
+#: inc/admin/style.php:68
+msgid "Chat Background Color"
+msgstr ""
+
+#: inc/admin/style.php:80
+msgid "Chat Bot Message Color"
+msgstr ""
+
+#: inc/admin/style.php:84
+msgid "Chat Button Color"
+msgstr ""
+
+#: inc/admin/style.php:88
+msgid "Chat Font Family"
+msgstr ""
+
+#: inc/admin/style.php:72
+msgid "Chat Text Color"
+msgstr ""
+
+#: inc/admin/style.php:76
+msgid "Chat User Message Color"
+msgstr ""
+
+#: inc/admin/configuration.php:58
+msgid "Check this box to enable the chat on every page of your website."
+msgstr ""
+
+#. Page title
+#: inc/admin/admin-menu.php:14 inc/admin/admin-menu.php:15
+msgid "Cheshire Cat"
+msgstr ""
+
+#. Name of the plugin
+msgid "Cheshire Cat Chatbot"
+msgstr ""
+
+#: inc/admin/configuration.php:50
+msgid "Cheshire Cat Token"
+msgstr ""
+
+#: inc/admin/configuration.php:46
+msgid "Cheshire Cat URL"
+msgstr ""
+
+#: inc/ajax.php:24
+msgid "Cheshire Cat URL or Token not set."
+msgstr ""
+
+#. Parent slug
+#. Page title
+#: inc/admin/admin-menu.php:43 inc/admin/admin-menu.php:44
+#: inc/admin/overview.php:39 inc/admin/overview.php:55
+msgid "Configuration"
+msgstr ""
+
+#: inc/admin/overview.php:44
+msgid "Displaying the Chat with the Shortcode"
+msgstr ""
+
+#: inc/admin/overview.php:58
+msgid "do not"
+msgstr ""
+
+#: inc/admin/configuration.php:57
+msgid "Enable Global Chat"
+msgstr ""
+
+#: inc/admin/overview.php:53
+msgid "Enabling Global Chat"
+msgstr ""
+
+#: inc/admin/configuration.php:54
+msgid "Global Chat"
+msgstr ""
+
+#: cheshire-cat-chatbot.php:99 inc/admin/style.php:58
+msgid "Hello! How can I help you?"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://bititup.it/"
+msgstr ""
+
+#: inc/admin/overview.php:55
+msgid ""
+"If you want the chat to appear on every page of your website, you can enable "
+"the \"Global Chat\" option in the"
+msgstr ""
+
+#. Author of the plugin
+msgid "Marco Buttarini"
+msgstr ""
+
+#: inc/ajax.php:36
+msgid "Message not provided."
+msgstr ""
+
+#: inc/admin/overview.php:58
+msgid "need to use the shortcode."
+msgstr ""
+
+#. Parent slug
+#. Page title
+#: inc/admin/admin-menu.php:25 inc/admin/admin-menu.php:26
+msgid "Overview & Usage"
+msgstr ""
+
+#: inc/admin/overview.php:39 inc/admin/overview.php:55
+msgid "section."
+msgstr ""
+
+#: inc/admin/overview.php:50
+msgid ""
+"Simply paste this shortcode into the content area of any page or post where "
+"you want the chat to appear."
+msgstr ""
+
+#. Parent slug
+#. Page title
+#: inc/admin/admin-menu.php:34 inc/admin/admin-menu.php:35
+msgid "Style"
+msgstr ""
+
+#: inc/admin/overview.php:29
+msgid ""
+"This plugin acts as a bridge between your WordPress site and your Cheshire "
+"Cat AI instance."
+msgstr ""
+
+#: inc/admin/overview.php:46
+msgid ""
+"To display the chat on a specific page or post, use the following shortcode:"
+msgstr ""
+
+#: inc/admin/overview.php:29
+msgid "To use this plugin, you must have a working installation of"
+msgstr ""
+
+#: inc/shortcodes.php:20
+msgid "Type your message..."
+msgstr ""
+
+#: inc/admin/overview.php:42
+msgid "Usage"
+msgstr ""
+
+#: inc/admin/style.php:92
+msgid "Welcome Message"
+msgstr ""
+
+#: inc/admin/overview.php:25
+msgid ""
+"Welcome to the Cheshire Cat Chatbot plugin! This plugin allows you to "
+"integrate the powerful Cheshire Cat AI chatbot into your WordPress website."
+msgstr ""
+
+#: inc/admin/overview.php:58
+msgid ""
+"When the Global Chat is enabled, the chat will be automatically added to all "
+"pages, and you"
+msgstr ""
+
+#: inc/admin/overview.php:39
+msgid "You can enter these details in the"
+msgstr ""
+
+#: inc/admin/configuration.php:17 inc/admin/overview.php:17
+#: inc/admin/style.php:17
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: inc/admin/overview.php:32
+msgid ""
+"You will need the following information from your Cheshire Cat AI setup:"
+msgstr ""

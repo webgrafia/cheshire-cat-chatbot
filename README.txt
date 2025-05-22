@@ -1,10 +1,10 @@
-=== Cheshire Cat WP ===
-Contributors: bititup
+=== Cheshire Cat Chatbot ===
+Contributors: webgrafia
 Tags: chatbot, ai, cheshire cat, chat, assistant
 Requires at least: 5.8
 Requires PHP: 7.4
-Tested up to: 6.7.2
-Stable tag: 0.3
+Tested up to: 6.8
+Stable tag: 0.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -12,7 +12,7 @@ A WordPress plugin to integrate the Cheshire Cat AI chatbot, offering seamless c
 
 == Description ==
 
-**Cheshire Cat WP** is a WordPress plugin that seamlessly integrates the [Cheshire Cat AI](https://cheshirecat.ai/) chatbot into your WordPress website. It allows you to add a conversational AI assistant to your site, providing an interactive and engaging experience for your users.
+**Cheshire Cat Chatbot** is a WordPress plugin that seamlessly integrates the [Cheshire Cat AI](https://cheshirecat.ai/) chatbot into your WordPress website. It allows you to add a conversational AI assistant to your site, providing an interactive and engaging experience for your users.
 
 **Features:**
 
@@ -27,7 +27,7 @@ A WordPress plugin to integrate the Cheshire Cat AI chatbot, offering seamless c
 
 == Installation ==
 
-1.  Upload the `cheshire-cat-wp` folder to the `/wp-content/plugins/` directory of your WordPress installation.
+1.  Upload the `cheshire-cat-chatbot` folder to the `/wp-content/plugins/` directory of your WordPress installation.
 2.  Activate the plugin through the 'Plugins' menu in WordPress.
 3.  Go to the WordPress admin panel, then navigate to **Settings -> Cheshire Cat**.
 4.  Enter your Cheshire Cat URL (e.g., `http://localhost:1865`) and your API token.
@@ -58,10 +58,13 @@ Yes, you can enable the "Global Chat" option in the **Settings -> Cheshire Cat**
 
 == Screenshots ==
 
-1.  The Cheshire Cat WP configuration page.
+1.  The Cheshire Cat Chatbot configuration page.
 2.  The chat interface in action.
 
 == Changelog ==
+
+= 0.4 =
+*   Fixes for Plugin Compliance and Security Improvement Guidelines
 
 = 0.3 =
 *   Fixed security issues.

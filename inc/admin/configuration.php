@@ -1,6 +1,6 @@
 <?php
 
-namespace CheshireCatWp\inc\admin;
+namespace webgrafia\cheshirecat\inc\admin;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -10,11 +10,11 @@ if (!defined('ABSPATH')) {
 /**
  * Configuration page callback.
  */
-function cheshire_cat_configuration_page()
+function cheshirecat_configuration_page()
 {
     // Check user capabilities
     if (!current_user_can('manage_options')) {
-        wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'cheshire-cat-wp'));
+        wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'cheshire-cat-chatbot'));
     }
 
     // Handle form submission
@@ -43,19 +43,19 @@ function cheshire_cat_configuration_page()
             <?php wp_nonce_field('cheshire_plugin_save_settings', 'cheshire_plugin_nonce'); ?>
             <table class="form-table">
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e('Cheshire Cat URL', 'cheshire-cat-wp'); ?></th>
+                    <th scope="row"><?php esc_html_e('Cheshire Cat URL', 'cheshire-cat-chatbot'); ?></th>
                     <td><input type="text" name="cheshire_plugin_url" value="<?php echo esc_attr($cheshire_plugin_url); ?>" /></td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e('Cheshire Cat Token', 'cheshire-cat-wp'); ?></th>
+                    <th scope="row"><?php esc_html_e('Cheshire Cat Token', 'cheshire-cat-chatbot'); ?></th>
                     <td><input type="text" name="cheshire_plugin_token" value="<?php echo esc_attr($cheshire_plugin_token); ?>" /></td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e('Global Chat', 'cheshire-cat-wp'); ?></th>
+                    <th scope="row"><?php esc_html_e('Global Chat', 'cheshire-cat-chatbot'); ?></th>
                     <td>
                         <input type="checkbox" name="cheshire_plugin_global_chat" <?php checked($cheshire_plugin_global_chat, 'on'); ?> />
-                        <label for="cheshire_plugin_global_chat"><?php esc_html_e('Enable Global Chat', 'cheshire-cat-wp'); ?></label>
-                        <p class="description"><?php esc_html_e('Check this box to enable the chat on every page of your website.', 'cheshire-cat-wp'); ?></p>
+                        <label for="cheshire_plugin_global_chat"><?php esc_html_e('Enable Global Chat', 'cheshire-cat-chatbot'); ?></label>
+                        <p class="description"><?php esc_html_e('Check this box to enable the chat on every page of your website.', 'cheshire-cat-chatbot'); ?></p>
                     </td>
                 </tr>
             </table>

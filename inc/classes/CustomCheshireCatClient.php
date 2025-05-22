@@ -1,10 +1,15 @@
 <?php
 
-namespace CheshireCatWp\inc\classes;
+namespace webgrafia\cheshirecat\inc\classes;
+
+// Exit if accessed directly.
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 use CheshireCatSdk\Http\Clients\CheshireCatClient;
 use GuzzleHttp\Client;
-class CustomCheshireCatClient extends CheshireCatClient
+class CHESHIRECAT_CustomCheshireCatClient extends CheshireCatClient
 {
     protected $baseUrl;
     protected $token;

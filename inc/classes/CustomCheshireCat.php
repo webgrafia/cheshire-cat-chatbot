@@ -1,9 +1,14 @@
 <?php
 
-namespace CheshireCatWp\inc\classes;
+namespace webgrafia\cheshirecat\inc\classes;
+
+// Exit if accessed directly.
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 use CheshireCatSdk\CheshireCat;
-class CustomCheshireCat extends CheshireCat
+class CHESHIRECAT_CustomCheshireCat extends CheshireCat
 {
     protected $baseUrl;
     protected $token;
@@ -19,7 +24,7 @@ class CustomCheshireCat extends CheshireCat
 
     protected function createClient()
     {
-        return new CustomCheshireCatClient($this->baseUrl, $this->token);
+        return new CHESHIRECAT_CustomCheshireCatClient($this->baseUrl, $this->token);
     }
     public function sendMessage(string $message, array $options = []): array
     {

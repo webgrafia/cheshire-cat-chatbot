@@ -1,6 +1,6 @@
 <?php
 
-namespace CheshireCatWp\inc\admin;
+namespace webgrafia\cheshirecat\inc\admin;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -10,11 +10,11 @@ if (!defined('ABSPATH')) {
 /**
  * Style page callback.
  */
-function cheshire_cat_style_page()
+function cheshirecat_style_page()
 {
     // Check user capabilities
     if (!current_user_can('manage_options')) {
-        wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'cheshire-cat-wp'));
+        wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'cheshire-cat-chatbot'));
     }
 
     // Handle form submission
@@ -55,7 +55,7 @@ function cheshire_cat_style_page()
     $cheshire_chat_bot_message_color = get_option('cheshire_chat_bot_message_color', '#ffffff');
     $cheshire_chat_button_color = get_option('cheshire_chat_button_color', '#0078d7');
     $cheshire_chat_font_family = get_option('cheshire_chat_font_family', 'Arial, sans-serif');
-    $cheshire_chat_welcome_message = get_option('cheshire_chat_welcome_message', __('Hello! How can I help you?', 'cheshire-cat-wp'));
+    $cheshire_chat_welcome_message = get_option('cheshire_chat_welcome_message', __('Hello! How can I help you?', 'cheshire-cat-chatbot'));
     ?>
     <div class="wrap">
         <h1><?php if (function_exists('get_admin_page_title')) {
@@ -65,31 +65,31 @@ function cheshire_cat_style_page()
             <?php wp_nonce_field('cheshire_style_save_settings', 'cheshire_style_nonce'); ?>
             <table class="form-table">
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e('Chat Background Color', 'cheshire-cat-wp'); ?></th>
+                    <th scope="row"><?php esc_html_e('Chat Background Color', 'cheshire-cat-chatbot'); ?></th>
                     <td><input type="color" name="cheshire_chat_background_color" value="<?php echo esc_attr($cheshire_chat_background_color); ?>" /></td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e('Chat Text Color', 'cheshire-cat-wp'); ?></th>
+                    <th scope="row"><?php esc_html_e('Chat Text Color', 'cheshire-cat-chatbot'); ?></th>
                     <td><input type="color" name="cheshire_chat_text_color" value="<?php echo esc_attr($cheshire_chat_text_color); ?>" /></td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e('Chat User Message Color', 'cheshire-cat-wp'); ?></th>
+                    <th scope="row"><?php esc_html_e('Chat User Message Color', 'cheshire-cat-chatbot'); ?></th>
                     <td><input type="color" name="cheshire_chat_user_message_color" value="<?php echo esc_attr($cheshire_chat_user_message_color); ?>" /></td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e('Chat Bot Message Color', 'cheshire-cat-wp'); ?></th>
+                    <th scope="row"><?php esc_html_e('Chat Bot Message Color', 'cheshire-cat-chatbot'); ?></th>
                     <td><input type="color" name="cheshire_chat_bot_message_color" value="<?php echo esc_attr($cheshire_chat_bot_message_color); ?>" /></td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e('Chat Button Color', 'cheshire-cat-wp'); ?></th>
+                    <th scope="row"><?php esc_html_e('Chat Button Color', 'cheshire-cat-chatbot'); ?></th>
                     <td><input type="color" name="cheshire_chat_button_color" value="<?php echo esc_attr($cheshire_chat_button_color); ?>" /></td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e('Chat Font Family', 'cheshire-cat-wp'); ?></th>
+                    <th scope="row"><?php esc_html_e('Chat Font Family', 'cheshire-cat-chatbot'); ?></th>
                     <td><input type="text" name="cheshire_chat_font_family" value="<?php echo esc_attr($cheshire_chat_font_family); ?>" /></td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><?php esc_html_e('Welcome Message', 'cheshire-cat-wp'); ?></th>
+                    <th scope="row"><?php esc_html_e('Welcome Message', 'cheshire-cat-chatbot'); ?></th>
                     <td><textarea name="cheshire_chat_welcome_message" rows="5" cols="50"><?php echo esc_textarea($cheshire_chat_welcome_message); ?></textarea></td>
                 </tr>
             </table>

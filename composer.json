@@ -1,5 +1,5 @@
 {
-    "name": "bititup/cheshire-cat-wp",
+    "name": "bititup/cheshire-cat-chatbot",
     "description": "Cheshire cat integration",
     "type": "library",
     "require": {

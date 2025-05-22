@@ -1,19 +1,19 @@
 <?php return array(
     'root' => array(
-        'name' => 'bititup/cheshire-cat-wp',
+        'name' => 'bititup/cheshire-cat-chatbot',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'b6c178292eaf21f54f7cc78ece490546eefbb09e',
+        'reference' => '2d5566712feef5ed1fc5facc4d7f66925b3d14ea',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'bititup/cheshire-cat-wp' => array(
+        'bititup/cheshire-cat-chatbot' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'b6c178292eaf21f54f7cc78ece490546eefbb09e',
+            'reference' => '2d5566712feef5ed1fc5facc4d7f66925b3d14ea',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -1,6 +1,6 @@
 <?php
 /**
- * Fired when the Cheshire Cat WP plugin is uninstalled.
+ * Fired when the Cheshire Cat Chatbot plugin is uninstalled.
  *
  * This file is responsible for cleaning up plugin data from the database.
  *

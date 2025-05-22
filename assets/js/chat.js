@@ -40,15 +40,33 @@ jQuery(document).ready(function($) {
             type: 'POST',
             data: {
                 action: 'cheshire_plugin_ajax',
-                message: message
+                message: message,
+                nonce: cheshire_ajax_object.nonce
             },
             success: function(response) {
                 console.log('AJAX Success:', response);
                 // Remove the loader
                 $('#cheshire-loader').remove();
                 if (response.success) {
-                    // Append the response to the chat messages
-                    $('#cheshire-chat-messages').append('<div class="bot-message"><p>' + response.data + '</p></div>');
+                    // Extract only the content from the response
+                    var content = '';
+                    console.log('Response data:', response.data);
+
+                    // Based on the issue description, we need to extract the content from the complex JSON structure
+                    if (response.data && typeof response.data === 'object') {
+                        // The example in the issue description shows a complex nested structure
+                        // The content we need is in the "content" field at the end of the response
+                        if (response.data.content) {
+                            content = response.data.content;
+                        } else {
+                            // Try to find content in the nested structure
+                            content = response.data;
+                        }
+                    } else {
+                        content = response.data;
+                    }
+                    // Append only the content to the chat messages
+                    $('#cheshire-chat-messages').append('<div class="bot-message"><p>' + content + '</p></div>');
                 } else {
                     // Handle the error
                     $('#cheshire-chat-messages').append('<div class="error-message"><p>Error: ' + response.data + '</p></div>');
