@@ -1,72 +1,64 @@
 <?php
+/**
+ * AJAX handlers for Cheshire Cat Chatbot
+ *
+ * @package CheshireCatChatbot
+ */
 
 namespace webgrafia\cheshirecat;
 
 // Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
 /**
  * Handle AJAX request for sending a message to Cheshire Cat.
+ *
+ * This function processes both 'cheshire_send_message' and 'cheshire_plugin_ajax' actions.
+ *
+ * @since 0.1
+ * @return void
  */
-function cheshirecat_send_message()
-{
-    check_ajax_referer('cheshire_ajax_nonce', 'nonce');
+function cheshirecat_process_message() {
+    // Verify nonce for security.
+    check_ajax_referer( 'cheshire_ajax_nonce', 'nonce' );
 
-    if (isset($_POST['message'])) {
-        $message = sanitize_text_field(wp_unslash($_POST['message']));
+    // Check if message is provided.
+    if ( ! isset( $_POST['message'] ) ) {
+        wp_send_json_error( __( 'Message not provided.', 'cheshire-cat-chatbot' ) );
+        return;
+    }
 
-        $cheshire_plugin_url = get_option('cheshire_plugin_url');
-        $cheshire_plugin_token = get_option('cheshire_plugin_token');
+    // Sanitize the message.
+    $message = sanitize_text_field( wp_unslash( $_POST['message'] ) );
 
-        if (empty($cheshire_plugin_url) || empty($cheshire_plugin_token)) {
-            wp_send_json_error(__('Cheshire Cat URL or Token not set.', 'cheshire-cat-chatbot'));
-        }
+    // Get Cheshire Cat configuration.
+    $cheshire_plugin_url   = get_option( 'cheshire_plugin_url' );
+    $cheshire_plugin_token = get_option( 'cheshire_plugin_token' );
 
-        $cheshire_cat = new inc\classes\CHESHIRECAT_CustomCheshireCat($cheshire_plugin_url, $cheshire_plugin_token);
+    // Validate configuration.
+    if ( empty( $cheshire_plugin_url ) || empty( $cheshire_plugin_token ) ) {
+        wp_send_json_error( __( 'Cheshire Cat URL or Token not set.', 'cheshire-cat-chatbot' ) );
+        return;
+    }
 
-        try {
-            $response = $cheshire_cat->sendMessage($message);
-            wp_send_json_success($response);
-        } catch (\Exception $e) {
-            wp_send_json_error($e->getMessage());
-        }
-    } else {
-        wp_send_json_error(__('Message not provided.', 'cheshire-cat-chatbot'));
+    // Initialize Cheshire Cat client.
+    $cheshire_cat = new inc\classes\Custom_Cheshire_Cat( $cheshire_plugin_url, $cheshire_plugin_token );
+
+    try {
+        // Send message and get response.
+        $response = $cheshire_cat->sendMessage( $message );
+        wp_send_json_success( $response );
+    } catch ( \Exception $e ) {
+        // Handle errors.
+        wp_send_json_error( $e->getMessage() );
     }
 }
-add_action('wp_ajax_cheshire_send_message', __NAMESPACE__ . '\cheshirecat_send_message');
-add_action('wp_ajax_nopriv_cheshire_send_message', __NAMESPACE__ . '\cheshirecat_send_message');
 
-/**
- * Handle AJAX request for the cheshire_plugin_ajax action.
- */
-function cheshire_plugin_ajax()
-{
-    check_ajax_referer('cheshire_ajax_nonce', 'nonce');
-
-    if (isset($_POST['message'])) {
-        $message = sanitize_text_field(wp_unslash($_POST['message']));
-
-        $cheshire_plugin_url = get_option('cheshire_plugin_url');
-        $cheshire_plugin_token = get_option('cheshire_plugin_token');
-
-        if (empty($cheshire_plugin_url) || empty($cheshire_plugin_token)) {
-            wp_send_json_error(__('Cheshire Cat URL or Token not set.', 'cheshire-cat-chatbot'));
-        }
-
-        $cheshire_cat = new inc\classes\CHESHIRECAT_CustomCheshireCat($cheshire_plugin_url, $cheshire_plugin_token);
-
-        try {
-            $response = $cheshire_cat->sendMessage($message);
-            wp_send_json_success($response);
-        } catch (\Exception $e) {
-            wp_send_json_error($e->getMessage());
-        }
-    } else {
-        wp_send_json_error(__('Message not provided.', 'cheshire-cat-chatbot'));
-    }
-}
-add_action('wp_ajax_cheshire_plugin_ajax', __NAMESPACE__ . '\cheshire_plugin_ajax');
-add_action('wp_ajax_nopriv_cheshire_plugin_ajax', __NAMESPACE__ . '\cheshire_plugin_ajax');
+// Register AJAX handlers for both logged-in and non-logged-in users.
+// Support both action names for backward compatibility.
+add_action( 'wp_ajax_cheshire_send_message', __NAMESPACE__ . '\cheshirecat_process_message' );
+add_action( 'wp_ajax_nopriv_cheshire_send_message', __NAMESPACE__ . '\cheshirecat_process_message' );
+add_action( 'wp_ajax_cheshire_plugin_ajax', __NAMESPACE__ . '\cheshirecat_process_message' );
+add_action( 'wp_ajax_nopriv_cheshire_plugin_ajax', __NAMESPACE__ . '\cheshirecat_process_message' );
