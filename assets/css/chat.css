@@ -39,7 +39,6 @@
     border-radius: var(--chat-border-radius);
     margin: 20px auto;
     font-family: 'Arial', sans-serif;
-    overflow: hidden;
     box-shadow: var(--chat-shadow);
     position: fixed;
     bottom: 20px;
@@ -242,8 +241,161 @@
 }
 
 /* ----------------------------------------
-   10. General Styles
+   10. Avatar Styles
 ---------------------------------------- */
+#cheshire-chat-avatar {
+    position: absolute;
+    bottom: -60px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    z-index: 9999;
+    display: block;
+}
+
+#cheshire-chat-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Chat bubble styling when avatar is enabled */
+#cheshire-chat-container.with-avatar {
+    margin-bottom: 70px; /* Make room for the avatar */
+}
+
+#cheshire-chat-container.with-avatar:after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    right: 30px;
+    width: 30px;
+    height: 15px;
+    background-color: var(--chat-bg-color);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    border-right: 1px solid var(--chat-border-color);
+    border-left: 1px solid var(--chat-border-color);
+    z-index: 1000;
+    display: block;
+}
+
+/* ----------------------------------------
+   11. HTML Content Styling
+---------------------------------------- */
+/* Basic paragraph styling */
 p {
     margin: 0;
+}
+
+/* Styling for HTML elements in bot messages */
+.bot-message strong, 
+.bot-message b {
+    font-weight: bold;
+}
+
+.bot-message em, 
+.bot-message i {
+    font-style: italic;
+}
+
+/* Code blocks */
+.bot-message pre {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px 0;
+    overflow-x: auto;
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.bot-message code {
+    background-color: #f5f5f5;
+    border-radius: 3px;
+    font-family: monospace;
+    padding: 2px 4px;
+    font-size: 90%;
+}
+
+.bot-message pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Lists */
+.bot-message ul, 
+.bot-message ol {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.bot-message li {
+    margin-bottom: 5px;
+}
+
+/* Links */
+.bot-message a {
+    color: var(--chat-primary-color);
+    text-decoration: underline;
+}
+
+.bot-message a:hover {
+    color: var(--chat-primary-hover);
+}
+
+/* Tables */
+.bot-message table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.bot-message th, 
+.bot-message td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.bot-message th {
+    background-color: #f5f5f5;
+}
+
+/* Blockquotes */
+.bot-message blockquote {
+    border-left: 3px solid var(--chat-primary-color);
+    margin: 10px 0;
+    padding-left: 10px;
+    color: #666;
+}
+
+/* Headings */
+.bot-message h1, 
+.bot-message h2, 
+.bot-message h3, 
+.bot-message h4, 
+.bot-message h5, 
+.bot-message h6 {
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.bot-message h1 { font-size: 1.6em; }
+.bot-message h2 { font-size: 1.4em; }
+.bot-message h3 { font-size: 1.2em; }
+.bot-message h4 { font-size: 1.1em; }
+.bot-message h5 { font-size: 1em; }
+.bot-message h6 { font-size: 0.9em; }
+
+/* Images */
+.bot-message img {
+    max-width: 100%;
+    height: auto;
+    margin: 10px 0;
+    border-radius: 4px;
 }

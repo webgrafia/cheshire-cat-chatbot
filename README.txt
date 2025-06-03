@@ -4,7 +4,7 @@ Tags: chatbot, ai, cheshire cat, chat, assistant
 Requires at least: 5.8
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 0.4
+Stable tag: 0.4.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -24,6 +24,7 @@ A WordPress plugin to integrate the Cheshire Cat AI chatbot, offering seamless c
 *   **Error Handling:** Display error messages if there are issues with the connection or the bot's response.
 *   **Easy to use:** Use a shortcode to add the chat to your pages.
 *   **Global Chat:** Enable the chat on every page of your website.
+*   **Avatar Support:** Display a customizable avatar below the chat, making it look like a speech bubble.
 
 == Installation ==
 
@@ -56,12 +57,25 @@ You can customize the chat interface's colors and font in the **Settings -> Ches
 = Can I use the chat on every page? =
 Yes, you can enable the "Global Chat" option in the **Settings -> Cheshire Cat** section.
 
+= How do I enable the avatar feature? =
+You can enable the avatar feature in the **Configuration** section of the Cheshire Cat menu. After enabling it, you can upload a custom avatar image in the **Style** section.
+
+= What is the Playground page? =
+The Playground page is a full-page chat interface for administrators to test the chatbot. It's accessible from the Cheshire Cat menu in the WordPress admin area.
+
 == Screenshots ==
 
 1.  The Cheshire Cat Chatbot configuration page.
 2.  The chat interface in action.
 
 == Changelog ==
+
+= 0.4.1 =
+*   Added avatar functionality with customizable images
+*   Added chat bubble styling when avatar is enabled
+*   Added reset buttons for all options and color settings
+*   Added admin playground page for full-page chat testing
+*   Fixed CSS issues with chat container and avatar display
 
 = 0.4 =
 *   Fixes for Plugin Compliance and Security Improvement Guidelines
@@ -86,6 +100,9 @@ Yes, you can enable the "Global Chat" option in the **Settings -> Cheshire Cat**
 *   Shortcode for adding the chat to pages and posts.
 
 == Upgrade Notice ==
+
+= 0.4.1 =
+Feature update: Added avatar support, reset buttons, admin playground, and fixed CSS issues.
 
 = 0.3 =
 Security update: Fixed security issues. Updated tested up to version.

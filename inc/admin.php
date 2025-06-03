@@ -12,3 +12,4 @@ require_once __DIR__ . '/admin/admin-menu.php';
 require_once __DIR__ . '/admin/overview.php';
 require_once __DIR__ . '/admin/style.php';
 require_once __DIR__ . '/admin/configuration.php';
+require_once __DIR__ . '/admin/playground.php';

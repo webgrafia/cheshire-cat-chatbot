@@ -394,28 +394,29 @@
         },
         {
             "name": "phrity/util-errorhandler",
-            "version": "1.1.1",
-            "version_normalized": "1.1.1.0",
+            "version": "1.2.0",
+            "version_normalized": "1.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sirn-se/phrity-util-errorhandler.git",
-                "reference": "483228156e06673963902b1cc1e6bd9541ab4d5e"
+                "reference": "61813189e4525fde4aecad3df849829d526d6f76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sirn-se/phrity-util-errorhandler/zipball/483228156e06673963902b1cc1e6bd9541ab4d5e",
-                "reference": "483228156e06673963902b1cc1e6bd9541ab4d5e",
+                "url": "https://api.github.com/repos/sirn-se/phrity-util-errorhandler/zipball/61813189e4525fde4aecad3df849829d526d6f76",
+                "reference": "61813189e4525fde4aecad3df849829d526d6f76",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.4 | ^8.0"
+                "php": "^8.1"
             },
             "require-dev": {
                 "php-coveralls/php-coveralls": "^2.0",
-                "phpunit/phpunit": "^9.0 | ^10.0 | ^11.0",
+                "phpstan/phpstan": "^2.0",
+                "phpunit/phpunit": "^10.0 | ^11.0  | ^12.0",
                 "squizlabs/php_codesniffer": "^3.5"
             },
-            "time": "2024-09-12T06:49:16+00:00",
+            "time": "2025-05-26T18:26:51+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -442,7 +443,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sirn-se/phrity-util-errorhandler/issues",
-                "source": "https://github.com/sirn-se/phrity-util-errorhandler/tree/1.1.1"
+                "source": "https://github.com/sirn-se/phrity-util-errorhandler/tree/1.2.0"
             },
             "install-path": "../phrity/util-errorhandler"
         },
@@ -717,23 +718,23 @@
         },
         {
             "name": "symfony/deprecation-contracts",
-            "version": "v3.5.1",
-            "version_normalized": "3.5.1.0",
+            "version": "v3.6.0",
+            "version_normalized": "3.6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/deprecation-contracts.git",
-                "reference": "74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6"
+                "reference": "63afe740e99a13ba87ec199bb07bbdee937a5b62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6",
-                "reference": "74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/63afe740e99a13ba87ec199bb07bbdee937a5b62",
+                "reference": "63afe740e99a13ba87ec199bb07bbdee937a5b62",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1"
             },
-            "time": "2024-09-25T14:20:29+00:00",
+            "time": "2024-09-25T14:21:43+00:00",
             "type": "library",
             "extra": {
                 "thanks": {
@@ -741,7 +742,7 @@
                     "name": "symfony/contracts"
                 },
                 "branch-alias": {
-                    "dev-main": "3.5-dev"
+                    "dev-main": "3.6-dev"
                 }
             },
             "installation-source": "dist",
@@ -767,7 +768,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.5.1"
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.6.0"
             },
             "funding": [
                 {
@@ -841,17 +842,17 @@
         },
         {
             "name": "webgrafia/cheshire-cat-sdk-laravel",
-            "version": "v0.3.0",
-            "version_normalized": "0.3.0.0",
+            "version": "v0.3.1",
+            "version_normalized": "0.3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webgrafia/cheshire-cat-sdk-laravel.git",
-                "reference": "45e2a0f7581a5b60602eac0a769c42ed9074b3e9"
+                "reference": "f34d89c95377a8dae2fe2077dc61e69edf580c78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webgrafia/cheshire-cat-sdk-laravel/zipball/45e2a0f7581a5b60602eac0a769c42ed9074b3e9",
-                "reference": "45e2a0f7581a5b60602eac0a769c42ed9074b3e9",
+                "url": "https://api.github.com/repos/webgrafia/cheshire-cat-sdk-laravel/zipball/f34d89c95377a8dae2fe2077dc61e69edf580c78",
+                "reference": "f34d89c95377a8dae2fe2077dc61e69edf580c78",
                 "shasum": ""
             },
             "require": {
@@ -863,7 +864,7 @@
                 "laravel/framework": "^12.3",
                 "phpunit/phpunit": "^10.4"
             },
-            "time": "2025-03-27T11:32:26+00:00",
+            "time": "2025-06-03T19:57:44+00:00",
             "type": "library",
             "extra": {
                 "laravel": {
@@ -889,7 +890,7 @@
             "description": "Laravel SDK for interacting with Cheshire Cat AI API",
             "support": {
                 "issues": "https://github.com/webgrafia/cheshire-cat-sdk-laravel/issues",
-                "source": "https://github.com/webgrafia/cheshire-cat-sdk-laravel/tree/v0.3.0"
+                "source": "https://github.com/webgrafia/cheshire-cat-sdk-laravel/tree/v0.3.1"
             },
             "install-path": "../webgrafia/cheshire-cat-sdk-laravel"
         }

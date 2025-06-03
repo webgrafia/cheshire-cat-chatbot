@@ -79,8 +79,32 @@ class Custom_Cheshire_Cat extends CheshireCat {
      * @return array The response from the API.
      */
     public function sendMessage( string $message, array $options = [] ): array {
+        // Get user_id: if user is logged in, use username, otherwise use a cookie-based identifier
+        $user_id = 'wp';
+
+        // Check if user is logged in
+        if ( is_user_logged_in() ) {
+            $current_user = wp_get_current_user();
+            $user_id = $current_user->user_login;
+        } else {
+            // For non-logged in users, use a cookie-based identifier
+            $cookie_name = 'cheshire_cat_user_id';
+
+            if ( isset( $_COOKIE[$cookie_name] ) ) {
+                $user_id = sanitize_text_field( $_COOKIE[$cookie_name] );
+            } else {
+                // Generate a unique ID
+                $user_id = 'guest_' . uniqid();
+
+                // Set cookie to expire in 30 days
+                setcookie( $cookie_name, $user_id, time() + ( 86400 * 30 ), '/' );
+            }
+        }
+
+
         $payload = [
             'text' => $message,
+            'user_id' => $user_id,
         ];
 
         try {

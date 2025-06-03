@@ -1,6 +1,6 @@
 # Cheshire Cat SDK for Laravel
 
-![Cheshire Cat Logo](assets/logo.png)
+![Cheshire Cat Logo](assets/logo-bg.png)
 Laravel SDK for interacting with [Cheshire Cat AI](https://github.com/cheshire-cat-ai/) API, providing seamless integration with endpoints for messages, user management, settings, memory, plugins, and more.
 
 ---
@@ -36,6 +36,20 @@ This SDK is built to interact with the Cheshire Cat API. For a comprehensive lis
    CHESHIRE_CAT_WS_BASE_URI=ws://localhost:1865/ws
    CHESHIRE_CAT_API_KEY=your_api_key_here
    ```
+
+---
+
+
+## Default Routes
+
+The SDK provides 2 default route `/meow/status` and `/meow/hello` that can be used to check the status of the Cheshire Cat API.
+
+### Usage
+
+To check the status of the API, simply navigate to `http://your-app-domain/meow/status` in your browser.
+To say Hello to Cheshire simply navigate to `http://your-app-domain/meow/hello` in your browser.
+
+This routes will return a message indicating whether the API connection was successful or not, along with the status response or any error messages.
 
 ---
 
@@ -272,17 +286,6 @@ if ($response->getStatusCode() === 200) {
 - Returns an HTTP response object containing the details of the API's response.
 
 ---
-
-## Default Routes
-
-The SDK provides 2 default route `/meow/status` and `/meow/hello` that can be used to check the status of the Cheshire Cat API.
-
-### Usage
-
-To check the status of the API, simply navigate to `http://your-app-domain/meow/status` in your browser.
-To say Hello to Cheshire simply navigate to `http://your-app-domain/meow/hello` in your browser.
-
-This routes will return a message indicating whether the API connection was successful or not, along with the status response or any error messages.
 
 ## Custom route for Testing
 

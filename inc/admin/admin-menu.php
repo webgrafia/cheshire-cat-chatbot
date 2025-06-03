@@ -46,5 +46,15 @@ function cheshirecat_admin_menu()
         'cheshire-cat-configuration', // Menu slug
         __NAMESPACE__ . '\cheshirecat_configuration_page' // Callback function
     );
+
+    // Add the "Playground" submenu
+    add_submenu_page(
+        'cheshire-cat', // Parent slug
+        __('Playground', 'cheshire-cat-chatbot'), // Page title
+        __('Playground', 'cheshire-cat-chatbot'), // Menu title
+        'manage_options', // Capability
+        'cheshire-cat-playground', // Menu slug
+        __NAMESPACE__ . '\cheshirecat_playground_page' // Callback function
+    );
 }
 add_action('admin_menu', __NAMESPACE__ . '\cheshirecat_admin_menu');
