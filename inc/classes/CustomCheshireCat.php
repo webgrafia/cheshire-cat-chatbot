@@ -104,11 +104,15 @@ class Custom_Cheshire_Cat extends CheshireCat {
 
         $payload = [
             'text' => $message,
+        ];
+
+        // Add user_id to headers instead of payload
+        $headers = [
             'user_id' => $user_id,
         ];
 
         try {
-            $response = $this->client->sendMessage( $payload );
+            $response = $this->client->sendMessage( $payload, $headers );
 
             if ( is_null( $response ) ) {
                 // Log the error if WP_DEBUG is enabled.

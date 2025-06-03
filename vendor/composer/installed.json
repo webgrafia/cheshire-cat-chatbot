@@ -842,17 +842,17 @@
         },
         {
             "name": "webgrafia/cheshire-cat-sdk-laravel",
-            "version": "v0.3.1",
-            "version_normalized": "0.3.1.0",
+            "version": "v0.3.2",
+            "version_normalized": "0.3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webgrafia/cheshire-cat-sdk-laravel.git",
-                "reference": "f34d89c95377a8dae2fe2077dc61e69edf580c78"
+                "reference": "645bcac82f0ddcf020cd42c4e3ce1f2947b7c56e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webgrafia/cheshire-cat-sdk-laravel/zipball/f34d89c95377a8dae2fe2077dc61e69edf580c78",
-                "reference": "f34d89c95377a8dae2fe2077dc61e69edf580c78",
+                "url": "https://api.github.com/repos/webgrafia/cheshire-cat-sdk-laravel/zipball/645bcac82f0ddcf020cd42c4e3ce1f2947b7c56e",
+                "reference": "645bcac82f0ddcf020cd42c4e3ce1f2947b7c56e",
                 "shasum": ""
             },
             "require": {
@@ -864,7 +864,7 @@
                 "laravel/framework": "^12.3",
                 "phpunit/phpunit": "^10.4"
             },
-            "time": "2025-06-03T19:57:44+00:00",
+            "time": "2025-06-03T21:13:21+00:00",
             "type": "library",
             "extra": {
                 "laravel": {
@@ -890,7 +890,7 @@
             "description": "Laravel SDK for interacting with Cheshire Cat AI API",
             "support": {
                 "issues": "https://github.com/webgrafia/cheshire-cat-sdk-laravel/issues",
-                "source": "https://github.com/webgrafia/cheshire-cat-sdk-laravel/tree/v0.3.1"
+                "source": "https://github.com/webgrafia/cheshire-cat-sdk-laravel/tree/v0.3.2"
             },
             "install-path": "../webgrafia/cheshire-cat-sdk-laravel"
         }
