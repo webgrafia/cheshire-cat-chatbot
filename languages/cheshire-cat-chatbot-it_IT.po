@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Cheshire Cat Chatbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-22 18:11+0000\n"
-"PO-Revision-Date: 2025-06-04 18:05+0000\n"
+"PO-Revision-Date: 2025-06-04 20:39+0000\n"
 "Last-Translator: \n"
 "Language-Team: Italiano\n"
 "Language: it_IT\n"
@@ -49,6 +49,10 @@ msgstr ""
 "Dopo aver abilitato l'avatar, vai alla pagina %s per caricare l'immagine del "
 "tuo avatar personalizzato."
 
+#: inc/admin/style.php:50
+msgid "Avatar image has been removed."
+msgstr "L'immagine avatar è stata rimossa."
+
 #: inc/admin/overview.php:27
 msgid "Before You Begin"
 msgstr "Prima di iniziare"
@@ -57,31 +61,39 @@ msgstr "Prima di iniziare"
 msgid "Chat Avatar"
 msgstr "Avatar della chat"
 
-#: inc/admin/style.php:132
+#: inc/admin/style.php:170
 msgid "Chat Avatar Image"
 msgstr "Immagine avatar della chat"
 
-#: inc/admin/style.php:104
+#: inc/admin/style.php:135
 msgid "Chat Background Color"
 msgstr "Colore di sfondo della chat"
 
-#: inc/admin/style.php:116
+#: inc/admin/style.php:147
 msgid "Chat Bot Message Color"
 msgstr "Colore del messaggio del chatbot"
 
-#: inc/admin/style.php:120
+#: inc/admin/style.php:151
 msgid "Chat Button Color"
 msgstr "Colore del pulsante della chat"
 
-#: inc/admin/style.php:124
+#: inc/admin/style.php:155
 msgid "Chat Font Family"
 msgstr "Famiglia di font Chat"
 
-#: inc/admin/style.php:108
+#: inc/admin/style.php:128
+msgid "Chat Header Color"
+msgstr "Colore dell'intestazione della chat"
+
+#: inc/admin/style.php:163
+msgid "Chat Input Placeholder"
+msgstr "Segnaposto di input della chat"
+
+#: inc/admin/style.php:139
 msgid "Chat Text Color"
 msgstr "Colore del testo della chat"
 
-#: inc/admin/style.php:112
+#: inc/admin/style.php:143
 msgid "Chat User Message Color"
 msgstr "Colore del messaggio utente della chat"
 
@@ -157,7 +169,14 @@ msgstr "Chiudi chat"
 msgid "Closed"
 msgstr "Chiuso"
 
-#: inc/admin/style.php:36
+#: inc/admin/style.php:131
+msgid ""
+"Color of the top bar of the chat window where the close button is located."
+msgstr ""
+"Colore della barra superiore della finestra di chat in cui si trova il "
+"pulsante di chiusura."
+
+#: inc/admin/style.php:37
 msgid "Color settings have been reset to default values."
 msgstr ""
 "Le impostazioni del colore sono state ripristinate ai valori predefiniti."
@@ -165,7 +184,7 @@ msgstr ""
 #. Parent slug
 #. Page title
 #: inc/admin/admin-menu.php:43 inc/admin/admin-menu.php:44
-#: inc/admin/overview.php:39 inc/admin/overview.php:55 inc/admin/style.php:144
+#: inc/admin/overview.php:39 inc/admin/overview.php:55 inc/admin/style.php:185
 msgid "Configuration"
 msgstr "Configurazione"
 
@@ -181,6 +200,12 @@ msgstr "Impostazioni del tipo di contenuto"
 #: inc/admin/configuration.php:137
 msgid "Context Information"
 msgstr "Informazioni di contesto"
+
+#: inc/admin/style.php:166
+msgid "Customize the placeholder text shown in the chat input field."
+msgstr ""
+"Personalizza il testo segnaposto visualizzato nel campo di inserimento della "
+"chat."
 
 #: inc/admin/configuration.php:145
 msgid "Default Chat State"
@@ -222,7 +247,7 @@ msgstr "Abilitazione della chat globale"
 msgid "Global Chat"
 msgstr "Chat globale"
 
-#: cheshire-cat-chatbot.php:271 inc/admin/style.php:93
+#: cheshire-cat-chatbot.php:275 inc/admin/style.php:116
 msgid "Hello! How can I help you?"
 msgstr "Salve! Come posso aiutarti?"
 
@@ -247,7 +272,7 @@ msgid "Logged-in Users Only"
 msgstr "Solo utenti registrati"
 
 #. %s: URL to the Configuration page
-#: inc/admin/style.php:143
+#: inc/admin/style.php:184
 #, php-format
 msgid ""
 "Make sure to enable the avatar feature in the %s page for the avatar to be "
@@ -268,7 +293,7 @@ msgstr "Messaggio non fornito."
 msgid "need to use the shortcode."
 msgstr "è necessario utilizzare lo shortcode."
 
-#: inc/admin/configuration.php:129 inc/admin/style.php:141
+#: inc/admin/configuration.php:129 inc/admin/style.php:182
 msgid "Note:"
 msgstr "Nota:"
 
@@ -291,6 +316,10 @@ msgstr "Parco giochi"
 #: inc/admin/configuration.php:199
 msgid "Post Types"
 msgstr "Tipi di post"
+
+#: inc/admin/style.php:176
+msgid "Remove Avatar"
+msgstr "Rimuovi avatar"
 
 #: inc/classes/CustomCheshireCat.php:210
 #, php-format
@@ -365,11 +394,11 @@ msgstr ""
 "Per utilizzare questo plugin, è necessario disporre di un'installazione "
 "funzionante di"
 
-#: inc/shortcodes.php:47 inc/admin/playground.php:43
+#: inc/shortcodes.php:47 inc/admin/playground.php:43 inc/admin/style.php:118
 msgid "Type your message..."
 msgstr "Scrivi il tuo messaggio..."
 
-#: inc/admin/style.php:140
+#: inc/admin/style.php:181
 msgid ""
 "Upload a custom avatar image. If none is provided, a default robot avatar "
 "will be used."
@@ -389,7 +418,7 @@ msgstr ""
 "Utilizza questo ambiente di gioco per testare la configurazione e le "
 "risposte del tuo chatbot prima di renderlo disponibile ai tuoi utenti."
 
-#: inc/admin/style.php:128
+#: inc/admin/style.php:159
 msgid "Welcome Message"
 msgstr "Messaggio di benvenuto"
 

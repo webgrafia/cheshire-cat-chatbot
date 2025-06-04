@@ -40,7 +40,7 @@ function cheshirecat_playground_page()
                 <?php \webgrafia\cheshirecat\cheshirecat_display_welcome_message(); ?>
             </div>
             <div id="cheshire-chat-input-container">
-                <input type="text" id="cheshire-chat-input" placeholder="<?php esc_attr_e('Type your message...', 'cheshire-cat-chatbot'); ?>">
+                <input type="text" id="cheshire-chat-input" placeholder="<?php echo esc_attr(get_option('cheshire_plugin_input_placeholder', __('Type your message...', 'cheshire-cat-chatbot'))); ?>">
                 <button id="cheshire-chat-send"></button>
             </div>
             <?php if ($avatar_enabled === 'on') : ?>

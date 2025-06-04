@@ -4,7 +4,7 @@ Tags: chatbot, ai, cheshire cat, chat, assistant
 Requires at least: 5.8
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 0.5
+Stable tag: 0.5.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -74,6 +74,10 @@ The Context Awareness feature allows the chatbot to receive information about th
 
 == Changelog ==
 
+= 0.5.1 =
+*   Maintenance release with stability improvements
+*   Fixed minor bugs and improved performance
+
 = 0.5 =
 *   Added Context Awareness feature to send page information to the chatbot
 *   Improved page content detection for better context awareness
@@ -111,6 +115,9 @@ The Context Awareness feature allows the chatbot to receive information about th
 *   Shortcode for adding the chat to pages and posts.
 
 == Upgrade Notice ==
+
+= 0.5.1 =
+Maintenance release: Stability improvements and bug fixes for better performance.
 
 = 0.5 =
 Feature update: Added Context Awareness to make the chatbot aware of page content, improved content detection, and fixed title/content retrieval issues.

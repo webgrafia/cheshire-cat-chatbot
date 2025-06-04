@@ -1,6 +1,6 @@
 /**
  * Cheshire Cat Chatbot - Frontend JavaScript
- * 
+ *
  * Handles the chat interface functionality including sending messages,
  * receiving responses, and updating the UI.
  */
@@ -17,7 +17,7 @@ jQuery(document).ready(function($) {
 
     /**
      * Safely encode HTML entities to prevent XSS attacks.
-     * 
+     *
      * @param {string} text - The text to encode
      * @return {string} The encoded text
      */
@@ -27,7 +27,7 @@ jQuery(document).ready(function($) {
 
     /**
      * Sanitize HTML to allow certain safe tags while removing potentially dangerous ones.
-     * 
+     *
      * @param {string} html - The HTML to sanitize
      * @return {string} The sanitized HTML
      */
@@ -75,7 +75,7 @@ jQuery(document).ready(function($) {
 
     /**
      * Extract content from the API response.
-     * 
+     *
      * @param {Object|string} data - The response data
      * @return {string} The extracted content
      */
@@ -138,7 +138,7 @@ jQuery(document).ready(function($) {
 
     /**
      * Display a message in the chat window.
-     * 
+     *
      * @param {string} message - The message to display
      * @param {string} type - The type of message ('user', 'bot', or 'error')
      */
@@ -201,6 +201,13 @@ jQuery(document).ready(function($) {
             return;
         }
 
+        // Get the send button reference
+        var sendButton = $('#cheshire-chat-send');
+
+        // Disable the send button and change the icon to spinning
+        sendButton.prop('disabled', true);
+        sendButton.html('<i class="fas fa-spinner fa-spin"></i>');
+
         // Clear the input field
         $('#cheshire-chat-input').val('');
 
@@ -225,6 +232,10 @@ jQuery(document).ready(function($) {
                 // Hide loading indicator
                 hideLoader();
 
+                // Re-enable the send button and restore the original icon
+                sendButton.prop('disabled', false);
+                sendButton.html('<i class="far fa-arrow-alt-circle-right"></i>');
+
                 if (response.success) {
                     // Extract and display the content
                     var content = extractContent(response.data);
@@ -238,6 +249,10 @@ jQuery(document).ready(function($) {
                 // Hide loading indicator
                 hideLoader();
 
+                // Re-enable the send button and restore the original icon
+                sendButton.prop('disabled', false);
+                sendButton.html('<i class="far fa-arrow-alt-circle-right"></i>');
+
                 // Handle AJAX error
                 displayMessage(error.statusText || 'Connection error', 'error');
             }
@@ -247,7 +262,7 @@ jQuery(document).ready(function($) {
     // Initialize the chat interface
 
     // Add icon to the send button
-    $('#cheshire-chat-send').html('<i class="fas fa-paper-plane"></i>');
+    $('#cheshire-chat-send').html('<i class="far fa-arrow-alt-circle-right"></i>');
 
     // Set up event handlers
 

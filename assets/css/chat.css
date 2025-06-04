@@ -7,6 +7,11 @@
 /* ----------------------------------------
    1. Variables
 ---------------------------------------- */
+/* 
+ * The chat is styled to look like a speech bubble (balloon) when an avatar is enabled.
+ * This is achieved through rounded corners, a tail pointing to the avatar,
+ * and subtle shadows for depth.
+ */
 :root {
     --chat-primary-color: #0078d7;
     --chat-primary-hover: #005bb5;
@@ -25,11 +30,13 @@
     --chat-input-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
     --chat-input-focus-shadow: inset 0 2px 6px rgba(0, 120, 215, 0.2);
     --chat-border-radius: 10px;
+    --chat-balloon-border-radius: 20px;
     --chat-msg-border-radius: 15px;
     --chat-transition-speed: 0.3s;
     --chat-avatar-size: 50px;
     --chat-avatar-bottom-margin: 20px;
     --chat-container-bottom-margin: 10px;
+    --chat-balloon-tail-size: 20px;
 }
 
 /* ----------------------------------------
@@ -67,8 +74,9 @@
     visibility: visible;
     border: 1px solid var(--chat-border-color);
     background-color: var(--chat-bg-color);
-    box-shadow: var(--chat-shadow);
-    overflow: hidden; /* Changed from visible to hidden to clip content during animation */
+    box-shadow: var(--chat-shadow), 0 0 15px rgba(0, 0, 0, 0.05); /* Enhanced shadow for balloon effect */
+    overflow: visible;
+    border-radius: var(--chat-balloon-border-radius); /* More rounded corners for balloon effect */
     transition: height var(--chat-transition-speed) ease,
                 min-height var(--chat-transition-speed) ease,
                 opacity var(--chat-transition-speed) ease,
@@ -124,8 +132,8 @@
     padding: 5px 10px;
     border-bottom: 1px solid var(--chat-border-color);
     background-color: var(--chat-bg-color); /* Ensure header has background */
-    border-top-left-radius: var(--chat-border-radius);
-    border-top-right-radius: var(--chat-border-radius);
+    border-top-left-radius: var(--chat-balloon-border-radius); /* Match container's rounded corners */
+    border-top-right-radius: var(--chat-balloon-border-radius); /* Match container's rounded corners */
     flex-shrink: 0; /* Prevent header from shrinking */
 }
 
@@ -204,7 +212,7 @@
     border: none;
     background-color: transparent;
     color: var(--chat-primary-color);
-    font-size: 20px;
+    font-size: 32px;
     cursor: pointer;
     width: 40px;
     height: 40px;
@@ -361,10 +369,10 @@
 #cheshire-chat-container.cheshire-chat-open.with-avatar:after {
     content: '';
     position: absolute;
-    bottom: -15px; /* Adjust to connect with avatar */
+    bottom: calc(-1 * var(--chat-balloon-tail-size) / 2); /* Position tail to connect with avatar */
     right: 30px;   /* Align with avatar position */
-    width: 30px;
-    height: 15px;
+    width: var(--chat-balloon-tail-size);
+    height: calc(var(--chat-balloon-tail-size) / 2);
     background-color: var(--chat-bg-color); /* Match chat container background */
     clip-path: polygon(0 0, 100% 0, 50% 100%);
     border-right: 1px solid var(--chat-border-color);
@@ -372,6 +380,7 @@
     border-bottom: 1px solid var(--chat-border-color);
     z-index: 999; /* Below main container content but above page */
     display: block;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1)); /* Add shadow to the tail for depth */
 }
 
 
@@ -393,7 +402,8 @@
     }
 
     #cheshire-chat-container.cheshire-chat-open.with-avatar:after {
-        right: 20px; /* Adjust tail position */
+        right: 20px; /* Adjust tail position for mobile */
+        width: var(--chat-balloon-tail-size); /* Maintain tail size on mobile */
     }
 
     .user-message,

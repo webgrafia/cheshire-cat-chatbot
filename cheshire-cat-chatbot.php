@@ -11,7 +11,7 @@
  * Plugin Name:       Cheshire Cat Chatbot
  * Plugin URI:        https://cheshirecat.ai/
  * Description:       A WordPress plugin to integrate the Cheshire Cat AI chatbot, offering seamless conversational AI for your site.
- * Version:           0.5
+ * Version:           0.5.1
  * Author:            Marco Buttarini
  * Author URI:        https://bititup.it/
  * License:           GPL-3.0-or-later
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'CHESHIRE_CAT_VERSION', '0.5' );
+define( 'CHESHIRE_CAT_VERSION', '0.5.1' );
 define( 'CHESHIRE_CAT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CHESHIRE_CAT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -225,6 +225,7 @@ function cheshirecat_generate_dynamic_css() {
     $chat_user_message_color = get_option( 'cheshire_chat_user_message_color', '#4caf50' );
     $chat_bot_message_color  = get_option( 'cheshire_chat_bot_message_color', '#ffffff' );
     $chat_button_color       = get_option( 'cheshire_chat_button_color', '#0078d7' );
+    $chat_header_color       = get_option( 'cheshire_chat_header_color', '#ffffff' );
     $chat_font_family        = get_option( 'cheshire_chat_font_family', 'Arial, sans-serif' );
 
     // Build the custom CSS.
@@ -255,6 +256,9 @@ function cheshirecat_generate_dynamic_css() {
         }
         #cheshire-chat-container.with-avatar:after {
             background-color: " . esc_attr( $chat_background_color ) . ";
+        }
+        #cheshire-chat-header {
+            background-color: " . esc_attr( $chat_header_color ) . ";
         }
     ";
 
