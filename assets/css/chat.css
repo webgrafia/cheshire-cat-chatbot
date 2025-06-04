@@ -27,6 +27,9 @@
     --chat-border-radius: 10px;
     --chat-msg-border-radius: 15px;
     --chat-transition-speed: 0.3s;
+    --chat-avatar-size: 50px;
+    --chat-avatar-bottom-margin: 20px;
+    --chat-container-bottom-margin: 10px;
 }
 
 /* ----------------------------------------
@@ -35,39 +38,145 @@
 #cheshire-chat-container {
     width: 100%;
     max-width: 400px;
-    border: 1px solid var(--chat-border-color);
-    border-radius: var(--chat-border-radius);
-    margin: 20px auto;
     font-family: 'Arial', sans-serif;
-    box-shadow: var(--chat-shadow);
     position: fixed;
-    bottom: 20px;
+    bottom: calc(var(--chat-avatar-size) + var(--chat-avatar-bottom-margin) + var(--chat-container-bottom-margin));
     right: 20px;
     z-index: 1000;
-    background-color: var(--chat-bg-color);
+    transition: all var(--chat-transition-speed) ease;
+    /* Default styles for closed state */
     display: flex;
     flex-direction: column;
+    height: 0;
+    min-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    border: none;
+    border-radius: var(--chat-border-radius);
+    background-color: transparent;
+    box-shadow: none;
+    overflow: hidden;
+}
+
+/* Chat container when explicitly open (mostly for JS to toggle) */
+#cheshire-chat-container.cheshire-chat-open {
+    display: flex; /* Ensure it's flex if it was changed */
+    height: auto; /* Or a specific height if you prefer, e.g., 450px */
+    min-height: 150px;
+    opacity: 1;
+    visibility: visible;
+    border: 1px solid var(--chat-border-color);
+    background-color: var(--chat-bg-color);
+    box-shadow: var(--chat-shadow);
+    overflow: hidden; /* Changed from visible to hidden to clip content during animation */
+    transition: height var(--chat-transition-speed) ease,
+                min-height var(--chat-transition-speed) ease,
+                opacity var(--chat-transition-speed) ease,
+                visibility 0s linear 0s;
+}
+
+/* Chat container when closed and avatar is NOT enabled */
+#cheshire-chat-container.cheshire-chat-closed:not(.with-avatar) {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+    min-height: 0;
+}
+
+/* Chat container when closed BUT avatar IS enabled */
+#cheshire-chat-container.cheshire-chat-closed.with-avatar {
+    height: 0;
+    min-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    border: none !important; /* Remove border */
+    background: transparent !important; /* Make container background transparent */
+    box-shadow: none !important; /* Remove shadow */
+    overflow: hidden;
+    transition: height var(--chat-transition-speed) ease,
+                min-height var(--chat-transition-speed) ease,
+                opacity var(--chat-transition-speed) ease,
+                visibility 0s linear var(--chat-transition-speed);
+}
+
+/* Ensure smooth transition when opening */
+#cheshire-chat-container.cheshire-chat-open.with-avatar {
+    transition: height var(--chat-transition-speed) ease,
+                min-height var(--chat-transition-speed) ease,
+                opacity var(--chat-transition-speed) ease,
+                visibility 0s linear 0s;
+}
+
+/* Hide internal elements when chat is closed */
+#cheshire-chat-container.cheshire-chat-closed #cheshire-chat-header,
+#cheshire-chat-container.cheshire-chat-closed #cheshire-chat-messages,
+#cheshire-chat-container.cheshire-chat-closed #cheshire-chat-input-container {
+    display: none;
+}
+
+/* ----------------------------------------
+   3. Chat Header
+---------------------------------------- */
+#cheshire-chat-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px 10px;
+    border-bottom: 1px solid var(--chat-border-color);
+    background-color: var(--chat-bg-color); /* Ensure header has background */
+    border-top-left-radius: var(--chat-border-radius);
+    border-top-right-radius: var(--chat-border-radius);
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+#cheshire-chat-close {
+    background: transparent;
+    border: none;
+    color: #999;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
     transition: all var(--chat-transition-speed) ease;
 }
 
+#cheshire-chat-close:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #666;
+}
+
+#cheshire-chat-close:focus {
+    outline: 2px solid var(--chat-primary-color);
+    outline-offset: 2px;
+}
+
+/* ----------------------------------------
+   4. Chat Messages Area
+---------------------------------------- */
 #cheshire-chat-messages {
-    height: 300px;
+    height: 300px; /* Default height, can be overridden by playground styles */
     overflow-y: auto;
     padding: 10px 15px;
     background-color: var(--chat-messages-bg);
     border-bottom: 1px solid var(--chat-border-color);
     scroll-behavior: smooth;
-    flex-grow: 1;
+    flex-grow: 1; /* Allow messages area to take available space */
 }
 
 /* ----------------------------------------
-   3. Chat Input Area
+   5. Chat Input Area
 ---------------------------------------- */
 #cheshire-chat-input-container {
     display: flex;
     align-items: center;
     padding: 10px;
-    background-color: var(--chat-bg-color);
+    background-color: var(--chat-bg-color); /* Ensure input container has background */
+    flex-shrink: 0; /* Prevent input area from shrinking */
 }
 
 #cheshire-chat-input {
@@ -79,7 +188,7 @@
     box-shadow: var(--chat-input-shadow);
     outline: none;
     margin: 0;
-    background-color: var(--chat-bg-color);
+    background-color: var(--chat-bg-color); /* Ensure input has background */
 }
 
 #cheshire-chat-input:focus {
@@ -88,7 +197,7 @@
 }
 
 /* ----------------------------------------
-   4. Send Button
+   6. Send Button
 ---------------------------------------- */
 #cheshire-chat-send {
     padding: 0;
@@ -102,7 +211,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    transition: color var(--chat-transition-speed) ease;
+    transition: color var(--chat-transition-speed) ease, background-color var(--chat-transition-speed) ease;
     margin-left: 10px;
     outline: none;
     border-radius: 50%;
@@ -121,13 +230,12 @@
     box-shadow: 0 0 0 2px rgba(0, 120, 215, 0.3);
 }
 
-/* Send Icon */
 #cheshire-chat-send i {
-    pointer-events: none; /* Prevent icon from interfering with button clicks */
+    pointer-events: none;
 }
 
 /* ----------------------------------------
-   5. Message Styling
+   7. Message Styling
 ---------------------------------------- */
 .user-message,
 .bot-message,
@@ -137,14 +245,13 @@
     border-radius: var(--chat-msg-border-radius);
     font-size: 14px;
     max-width: 75%;
-    display: inline-block;
+    display: inline-block; /* Changed from inline-block to block for proper float clearing */
     word-wrap: break-word;
     clear: both;
     position: relative;
     line-height: 1.5;
 }
 
-/* User messages */
 .user-message {
     background-color: var(--chat-user-msg-bg);
     color: var(--chat-user-msg-color);
@@ -153,7 +260,6 @@
     animation: fadeInRight var(--chat-transition-speed) ease-out;
 }
 
-/* Bot messages */
 .bot-message {
     background-color: var(--chat-bot-msg-bg);
     color: var(--chat-bot-msg-color);
@@ -163,7 +269,6 @@
     animation: fadeInLeft var(--chat-transition-speed) ease-out;
 }
 
-/* Error messages */
 .error-message {
     background-color: var(--chat-error-msg-bg);
     border: 1px solid var(--chat-error-msg-border);
@@ -173,8 +278,15 @@
     animation: shake var(--chat-transition-speed) ease-out;
 }
 
+/* Clearfix for message containers if needed, though float on messages should handle it */
+#cheshire-chat-messages::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
 /* ----------------------------------------
-   6. Loader
+   8. Loader
 ---------------------------------------- */
 .loader {
     border: 3px solid #f3f3f3;
@@ -188,7 +300,7 @@
 }
 
 /* ----------------------------------------
-   7. Animations
+   9. Animations
 ---------------------------------------- */
 @keyframes spin {
     0% { transform: rotate(0deg); }
@@ -214,43 +326,27 @@
 }
 
 /* ----------------------------------------
-   8. Accessibility Improvements
+   10. Accessibility Improvements
 ---------------------------------------- */
 #cheshire-chat-input:focus,
-#cheshire-chat-send:focus {
+#cheshire-chat-send:focus,
+#cheshire-chat-close:focus { /* Added close button */
     outline: 2px solid var(--chat-primary-color);
     outline-offset: 2px;
 }
 
 /* ----------------------------------------
-   9. Responsive Design
----------------------------------------- */
-@media screen and (max-width: 480px) {
-    #cheshire-chat-container {
-        max-width: 90%;
-        right: 5%;
-        left: 5%;
-        bottom: 10px;
-    }
-
-    .user-message,
-    .bot-message,
-    .error-message {
-        max-width: 85%;
-    }
-}
-
-/* ----------------------------------------
-   10. Avatar Styles
+   11. Avatar Styles
 ---------------------------------------- */
 #cheshire-chat-avatar {
-    position: absolute;
-    bottom: -60px;
+    position: fixed;
     right: 20px;
-    width: 50px;
-    height: 50px;
-    z-index: 9999;
-    display: block;
+    bottom: var(--chat-avatar-bottom-margin);
+    width: var(--chat-avatar-size);
+    height: var(--chat-avatar-size);
+    z-index: 1001; /* Ensure avatar is above the transparent closed container */
+    display: block; /* Default, will be overridden if avatar not enabled */
+    cursor: pointer;
 }
 
 #cheshire-chat-avatar img {
@@ -261,46 +357,72 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Chat bubble styling when avatar is enabled */
-#cheshire-chat-container.with-avatar {
-    margin-bottom: 70px; /* Make room for the avatar */
-}
-
-#cheshire-chat-container.with-avatar:after {
+/* Chat bubble tail - only show when chat is explicitly open and avatar is enabled */
+#cheshire-chat-container.cheshire-chat-open.with-avatar:after {
     content: '';
     position: absolute;
-    bottom: -15px;
-    right: 30px;
+    bottom: -15px; /* Adjust to connect with avatar */
+    right: 30px;   /* Align with avatar position */
     width: 30px;
     height: 15px;
-    background-color: var(--chat-bg-color);
+    background-color: var(--chat-bg-color); /* Match chat container background */
     clip-path: polygon(0 0, 100% 0, 50% 100%);
     border-right: 1px solid var(--chat-border-color);
     border-left: 1px solid var(--chat-border-color);
-    z-index: 1000;
+    border-bottom: 1px solid var(--chat-border-color);
+    z-index: 999; /* Below main container content but above page */
     display: block;
 }
 
+
 /* ----------------------------------------
-   11. HTML Content Styling
+   12. Responsive Design
 ---------------------------------------- */
-/* Basic paragraph styling */
-p {
-    margin: 0;
+@media screen and (max-width: 480px) {
+    #cheshire-chat-container {
+        max-width: 100%; /* Use full width available */
+        width: calc(100% - 20px); /* Full width minus some padding */
+        right: 10px;
+        left: 10px;
+        bottom: calc(var(--chat-avatar-size) + var(--chat-avatar-bottom-margin) + var(--chat-container-bottom-margin));
+    }
+
+    #cheshire-chat-avatar {
+        right: 10px;
+        bottom: 10px; /* Smaller bottom margin on mobile */
+    }
+
+    #cheshire-chat-container.cheshire-chat-open.with-avatar:after {
+        right: 20px; /* Adjust tail position */
+    }
+
+    .user-message,
+    .bot-message,
+    .error-message {
+        max-width: 85%;
+    }
 }
 
-/* Styling for HTML elements in bot messages */
-.bot-message strong, 
+/* ----------------------------------------
+   13. HTML Content Styling in Bot Messages
+---------------------------------------- */
+.bot-message p { /* Ensure paragraphs inside bot messages have no extra margin if not desired */
+    margin: 0 0 0.5em 0; /* Add some bottom margin to paragraphs */
+}
+.bot-message p:last-child {
+    margin-bottom: 0;
+}
+
+.bot-message strong,
 .bot-message b {
     font-weight: bold;
 }
 
-.bot-message em, 
+.bot-message em,
 .bot-message i {
     font-style: italic;
 }
 
-/* Code blocks */
 .bot-message pre {
     background-color: #f5f5f5;
     border: 1px solid #ddd;
@@ -308,15 +430,17 @@ p {
     padding: 10px;
     margin: 10px 0;
     overflow-x: auto;
-    font-family: monospace;
+    font-family: monospace, 'Courier New', Courier;
     font-size: 13px;
     line-height: 1.4;
+    white-space: pre-wrap; /* Allow wrapping for long lines */
+    word-wrap: break-word; /* Break words if necessary */
 }
 
 .bot-message code {
     background-color: #f5f5f5;
     border-radius: 3px;
-    font-family: monospace;
+    font-family: monospace, 'Courier New', Courier;
     padding: 2px 4px;
     font-size: 90%;
 }
@@ -325,20 +449,21 @@ p {
     background-color: transparent;
     padding: 0;
     border-radius: 0;
+    font-size: inherit; /* Inherit font size from pre */
+    white-space: pre-wrap; /* Ensure code inside pre also wraps */
 }
 
-/* Lists */
-.bot-message ul, 
+.bot-message ul,
 .bot-message ol {
-    margin: 10px 0;
+    margin: 10px 0 10px 20px; /* Adjusted left margin for padding */
     padding-left: 20px;
 }
 
 .bot-message li {
     margin-bottom: 5px;
+    line-height: 1.4;
 }
 
-/* Links */
 .bot-message a {
     color: var(--chat-primary-color);
     text-decoration: underline;
@@ -348,14 +473,14 @@ p {
     color: var(--chat-primary-hover);
 }
 
-/* Tables */
 .bot-message table {
     border-collapse: collapse;
     width: 100%;
     margin: 10px 0;
+    font-size: 13px;
 }
 
-.bot-message th, 
+.bot-message th,
 .bot-message td {
     border: 1px solid #ddd;
     padding: 8px;
@@ -364,25 +489,34 @@ p {
 
 .bot-message th {
     background-color: #f5f5f5;
+    font-weight: bold;
 }
 
-/* Blockquotes */
 .bot-message blockquote {
     border-left: 3px solid var(--chat-primary-color);
-    margin: 10px 0;
-    padding-left: 10px;
-    color: #666;
+    margin: 10px 0 10px 5px; /* Adjusted left margin */
+    padding: 5px 10px; /* Added some padding */
+    color: #555; /* Slightly darker for better readability */
+    font-style: italic;
 }
 
-/* Headings */
-.bot-message h1, 
-.bot-message h2, 
-.bot-message h3, 
-.bot-message h4, 
-.bot-message h5, 
+.bot-message h1,
+.bot-message h2,
+.bot-message h3,
+.bot-message h4,
+.bot-message h5,
 .bot-message h6 {
-    margin: 10px 0 5px;
+    margin: 15px 0 8px;
     font-weight: bold;
+    line-height: 1.3;
+}
+.bot-message h1:first-child, /* Remove top margin if heading is the first element */
+.bot-message h2:first-child,
+.bot-message h3:first-child,
+.bot-message h4:first-child,
+.bot-message h5:first-child,
+.bot-message h6:first-child {
+    margin-top: 0;
 }
 
 .bot-message h1 { font-size: 1.6em; }
@@ -392,10 +526,10 @@ p {
 .bot-message h5 { font-size: 1em; }
 .bot-message h6 { font-size: 0.9em; }
 
-/* Images */
 .bot-message img {
     max-width: 100%;
     height: auto;
     margin: 10px 0;
     border-radius: 4px;
+    display: block; /* Ensure image is block for margin auto if needed */
 }

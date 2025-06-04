@@ -263,4 +263,52 @@ jQuery(document).ready(function($) {
             return false; // Prevent default behavior (form submission)
         }
     });
+
+    // Close chat on X button click
+    $('#cheshire-chat-close').click(function() {
+        // Don't hide the chat on the playground page
+        if ($('#cheshire-chat-container').hasClass('playground')) {
+            return;
+        }
+
+        $('#cheshire-chat-container').removeClass('cheshire-chat-open').addClass('cheshire-chat-closed');
+        // Store the state in localStorage so it persists across page loads
+        localStorage.setItem('cheshire_chat_state', 'closed');
+    });
+
+    // Open chat when avatar is clicked
+    $(document).on('click', '#cheshire-chat-avatar', function() {
+        if ($('#cheshire-chat-container').hasClass('cheshire-chat-closed')) {
+            $('#cheshire-chat-container').removeClass('cheshire-chat-closed').addClass('cheshire-chat-open');
+            // Update localStorage
+            localStorage.setItem('cheshire_chat_state', 'open');
+        }
+    });
+
+    // Check if chat should be opened on page load
+    $(document).ready(function() {
+        // Always show the chat on the playground page
+        if ($('#cheshire-chat-container').hasClass('playground')) {
+            $('#cheshire-chat-container').removeClass('cheshire-chat-closed').addClass('cheshire-chat-open');
+            return;
+        }
+
+        // Check localStorage for saved state
+        var savedState = localStorage.getItem('cheshire_chat_state');
+
+        // If saved state is 'open' or default state is 'open' and no saved state, open the chat
+        if (savedState === 'open' || (!savedState && cheshire_ajax_object.default_state === 'open')) {
+            $('#cheshire-chat-container').removeClass('cheshire-chat-closed').addClass('cheshire-chat-open');
+        }
+        // Otherwise, it stays closed (which is the default in HTML now)
+
+        // For backward compatibility, check the old localStorage key and update to new format
+        if (localStorage.getItem('cheshire_chat_hidden') === 'true') {
+            // Ensure chat stays closed
+            $('#cheshire-chat-container').removeClass('cheshire-chat-open').addClass('cheshire-chat-closed');
+            localStorage.setItem('cheshire_chat_state', 'closed');
+            // Remove old localStorage key
+            localStorage.removeItem('cheshire_chat_hidden');
+        }
+    });
 });

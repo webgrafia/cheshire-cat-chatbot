@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Cheshire Cat Chatbot\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-22 18:11+0000\n"
-"PO-Revision-Date: 2025-05-22 18:18+0000\n"
+"PO-Revision-Date: 2025-06-04 18:05+0000\n"
 "Last-Translator: \n"
 "Language-Team: Italiano\n"
 "Language: it_IT\n"
@@ -20,58 +20,105 @@ msgid ""
 "<strong>Cheshire Cat Token:</strong> The API token for your Cheshire Cat AI "
 "instance."
 msgstr ""
-"<strong>Token Cheshire Cat:</strong> il token API per la tua istanza di "
-"intelligenza artificiale Cheshire Cat."
+"<strong>Token Stregatto:</strong> il token API per la tua istanza dello "
+"Stregatto."
 
 #: inc/admin/overview.php:34
 msgid ""
 "<strong>Cheshire Cat URL:</strong> The URL where your Cheshire Cat AI "
 "instance is running."
 msgstr ""
-"<strong>URL di Cheshire Cat:</strong> l'URL in cui è in esecuzione l'istanza "
-"di Cheshire Cat AI."
+"<strong>URL dello Stregatto</strong> l'URL in cui è in esecuzione l'istanza "
+"dello Stregatto"
 
 #. Description of the plugin
 msgid ""
 "A WordPress plugin to integrate the Cheshire Cat AI chatbot, offering "
 "seamless conversational AI for your site."
 msgstr ""
-"Un plugin di WordPress per integrare il chatbot AI Cheshire Cat, offrendo "
+"Un plugin di WordPress per integrare il chatbot AI Stregatto, offrendo "
 "un'intelligenza artificiale conversazionale fluida per il tuo sito."
+
+#. %s: URL to the Style page
+#: inc/admin/configuration.php:131
+#, php-format
+msgid ""
+"After enabling the avatar, go to the %s page to upload your custom avatar "
+"image."
+msgstr ""
+"Dopo aver abilitato l'avatar, vai alla pagina %s per caricare l'immagine del "
+"tuo avatar personalizzato."
 
 #: inc/admin/overview.php:27
 msgid "Before You Begin"
 msgstr "Prima di iniziare"
 
-#: inc/admin/style.php:68
+#: inc/admin/configuration.php:124
+msgid "Chat Avatar"
+msgstr "Avatar della chat"
+
+#: inc/admin/style.php:132
+msgid "Chat Avatar Image"
+msgstr "Immagine avatar della chat"
+
+#: inc/admin/style.php:104
 msgid "Chat Background Color"
 msgstr "Colore di sfondo della chat"
 
-#: inc/admin/style.php:80
+#: inc/admin/style.php:116
 msgid "Chat Bot Message Color"
 msgstr "Colore del messaggio del chatbot"
 
-#: inc/admin/style.php:84
+#: inc/admin/style.php:120
 msgid "Chat Button Color"
 msgstr "Colore del pulsante della chat"
 
-#: inc/admin/style.php:88
+#: inc/admin/style.php:124
 msgid "Chat Font Family"
 msgstr "Famiglia di font Chat"
 
-#: inc/admin/style.php:72
+#: inc/admin/style.php:108
 msgid "Chat Text Color"
 msgstr "Colore del testo della chat"
 
-#: inc/admin/style.php:76
+#: inc/admin/style.php:112
 msgid "Chat User Message Color"
 msgstr "Colore del messaggio utente della chat"
 
-#: inc/admin/configuration.php:58
+#: inc/admin/configuration.php:128
+msgid ""
+"Check this box to display an avatar below the chat, making it look like a "
+"speech bubble."
+msgstr ""
+"Seleziona questa casella per visualizzare un avatar sotto la chat, facendolo "
+"sembrare un fumetto."
+
+#: inc/admin/configuration.php:120
 msgid "Check this box to enable the chat on every page of your website."
 msgstr ""
 "Seleziona questa casella per abilitare la chat su ogni pagina del tuo sito "
 "web."
+
+#: inc/admin/configuration.php:141
+msgid ""
+"Check this box to send page context information (title, description, etc.) "
+"to the Cheshire Cat with each message."
+msgstr ""
+"Seleziona questa casella per inviare informazioni contestuali sulla pagina "
+"(titolo, descrizione, ecc.) allo Stregatto con ogni messaggio."
+
+#: inc/admin/configuration.php:188
+msgid "Check this box to show the chat on your site's homepage."
+msgstr ""
+"Seleziona questa casella per mostrare la chat nella home page del tuo sito."
+
+#: inc/admin/configuration.php:159
+msgid ""
+"Check this box to show the chat only to users who are logged in to your "
+"WordPress site."
+msgstr ""
+"Seleziona questa casella per mostrare la chat solo agli utenti che hanno "
+"effettuato l'accesso al tuo sito WordPress."
 
 #. Page title
 #: inc/admin/admin-menu.php:14 inc/admin/admin-menu.php:15
@@ -80,26 +127,68 @@ msgstr "Stregatto"
 
 #. Name of the plugin
 msgid "Cheshire Cat Chatbot"
-msgstr "Chatbot del Gatto del Cheshire"
+msgstr "Chatbot del lo Stregatto"
 
-#: inc/admin/configuration.php:50
+#: inc/admin/configuration.php:112
 msgid "Cheshire Cat Token"
-msgstr "Gettone del Gatto del Cheshire"
+msgstr "Token  dello Stregatto"
 
-#: inc/admin/configuration.php:46
+#: inc/admin/configuration.php:108
 msgid "Cheshire Cat URL"
-msgstr "URL del gatto del Cheshire"
+msgstr "URL dello Stregatto"
 
-#: inc/ajax.php:24
+#: inc/ajax.php:46
 msgid "Cheshire Cat URL or Token not set."
 msgstr "URL o token dello Stregatto non impostato."
+
+#: inc/admin/configuration.php:151
+msgid ""
+"Choose whether the chat window should be open or closed by default when a "
+"user visits your site."
+msgstr ""
+"Scegli se la finestra della chat deve essere aperta o chiusa per "
+"impostazione predefinita quando un utente visita il tuo sito."
+
+#: inc/shortcodes.php:39
+msgid "Close chat"
+msgstr "Chiudi chat"
+
+#: inc/admin/configuration.php:149
+msgid "Closed"
+msgstr "Chiuso"
+
+#: inc/admin/style.php:36
+msgid "Color settings have been reset to default values."
+msgstr ""
+"Le impostazioni del colore sono state ripristinate ai valori predefiniti."
 
 #. Parent slug
 #. Page title
 #: inc/admin/admin-menu.php:43 inc/admin/admin-menu.php:44
-#: inc/admin/overview.php:39 inc/admin/overview.php:55
+#: inc/admin/overview.php:39 inc/admin/overview.php:55 inc/admin/style.php:144
 msgid "Configuration"
 msgstr "Configurazione"
+
+#: inc/admin/configuration.php:166
+msgid "Configure how the chat should be displayed across your site."
+msgstr ""
+"Configura il modo in cui la chat deve essere visualizzata sul tuo sito."
+
+#: inc/admin/configuration.php:165
+msgid "Content Type Settings"
+msgstr "Impostazioni del tipo di contenuto"
+
+#: inc/admin/configuration.php:137
+msgid "Context Information"
+msgstr "Informazioni di contesto"
+
+#: inc/admin/configuration.php:145
+msgid "Default Chat State"
+msgstr "Stato predefinito della chat"
+
+#: inc/admin/configuration.php:170
+msgid "Display Mode"
+msgstr "Modalità di visualizzazione"
 
 #: inc/admin/overview.php:44
 msgid "Displaying the Chat with the Shortcode"
@@ -109,7 +198,19 @@ msgstr "Visualizzazione della chat con lo shortcode"
 msgid "do not"
 msgstr "non fare"
 
-#: inc/admin/configuration.php:57
+#: inc/admin/configuration.php:127
+msgid "Enable Avatar"
+msgstr "Abilita Avatar"
+
+#: inc/admin/configuration.php:187
+msgid "Enable chat on homepage"
+msgstr "Abilita la chat sulla home page"
+
+#: inc/admin/configuration.php:140
+msgid "Enable Context Information"
+msgstr "Abilita informazioni contestuali"
+
+#: inc/admin/configuration.php:119
 msgid "Enable Global Chat"
 msgstr "Abilita chat globale"
 
@@ -117,17 +218,21 @@ msgstr "Abilita chat globale"
 msgid "Enabling Global Chat"
 msgstr "Abilitazione della chat globale"
 
-#: inc/admin/configuration.php:54
+#: inc/admin/configuration.php:116
 msgid "Global Chat"
 msgstr "Chat globale"
 
-#: cheshire-cat-chatbot.php:99 inc/admin/style.php:58
+#: cheshire-cat-chatbot.php:271 inc/admin/style.php:93
 msgid "Hello! How can I help you?"
 msgstr "Salve! Come posso aiutarti?"
 
 #. Author URI of the plugin
 msgid "https://bititup.it/"
 msgstr "https://bititup.it/"
+
+#. URI of the plugin
+msgid "https://cheshirecat.ai/"
+msgstr "https://cheshirecat.ai/"
 
 #: inc/admin/overview.php:55
 msgid ""
@@ -137,11 +242,25 @@ msgstr ""
 "Se desideri che la chat venga visualizzata su ogni pagina del tuo sito web, "
 "puoi abilitare l'opzione \"Chat globale\" nel"
 
+#: inc/admin/configuration.php:155
+msgid "Logged-in Users Only"
+msgstr "Solo utenti registrati"
+
+#. %s: URL to the Configuration page
+#: inc/admin/style.php:143
+#, php-format
+msgid ""
+"Make sure to enable the avatar feature in the %s page for the avatar to be "
+"displayed."
+msgstr ""
+"Assicurati di abilitare la funzionalità avatar nella pagina %s affinché "
+"l'avatar possa essere visualizzato."
+
 #. Author of the plugin
 msgid "Marco Buttarini"
 msgstr "Marco Buttarini"
 
-#: inc/ajax.php:36
+#: inc/ajax.php:29
 msgid "Message not provided."
 msgstr "Messaggio non fornito."
 
@@ -149,15 +268,62 @@ msgstr "Messaggio non fornito."
 msgid "need to use the shortcode."
 msgstr "è necessario utilizzare lo shortcode."
 
+#: inc/admin/configuration.php:129 inc/admin/style.php:141
+msgid "Note:"
+msgstr "Nota:"
+
+#: inc/admin/configuration.php:148
+msgid "Open"
+msgstr "Aprire"
+
 #. Parent slug
 #. Page title
 #: inc/admin/admin-menu.php:25 inc/admin/admin-menu.php:26
 msgid "Overview & Usage"
 msgstr "Panoramica e utilizzo"
 
+#. Parent slug
+#. Page title
+#: inc/admin/admin-menu.php:53 inc/admin/admin-menu.php:54
+msgid "Playground"
+msgstr "Parco giochi"
+
+#: inc/admin/configuration.php:199
+msgid "Post Types"
+msgstr "Tipi di post"
+
+#: inc/classes/CustomCheshireCat.php:210
+#, php-format
+msgid "Search Results for: %s"
+msgstr "Risultati della ricerca per: %s"
+
 #: inc/admin/overview.php:39 inc/admin/overview.php:55
 msgid "section."
 msgstr "sezione."
+
+#: inc/admin/configuration.php:194
+msgid "Select Content Types"
+msgstr "Seleziona tipi di contenuto"
+
+#: inc/admin/configuration.php:195
+msgid "Select which post types and taxonomies should have the chat enabled."
+msgstr "Seleziona per quali tipi di post e tassonomie abilitare la chat."
+
+#: inc/admin/configuration.php:158
+msgid "Show chat only to logged-in users"
+msgstr "Mostra la chat solo agli utenti registrati"
+
+#: inc/admin/configuration.php:184
+msgid "Show in Homepage"
+msgstr "Mostra nella homepage"
+
+#: inc/admin/configuration.php:174
+msgid "Show on all pages"
+msgstr "Mostra su tutte le pagine"
+
+#: inc/admin/configuration.php:178
+msgid "Show only on selected post types and taxonomies"
+msgstr "Mostra solo su tipi di post e tassonomie selezionati"
 
 #: inc/admin/overview.php:50
 msgid ""
@@ -169,9 +335,14 @@ msgstr ""
 
 #. Parent slug
 #. Page title
-#: inc/admin/admin-menu.php:34 inc/admin/admin-menu.php:35
+#: inc/admin/configuration.php:132 inc/admin/admin-menu.php:34
+#: inc/admin/admin-menu.php:35
 msgid "Style"
 msgstr "Stile"
+
+#: inc/admin/configuration.php:216
+msgid "Taxonomies"
+msgstr "Tassonomie"
 
 #: inc/admin/overview.php:29
 msgid ""
@@ -194,17 +365,42 @@ msgstr ""
 "Per utilizzare questo plugin, è necessario disporre di un'installazione "
 "funzionante di"
 
-#: inc/shortcodes.php:20
+#: inc/shortcodes.php:47 inc/admin/playground.php:43
 msgid "Type your message..."
 msgstr "Scrivi il tuo messaggio..."
+
+#: inc/admin/style.php:140
+msgid ""
+"Upload a custom avatar image. If none is provided, a default robot avatar "
+"will be used."
+msgstr ""
+"Carica un'immagine avatar personalizzata. Se non ne viene fornita alcuna, "
+"verrà utilizzato un avatar robot predefinito."
 
 #: inc/admin/overview.php:42
 msgid "Usage"
 msgstr "Utilizzo"
 
-#: inc/admin/style.php:92
+#: inc/admin/playground.php:35
+msgid ""
+"Use this playground to test your chatbot configuration and responses before "
+"making it available to your users."
+msgstr ""
+"Utilizza questo ambiente di gioco per testare la configurazione e le "
+"risposte del tuo chatbot prima di renderlo disponibile ai tuoi utenti."
+
+#: inc/admin/style.php:128
 msgid "Welcome Message"
 msgstr "Messaggio di benvenuto"
+
+#: inc/admin/playground.php:34
+msgid ""
+"Welcome to the Cheshire Cat Chatbot Playground! This is a full-page chat "
+"interface where you can test the chatbot as an administrator."
+msgstr ""
+"Benvenuti nel parco giochi del chatbot dello Stregatto! Questa è "
+"un'interfaccia di chat a pagina intera dove potete testare il chatbot come "
+"amministratore."
 
 #: inc/admin/overview.php:25
 #| msgid ""
@@ -215,7 +411,7 @@ msgid ""
 "Welcome to the Cheshire Cat Chatbot plugin! This plugin allows you to "
 "integrate the powerful Cheshire Cat AI chatbot into your WordPress website."
 msgstr ""
-"Benvenuti dal plugin Cheshire Cat Chatbot! Questo plugin vi permette di "
+"Benvenuti dal plugin Stregatto Chatbot! Questo plugin vi permette di "
 "integrare il chatbot di intelligenza artificiale Cheshire Cat nel vostro "
 "sito web WordPress."
 
@@ -231,8 +427,8 @@ msgstr ""
 msgid "You can enter these details in the"
 msgstr "Puoi inserire questi dettagli nel"
 
-#: inc/admin/configuration.php:17 inc/admin/overview.php:17
-#: inc/admin/style.php:17
+#: inc/admin/configuration.php:17 inc/admin/playground.php:19
+#: inc/admin/overview.php:17 inc/admin/style.php:17
 msgid "You do not have sufficient permissions to access this page."
 msgstr "Non hai autorizzazioni sufficienti per accedere a questa pagina."
 
@@ -241,4 +437,4 @@ msgid ""
 "You will need the following information from your Cheshire Cat AI setup:"
 msgstr ""
 "Avrai bisogno delle seguenti informazioni dalla configurazione "
-"dell'intelligenza artificiale del tuo Cheshire Cat:"
+"dell'intelligenza artificiale del tuo Stregatto:"

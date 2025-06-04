@@ -78,6 +78,9 @@ function cheshirecat_enqueue_scripts() {
         }
     }
 
+    // Get chat settings
+    $default_state = get_option('cheshire_plugin_default_state', 'open');
+
     // Localize script with AJAX data.
     wp_localize_script(
         'cheshire-chat-js', 
@@ -86,6 +89,7 @@ function cheshirecat_enqueue_scripts() {
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'nonce'    => wp_create_nonce( 'cheshire_ajax_nonce' ),
             'page_id'  => $current_page_id,
+            'default_state' => $default_state,
         )
     );
 
@@ -147,6 +151,9 @@ function cheshirecat_admin_enqueue_scripts($hook) {
     // Get current page/post ID (in admin, this will be 0)
     $current_page_id = 0;
 
+    // Get chat settings
+    $default_state = get_option('cheshire_plugin_default_state', 'open');
+
     // Localize script with AJAX data.
     wp_localize_script(
         'cheshire-chat-js', 
@@ -155,6 +162,7 @@ function cheshirecat_admin_enqueue_scripts($hook) {
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'nonce'    => wp_create_nonce( 'cheshire_ajax_nonce' ),
             'page_id'  => $current_page_id,
+            'default_state' => $default_state,
         )
     );
 
