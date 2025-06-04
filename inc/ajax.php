@@ -33,6 +33,10 @@ function cheshirecat_process_message() {
     // Sanitize the message.
     $message = sanitize_text_field( wp_unslash( $_POST['message'] ) );
 
+    // Get page information if provided
+    $page_id = isset( $_POST['page_id'] ) ? absint( $_POST['page_id'] ) : 0;
+    $page_url = isset( $_POST['page_url'] ) ? esc_url_raw( wp_unslash( $_POST['page_url'] ) ) : '';
+
     // Get Cheshire Cat configuration.
     $cheshire_plugin_url   = get_option( 'cheshire_plugin_url' );
     $cheshire_plugin_token = get_option( 'cheshire_plugin_token' );
@@ -45,6 +49,9 @@ function cheshirecat_process_message() {
 
     // Initialize Cheshire Cat client.
     $cheshire_cat = new inc\classes\Custom_Cheshire_Cat( $cheshire_plugin_url, $cheshire_plugin_token );
+
+    // Set page context information
+    $cheshire_cat->setPageContext($page_id, $page_url);
 
     try {
         // Send message and get response.

@@ -11,7 +11,7 @@
  * Plugin Name:       Cheshire Cat Chatbot
  * Plugin URI:        https://cheshirecat.ai/
  * Description:       A WordPress plugin to integrate the Cheshire Cat AI chatbot, offering seamless conversational AI for your site.
- * Version:           0.4.1
+ * Version:           0.5
  * Author:            Marco Buttarini
  * Author URI:        https://bititup.it/
  * License:           GPL-3.0-or-later
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'CHESHIRE_CAT_VERSION', '0.4.1' );
+define( 'CHESHIRE_CAT_VERSION', '0.5' );
 define( 'CHESHIRE_CAT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CHESHIRE_CAT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -69,6 +69,15 @@ function cheshirecat_enqueue_scripts() {
         $version
     );
 
+    // Get current page/post ID
+    $current_page_id = 0;
+    if (is_singular()) {
+        global $post;
+        if ($post) {
+            $current_page_id = $post->ID;
+        }
+    }
+
     // Localize script with AJAX data.
     wp_localize_script(
         'cheshire-chat-js', 
@@ -76,8 +85,12 @@ function cheshirecat_enqueue_scripts() {
         array(
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'nonce'    => wp_create_nonce( 'cheshire_ajax_nonce' ),
+            'page_id'  => $current_page_id,
         )
     );
+
+    // Also set the page ID as a global JavaScript variable for backward compatibility
+    wp_add_inline_script('cheshire-chat-js', 'window.cheshire_page_id = ' . $current_page_id . ';', 'before');
 
     // Enqueue Font Awesome for icons.
     wp_enqueue_style(
@@ -131,6 +144,9 @@ function cheshirecat_admin_enqueue_scripts($hook) {
         $version
     );
 
+    // Get current page/post ID (in admin, this will be 0)
+    $current_page_id = 0;
+
     // Localize script with AJAX data.
     wp_localize_script(
         'cheshire-chat-js', 
@@ -138,8 +154,12 @@ function cheshirecat_admin_enqueue_scripts($hook) {
         array(
             'ajax_url' => admin_url( 'admin-ajax.php' ),
             'nonce'    => wp_create_nonce( 'cheshire_ajax_nonce' ),
+            'page_id'  => $current_page_id,
         )
     );
+
+    // Also set the page ID as a global JavaScript variable for backward compatibility
+    wp_add_inline_script('cheshire-chat-js', 'window.cheshire_page_id = ' . $current_page_id . ';', 'before');
 
     // Enqueue Font Awesome for icons.
     wp_enqueue_style(

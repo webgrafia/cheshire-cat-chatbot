@@ -37,12 +37,19 @@ function cheshirecat_configuration_page()
         } else {
             update_option('cheshire_plugin_enable_avatar', 'off');
         }
+        if (isset($_POST['cheshire_plugin_enable_context'])) {
+            $cheshire_plugin_enable_context = sanitize_text_field(wp_unslash($_POST['cheshire_plugin_enable_context']));
+            update_option('cheshire_plugin_enable_context', $cheshire_plugin_enable_context);
+        } else {
+            update_option('cheshire_plugin_enable_context', 'off');
+        }
     }
 
     $cheshire_plugin_url = get_option('cheshire_plugin_url');
     $cheshire_plugin_token = get_option('cheshire_plugin_token');
     $cheshire_plugin_global_chat = get_option('cheshire_plugin_global_chat');
     $cheshire_plugin_enable_avatar = get_option('cheshire_plugin_enable_avatar', 'off');
+    $cheshire_plugin_enable_context = get_option('cheshire_plugin_enable_context', 'off');
     ?>
     <div class="wrap">
         <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
@@ -76,6 +83,14 @@ function cheshirecat_configuration_page()
                             esc_html__('After enabling the avatar, go to the %s page to upload your custom avatar image.', 'cheshire-cat-chatbot'),
                             '<a href="' . esc_url(admin_url('admin.php?page=cheshire-cat-style')) . '">' . esc_html__('Style', 'cheshire-cat-chatbot') . '</a>'
                         ); ?></p>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><?php esc_html_e('Context Information', 'cheshire-cat-chatbot'); ?></th>
+                    <td>
+                        <input type="checkbox" name="cheshire_plugin_enable_context" <?php checked($cheshire_plugin_enable_context, 'on'); ?> />
+                        <label for="cheshire_plugin_enable_context"><?php esc_html_e('Enable Context Information', 'cheshire-cat-chatbot'); ?></label>
+                        <p class="description"><?php esc_html_e('Check this box to send page context information (title, description, etc.) to the Cheshire Cat with each message.', 'cheshire-cat-chatbot'); ?></p>
                     </td>
                 </tr>
             </table>

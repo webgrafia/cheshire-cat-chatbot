@@ -4,7 +4,7 @@ Tags: chatbot, ai, cheshire cat, chat, assistant
 Requires at least: 5.8
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 0.4.1
+Stable tag: 0.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -25,6 +25,7 @@ A WordPress plugin to integrate the Cheshire Cat AI chatbot, offering seamless c
 *   **Easy to use:** Use a shortcode to add the chat to your pages.
 *   **Global Chat:** Enable the chat on every page of your website.
 *   **Avatar Support:** Display a customizable avatar below the chat, making it look like a speech bubble.
+*   **Context Awareness:** Optionally send page context information (title, content, etc.) to make the chatbot aware of the current page's content.
 
 == Installation ==
 
@@ -63,12 +64,22 @@ You can enable the avatar feature in the **Configuration** section of the Cheshi
 = What is the Playground page? =
 The Playground page is a full-page chat interface for administrators to test the chatbot. It's accessible from the Cheshire Cat menu in the WordPress admin area.
 
+= What is the Context Awareness feature? =
+The Context Awareness feature allows the chatbot to receive information about the current page (such as title, content, categories, etc.) with each message. This helps the chatbot provide more relevant responses based on the page the user is viewing. You can enable this feature in the Configuration section.
+
 == Screenshots ==
 
 1.  The Cheshire Cat Chatbot configuration page.
 2.  The chat interface in action.
 
 == Changelog ==
+
+= 0.5 =
+*   Added Context Awareness feature to send page information to the chatbot
+*   Improved page content detection for better context awareness
+*   Enhanced handling of different WordPress page types
+*   Added support for WooCommerce product information in context
+*   Fixed issues with title and content retrieval in AJAX requests
 
 = 0.4.1 =
 *   Added avatar functionality with customizable images
@@ -100,6 +111,9 @@ The Playground page is a full-page chat interface for administrators to test the
 *   Shortcode for adding the chat to pages and posts.
 
 == Upgrade Notice ==
+
+= 0.5 =
+Feature update: Added Context Awareness to make the chatbot aware of page content, improved content detection, and fixed title/content retrieval issues.
 
 = 0.4.1 =
 Feature update: Added avatar support, reset buttons, admin playground, and fixed CSS issues.

@@ -5,7 +5,7 @@
  * This file is responsible for cleaning up plugin data from the database.
  *
  * @package   CheshireCatWp
- * @since     0.4.1
+ * @since     0.5
  */
 
 // If uninstall not called from WordPress, then exit.
@@ -18,6 +18,7 @@ $option_names = array(
     'cheshire_plugin_token',
     'cheshire_plugin_global_chat',
     'cheshire_plugin_enable_avatar',
+    'cheshire_plugin_enable_context',
     'cheshire_chat_background_color',
     'cheshire_chat_text_color',
     'cheshire_chat_user_message_color',

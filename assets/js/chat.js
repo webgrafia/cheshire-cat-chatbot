@@ -217,7 +217,9 @@ jQuery(document).ready(function($) {
             data: {
                 action: 'cheshire_plugin_ajax',
                 message: message,
-                nonce: cheshire_ajax_object.nonce
+                nonce: cheshire_ajax_object.nonce,
+                page_id: cheshire_ajax_object.page_id || '',
+                page_url: window.location.href
             },
             success: function(response) {
                 // Hide loading indicator
