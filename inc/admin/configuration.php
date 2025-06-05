@@ -58,6 +58,19 @@ function cheshirecat_configuration_page()
             update_option('cheshire_plugin_logged_in_only', 'off');
         }
 
+        // Reinforcement message
+        if (isset($_POST['cheshire_plugin_enable_reinforcement'])) {
+            $cheshire_plugin_enable_reinforcement = sanitize_text_field(wp_unslash($_POST['cheshire_plugin_enable_reinforcement']));
+            update_option('cheshire_plugin_enable_reinforcement', $cheshire_plugin_enable_reinforcement);
+        } else {
+            update_option('cheshire_plugin_enable_reinforcement', 'off');
+        }
+
+        if (isset($_POST['cheshire_plugin_reinforcement_message'])) {
+            $cheshire_plugin_reinforcement_message = sanitize_textarea_field(wp_unslash($_POST['cheshire_plugin_reinforcement_message']));
+            update_option('cheshire_plugin_reinforcement_message', $cheshire_plugin_reinforcement_message);
+        }
+
         // Post types
         if (isset($_POST['cheshire_plugin_enabled_post_types']) && is_array($_POST['cheshire_plugin_enabled_post_types'])) {
             $post_types = array_map('sanitize_text_field', wp_unslash($_POST['cheshire_plugin_enabled_post_types']));
@@ -96,6 +109,8 @@ function cheshirecat_configuration_page()
     $cheshire_plugin_enable_context = get_option('cheshire_plugin_enable_context', 'off');
     $cheshire_plugin_default_state = get_option('cheshire_plugin_default_state', 'open');
     $cheshire_plugin_logged_in_only = get_option('cheshire_plugin_logged_in_only', 'off');
+    $cheshire_plugin_enable_reinforcement = get_option('cheshire_plugin_enable_reinforcement', 'off');
+    $cheshire_plugin_reinforcement_message = get_option('cheshire_plugin_reinforcement_message', 'reply with short sentences');
     $cheshire_plugin_content_type_mode = get_option('cheshire_plugin_content_type_mode', 'site_wide');
     $cheshire_plugin_show_in_homepage = get_option('cheshire_plugin_show_in_homepage', 'off');
     ?>
@@ -157,6 +172,19 @@ function cheshirecat_configuration_page()
                         <input type="checkbox" name="cheshire_plugin_logged_in_only" <?php checked($cheshire_plugin_logged_in_only, 'on'); ?> />
                         <label for="cheshire_plugin_logged_in_only"><?php esc_html_e('Show chat only to logged-in users', 'cheshire-cat-chatbot'); ?></label>
                         <p class="description"><?php esc_html_e('Check this box to show the chat only to users who are logged in to your WordPress site.', 'cheshire-cat-chatbot'); ?></p>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><?php esc_html_e('Reinforcement Message', 'cheshire-cat-chatbot'); ?></th>
+                    <td>
+                        <input type="checkbox" name="cheshire_plugin_enable_reinforcement" <?php checked($cheshire_plugin_enable_reinforcement, 'on'); ?> />
+                        <label for="cheshire_plugin_enable_reinforcement"><?php esc_html_e('Enable Reinforcement Message', 'cheshire-cat-chatbot'); ?></label>
+                        <p class="description"><?php esc_html_e('Check this box to add a reinforcement message to each prompt sent to the Cheshire Cat.', 'cheshire-cat-chatbot'); ?></p>
+                        <div style="margin-top: 10px;">
+                            <label for="cheshire_plugin_reinforcement_message"><?php esc_html_e('Reinforcement Message:', 'cheshire-cat-chatbot'); ?></label>
+                            <textarea name="cheshire_plugin_reinforcement_message" rows="3" style="width: 100%;"><?php echo esc_textarea($cheshire_plugin_reinforcement_message); ?></textarea>
+                            <p class="description"><?php esc_html_e('This message will be added to each prompt with format: "#IMPORTANT [your message]". Example: "reply with short sentences"', 'cheshire-cat-chatbot'); ?></p>
+                        </div>
                     </td>
                 </tr>
             </table>

@@ -163,6 +163,50 @@ class Custom_Cheshire_Cat extends CheshireCat {
                         $context .= "categories: " . wp_strip_all_tags($product_categories) . "\n";
                     }
 
+                    // Get custom tabs from woocommerce-product-tabs plugin
+                    if (class_exists('Barn2\Plugin\WC_Product_Tabs_Free\Product_Tabs')) {
+                        $custom_tabs = get_posts([
+                            'post_type'      => 'woo_product_tab',
+                            'posts_per_page' => -1,
+                            'orderby'        => 'menu_order',
+                            'order'          => 'asc',
+                            'suppress_filters' => 0
+                        ]);
+
+                        if (!empty($custom_tabs)) {
+                            $tabs_content = "";
+                            foreach ($custom_tabs as $tab) {
+                                $tab_id = $tab->post_name;
+                                $tab_title = $tab->post_title;
+
+                                // Check if tab is overridden for this product
+                                $override_meta = get_post_meta($post->ID, '_wpt_override_' . $tab_id, true);
+
+                                // The _wpt_override key doesn't exist in older versions of the plugin
+                                // Check for the _wpt_field_ meta for the product as a fallback
+                                if (empty($override_meta) && get_post_meta($post->ID, '_wpt_field_' . $tab_id, true)) {
+                                    $override_meta = 'yes';
+                                }
+
+                                $override_content = $override_meta === 'yes';
+
+                                if ($override_content) {
+                                    $tab_content = get_post_meta($post->ID, '_wpt_field_' . $tab_id, true);
+                                } else {
+                                    $tab_content = $tab->post_content;
+                                }
+
+                                if (!empty($tab_content)) {
+                                    $tabs_content .= $tab_title . ": " . wp_strip_all_tags($tab_content) . "\n";
+                                }
+                            }
+
+                            if (!empty($tabs_content)) {
+                                $context .= "custom_tabs: \n" . $tabs_content;
+                            }
+                        }
+                    }
+
                     // Get product variations if it's a variable product
                     if ($product->is_type('variable')) {
                         $variations = $product->get_available_variations();
@@ -324,6 +368,17 @@ class Custom_Cheshire_Cat extends CheshireCat {
         if ($enable_context === 'on') {
             $context_info = $this->get_context_information();
             $message .= "\n\n" . $context_info;
+        }
+
+        // Check if reinforcement message is enabled
+        $enable_reinforcement = get_option('cheshire_plugin_enable_reinforcement', 'off');
+
+        // Append reinforcement message to the message if enabled
+        if ($enable_reinforcement === 'on') {
+            $reinforcement_message = get_option('cheshire_plugin_reinforcement_message', '');
+            if (!empty($reinforcement_message)) {
+                $message .= "\n\n#IMPORTANT\n" . $reinforcement_message . "\n";
+            }
         }
 
         $payload = [
