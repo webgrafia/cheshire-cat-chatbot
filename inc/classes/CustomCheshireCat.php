@@ -40,6 +40,14 @@ class Custom_Cheshire_Cat extends CheshireCat {
     protected $page_url = '';
 
     /**
+     * Flag to indicate if the request is coming from the editor.
+     *
+     * @since 0.6.0
+     * @var bool
+     */
+    protected $from_editor = false;
+
+    /**
      * Set the page context information.
      *
      * @since 0.4.2
@@ -50,6 +58,17 @@ class Custom_Cheshire_Cat extends CheshireCat {
     public function setPageContext($page_id, $page_url) {
         $this->page_id = $page_id;
         $this->page_url = $page_url;
+    }
+
+    /**
+     * Set whether the request is coming from the editor.
+     *
+     * @since 0.6.0
+     * @param bool $from_editor Whether the request is coming from the editor.
+     * @return void
+     */
+    public function setFromEditor($from_editor) {
+        $this->from_editor = $from_editor;
     }
 
     /**
@@ -361,23 +380,26 @@ class Custom_Cheshire_Cat extends CheshireCat {
             }
         }
 
-        // Check if context information is enabled
-        $enable_context = get_option('cheshire_plugin_enable_context', 'off');
+        // Only add context and reinforcement if not coming from the editor
+        if (!$this->from_editor) {
+            // Check if context information is enabled
+            $enable_context = get_option('cheshire_plugin_enable_context', 'off');
 
-        // Append context information to the message if enabled
-        if ($enable_context === 'on') {
-            $context_info = $this->get_context_information();
-            $message .= "\n\n" . $context_info;
-        }
+            // Append context information to the message if enabled
+            if ($enable_context === 'on') {
+                $context_info = $this->get_context_information();
+                $message .= "\n\n" . $context_info;
+            }
 
-        // Check if reinforcement message is enabled
-        $enable_reinforcement = get_option('cheshire_plugin_enable_reinforcement', 'off');
+            // Check if reinforcement message is enabled
+            $enable_reinforcement = get_option('cheshire_plugin_enable_reinforcement', 'off');
 
-        // Append reinforcement message to the message if enabled
-        if ($enable_reinforcement === 'on') {
-            $reinforcement_message = get_option('cheshire_plugin_reinforcement_message', '');
-            if (!empty($reinforcement_message)) {
-                $message .= "\n\n#IMPORTANT\n" . $reinforcement_message . "\n";
+            // Append reinforcement message to the message if enabled
+            if ($enable_reinforcement === 'on') {
+                $reinforcement_message = get_option('cheshire_plugin_reinforcement_message', '');
+                if (!empty($reinforcement_message)) {
+                    $message .= "\n\n#IMPORTANT\n" . $reinforcement_message . "\n";
+                }
             }
         }
 

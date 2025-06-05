@@ -4,7 +4,7 @@ Tags: chatbot, ai, cheshire cat, chat, assistant
 Requires at least: 5.8
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 0.5.1
+Stable tag: 0.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -20,12 +20,12 @@ A WordPress plugin to integrate the Cheshire Cat AI chatbot, offering seamless c
 *   **Conversational AI:** Engage users with a natural language processing-powered chatbot.
 *   **Customizable Chat Interface:** Style the chat interface to match your website's design.
 *   **Sequential Conversation Display:** Show user and bot messages in a clear, chronological order.
-*   **Loading Indicator:** Display a loading animation while waiting for the bot's response.
 *   **Error Handling:** Display error messages if there are issues with the connection or the bot's response.
 *   **Easy to use:** Use a shortcode to add the chat to your pages.
-*   **Global Chat:** Enable the chat on every page of your website.
+*   **Global Chat:** Enable the chat on every page of your website or choose a specific post type or taxonomy.
 *   **Avatar Support:** Display a customizable avatar below the chat, making it look like a speech bubble.
 *   **Context Awareness:** Optionally send page context information (title, content, etc.) to make the chatbot aware of the current page's content.
+*   **TinyMCE Editor Integration:** Add AI-generated content directly to your posts and pages with a dedicated TinyMCE editor button.
 
 == Installation ==
 
@@ -39,7 +39,8 @@ A WordPress plugin to integrate the Cheshire Cat AI chatbot, offering seamless c
 
 1.  **Add the Shortcode:** To add the chat interface to a page or post, use the `[cheshire_chat]` shortcode.
 2.  **Interact with the Chatbot:** Visit the page where you added the shortcode and start chatting with the Cheshire Cat AI.
-3. **Enable Global Chat:** If you want the chat to appear on every page of your website, you can enable the "Global Chat" option in the **Settings -> Cheshire Cat** section.
+3.  **Enable Global Chat:** If you want the chat to appear on every page of your website, you can enable the "Global Chat" option in the **Settings -> Cheshire Cat** section.
+4.  **Use the TinyMCE Editor Button:** When editing a post or page, you'll see a Cheshire Cat button in the editor toolbar. Click it to open a dialog where you can enter a prompt. The AI-generated response will be inserted directly into your content.
 
 == Frequently Asked Questions ==
 
@@ -67,12 +68,35 @@ The Playground page is a full-page chat interface for administrators to test the
 = What is the Context Awareness feature? =
 The Context Awareness feature allows the chatbot to receive information about the current page (such as title, content, categories, etc.) with each message. This helps the chatbot provide more relevant responses based on the page the user is viewing. You can enable this feature in the Configuration section.
 
+= How do I use the TinyMCE editor button? =
+When editing a post or page, you'll see a Cheshire Cat button in the editor toolbar. Click it to open a dialog where you can enter your prompt. After submitting, the AI-generated response will be inserted directly into your content at the cursor position.
+
 == Screenshots ==
 
 1.  The Cheshire Cat Chatbot configuration page.
 2.  The chat interface in action.
 
 == Changelog ==
+
+= 0.6 =
+* Added TinyMCE editor button for inserting AI-generated content directly into posts and pages
+* Implemented modal dialog for entering prompts in the editor
+* Added functionality to process prompts and insert responses into the editor content
+
+= 0.5.4 =
+* Added chat persistence across page navigation
+* Added "New conversation" button to clear chat history
+* Improved user experience by maintaining conversation context between pages
+* Fixed styling issues with chat header buttons
+
+= 0.5.3 =
+* Fixed display logic for post types and taxonomies
+* Chat now only appears on singular pages of selected post types
+* Chat now only appears on term pages of selected taxonomies
+
+= 0.5.2 =
+*   Release with latest integrations and improvements
+*   Enhanced stability and performance
 
 = 0.5.1 =
 *   Maintenance release with stability improvements
@@ -115,6 +139,18 @@ The Context Awareness feature allows the chatbot to receive information about th
 *   Shortcode for adding the chat to pages and posts.
 
 == Upgrade Notice ==
+
+= 0.6 =
+Feature update: Added TinyMCE editor button that allows you to insert AI-generated content directly into your posts and pages. Simply click the Cheshire Cat button in the editor toolbar, enter your prompt, and the response will be inserted into your content.
+
+= 0.5.4 =
+Feature update: Added chat persistence across page navigation, allowing users to maintain their conversation when navigating between pages. Added a "New conversation" button for better user control.
+
+= 0.5.3 =
+Bugfix update: Improved display logic for post types and taxonomies. Chat now only appears on singular pages of selected post types and term pages of selected taxonomies.
+
+= 0.5.2 =
+Release with latest integrations: Enhanced stability and performance improvements.
 
 = 0.5.1 =
 Maintenance release: Stability improvements and bug fixes for better performance.

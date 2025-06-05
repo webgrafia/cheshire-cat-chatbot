@@ -11,7 +11,7 @@
  * Plugin Name:       Cheshire Cat Chatbot
  * Plugin URI:        https://cheshirecat.ai/
  * Description:       A WordPress plugin to integrate the Cheshire Cat AI chatbot, offering seamless conversational AI for your site.
- * Version:           0.5.1
+ * Version:           0.6.0
  * Author:            Marco Buttarini
  * Author URI:        https://bititup.it/
  * License:           GPL-3.0-or-later
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'CHESHIRE_CAT_VERSION', '0.5.1' );
+define( 'CHESHIRE_CAT_VERSION', '0.6.0' );
 define( 'CHESHIRE_CAT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CHESHIRE_CAT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -230,6 +230,12 @@ function cheshirecat_generate_dynamic_css() {
 
     // Build the custom CSS.
     $custom_css = "
+         :root {
+                --chat-primary-color: " . esc_attr( $chat_button_color ) . ";
+                --chat-primary-hover: " . esc_attr( $chat_bot_message_color ) . ";
+                --chat-primary-active: " . esc_attr( $chat_user_message_color ) . ";
+          }
+
         #cheshire-chat-container {
             background-color: " . esc_attr( $chat_background_color ) . ";
             font-family: " . esc_attr( $chat_font_family ) . ";
@@ -260,6 +266,10 @@ function cheshirecat_generate_dynamic_css() {
         #cheshire-chat-header {
             background-color: " . esc_attr( $chat_header_color ) . ";
         }
+
+        #cheshire-chat-close, #cheshire-chat-new {
+            color: " . esc_attr( $chat_button_color ) . ";
+        }
     ";
 
     return $custom_css;
@@ -275,3 +285,53 @@ function cheshirecat_display_welcome_message() {
     $welcome_message = get_option( 'cheshire_chat_welcome_message', __( 'Hello! How can I help you?', 'cheshire-cat-chatbot' ) );
     echo '<div class="bot-message"><p>' . esc_html( $welcome_message ) . '</p></div>';
 }
+
+/**
+ * Register TinyMCE plugin for Cheshire Cat Chatbot.
+ *
+ * @since 0.6
+ * @return void
+ */
+function cheshirecat_register_tinymce_plugin($plugins) {
+    $plugins['cheshire_cat'] = CHESHIRE_CAT_PLUGIN_URL . 'assets/js/tinymce-plugin.js';
+    return $plugins;
+}
+add_filter('mce_external_plugins', __NAMESPACE__ . '\cheshirecat_register_tinymce_plugin');
+
+/**
+ * Add Cheshire Cat button to TinyMCE editor.
+ *
+ * @since 0.6
+ * @return void
+ */
+function cheshirecat_add_tinymce_button($buttons) {
+    array_push($buttons, 'cheshire_cat');
+    return $buttons;
+}
+add_filter('mce_buttons', __NAMESPACE__ . '\cheshirecat_add_tinymce_button');
+
+/**
+ * Enqueue scripts and localize data for TinyMCE plugin.
+ *
+ * @since 0.6
+ * @return void
+ */
+function cheshirecat_tinymce_enqueue_scripts() {
+    // Only enqueue on post edit screens
+    $screen = get_current_screen();
+    if (!$screen || !in_array($screen->base, array('post', 'page'))) {
+        return;
+    }
+
+    // Localize script with AJAX data
+    wp_localize_script(
+        'jquery',
+        'cheshire_tinymce_object',
+        array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce'    => wp_create_nonce('cheshire_ajax_nonce'),
+            'plugin_url' => CHESHIRE_CAT_PLUGIN_URL,
+        )
+    );
+}
+add_action('admin_enqueue_scripts', __NAMESPACE__ . '\cheshirecat_tinymce_enqueue_scripts');

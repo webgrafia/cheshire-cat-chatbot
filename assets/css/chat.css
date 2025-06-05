@@ -128,7 +128,7 @@
 ---------------------------------------- */
 #cheshire-chat-header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: 5px 10px;
     border-bottom: 1px solid var(--chat-border-color);
     background-color: var(--chat-bg-color); /* Ensure header has background */
@@ -137,7 +137,9 @@
     flex-shrink: 0; /* Prevent header from shrinking */
 }
 
-#cheshire-chat-close {
+/* Common styles for header buttons */
+#cheshire-chat-close,
+#cheshire-chat-new {
     background: transparent;
     border: none;
     color: #999;
@@ -153,14 +155,26 @@
     transition: all var(--chat-transition-speed) ease;
 }
 
-#cheshire-chat-close:hover {
+#cheshire-chat-close:hover,
+#cheshire-chat-new:hover {
     background-color: rgba(0, 0, 0, 0.05);
     color: #666;
 }
 
-#cheshire-chat-close:focus {
+#cheshire-chat-close:focus,
+#cheshire-chat-new:focus {
     outline: 2px solid var(--chat-primary-color);
     outline-offset: 2px;
+}
+
+/* Position the new conversation button to the left */
+#cheshire-chat-new {
+    margin-right: auto;
+}
+
+/* Position the close button to the right */
+#cheshire-chat-close {
+    margin-left: auto;
 }
 
 /* ----------------------------------------

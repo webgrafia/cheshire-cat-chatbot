@@ -36,6 +36,9 @@ function cheshirecat_chat_shortcode()
     ?>
     <div id="cheshire-chat-container" class="<?php echo esc_attr($container_classes); ?>">
         <div id="cheshire-chat-header">
+            <button id="cheshire-chat-new" aria-label="<?php esc_attr_e('New conversation', 'cheshire-cat-chatbot'); ?>" title="<?php esc_attr_e('Start a new conversation', 'cheshire-cat-chatbot'); ?>">
+                <i class="fas fa-plus"></i>
+            </button>
             <button id="cheshire-chat-close" aria-label="<?php esc_attr_e('Close chat', 'cheshire-cat-chatbot'); ?>">
                 <i class="fas fa-times"></i>
             </button>
@@ -113,7 +116,9 @@ function cheshirecat_add_global_chat()
 
     // Only show chat if we're on an enabled post type or taxonomy
     if (
-        ($current_post_type && in_array($current_post_type, $enabled_post_types)) || 
+        // For all post types, only show on singular pages
+        ($current_post_type && is_singular($current_post_type) && in_array($current_post_type, $enabled_post_types)) ||
+        // For taxonomies, only show on taxonomy term pages (detail pages)
         ($is_taxonomy_page && in_array($current_taxonomy, $enabled_taxonomies))
     ) {
         echo do_shortcode('[cheshire_chat]');

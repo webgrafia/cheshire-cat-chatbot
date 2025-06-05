@@ -137,12 +137,32 @@ jQuery(document).ready(function($) {
     }
 
     /**
+     * Store chat messages in localStorage.
+     *
+     * @param {Array} messages - Array of message objects to store
+     */
+    function storeMessages(messages) {
+        localStorage.setItem('cheshire_chat_messages', JSON.stringify(messages));
+    }
+
+    /**
+     * Get stored chat messages from localStorage.
+     *
+     * @return {Array} Array of message objects
+     */
+    function getStoredMessages() {
+        var messages = localStorage.getItem('cheshire_chat_messages');
+        return messages ? JSON.parse(messages) : [];
+    }
+
+    /**
      * Display a message in the chat window.
      *
      * @param {string} message - The message to display
      * @param {string} type - The type of message ('user', 'bot', or 'error')
+     * @param {boolean} store - Whether to store the message (default: true)
      */
-    function displayMessage(message, type) {
+    function displayMessage(message, type, store = true) {
         var cssClass = '';
         var processedMessage = '';
 
@@ -171,6 +191,17 @@ jQuery(document).ready(function($) {
         $('#cheshire-chat-messages').append(
             '<div class="' + cssClass + '"><p>' + processedMessage + '</p></div>'
         );
+
+        // Store the message in localStorage if requested
+        if (store) {
+            var messages = getStoredMessages();
+            messages.push({
+                message: message,
+                type: type,
+                timestamp: new Date().getTime()
+            });
+            storeMessages(messages);
+        }
 
         scrollToBottom();
     }
@@ -259,6 +290,57 @@ jQuery(document).ready(function($) {
         });
     }
 
+    /**
+     * Load stored messages from localStorage and display them in the chat.
+     */
+    function loadStoredMessages() {
+        var messages = getStoredMessages();
+
+        // Clear existing welcome message if we have stored messages
+        if (messages.length > 0) {
+            $('#cheshire-chat-messages').empty();
+        }
+
+        // Display each stored message
+        messages.forEach(function(msgObj) {
+            // Use store=false to avoid re-storing the messages
+            displayMessage(msgObj.message, msgObj.type, false);
+        });
+    }
+
+    /**
+     * Clear chat history from localStorage and reset the chat window.
+     */
+    function clearChatHistory() {
+        // Clear localStorage
+        localStorage.removeItem('cheshire_chat_messages');
+
+        // Clear chat window
+        $('#cheshire-chat-messages').empty();
+
+        // Display welcome message again
+        $.ajax({
+            url: cheshire_ajax_object.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'cheshire_get_welcome_message',
+                nonce: cheshire_ajax_object.nonce
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('#cheshire-chat-messages').html(response.data);
+                } else {
+                    // If AJAX fails, add a default welcome message
+                    $('#cheshire-chat-messages').html('<div class="bot-message"><p>Hello! How can I help you?</p></div>');
+                }
+            },
+            error: function() {
+                // If AJAX fails, add a default welcome message
+                $('#cheshire-chat-messages').html('<div class="bot-message"><p>Hello! How can I help you?</p></div>');
+            }
+        });
+    }
+
     // Initialize the chat interface
 
     // Add icon to the send button
@@ -289,6 +371,11 @@ jQuery(document).ready(function($) {
         $('#cheshire-chat-container').removeClass('cheshire-chat-open').addClass('cheshire-chat-closed');
         // Store the state in localStorage so it persists across page loads
         localStorage.setItem('cheshire_chat_state', 'closed');
+    });
+
+    // Start new conversation on "New" button click
+    $('#cheshire-chat-new').click(function() {
+        clearChatHistory();
     });
 
     // Open chat when avatar is clicked
@@ -325,5 +412,8 @@ jQuery(document).ready(function($) {
             // Remove old localStorage key
             localStorage.removeItem('cheshire_chat_hidden');
         }
+
+        // Load stored messages from localStorage
+        loadStoredMessages();
     });
 });
