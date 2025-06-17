@@ -341,10 +341,56 @@ jQuery(document).ready(function($) {
         });
     }
 
+    /**
+     * Display predefined responses as clickable tags.
+     */
+    function displayPredefinedResponses() {
+        // Check if predefined responses container exists, if not create it
+        if ($('#cheshire-predefined-responses').length === 0) {
+            $('#cheshire-chat-input-container').before('<div id="cheshire-predefined-responses"></div>');
+        }
+
+        // Get predefined responses
+        $.ajax({
+            url: cheshire_ajax_object.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'cheshire_get_predefined_responses',
+                nonce: cheshire_ajax_object.nonce
+            },
+            success: function(response) {
+                if (response.success && response.data) {
+                    var responses = response.data;
+                    var tagsHtml = '';
+
+                    // Create a tag for each predefined response
+                    responses.forEach(function(response) {
+                        tagsHtml += '<span class="predefined-response-tag">' + encodeHTML(response) + '</span>';
+                    });
+
+                    // Add the tags to the container
+                    $('#cheshire-predefined-responses').html(tagsHtml);
+                }
+            }
+        });
+    }
+
+    /**
+     * Handle click on predefined response tag.
+     */
+    $(document).on('click', '.predefined-response-tag', function() {
+        var message = $(this).text();
+        $('#cheshire-chat-input').val(message);
+        sendMessage();
+    });
+
     // Initialize the chat interface
 
     // Add icon to the send button
     $('#cheshire-chat-send').html('<i class="far fa-arrow-alt-circle-right"></i>');
+
+    // Display predefined responses
+    displayPredefinedResponses();
 
     // Set up event handlers
 

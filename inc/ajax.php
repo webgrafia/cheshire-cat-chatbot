@@ -86,6 +86,31 @@ function cheshirecat_get_welcome_message() {
     wp_send_json_success( $welcome_message );
 }
 
+/**
+ * Handle AJAX request for getting predefined responses.
+ *
+ * @since 0.6.1
+ * @return void
+ */
+function cheshirecat_get_predefined_responses() {
+    // Verify nonce for security.
+    check_ajax_referer( 'cheshire_ajax_nonce', 'nonce' );
+
+    // Get predefined responses from options
+    $predefined_responses = get_option( 'cheshire_plugin_predefined_responses', '' );
+
+    // If empty, return empty array
+    if ( empty( $predefined_responses ) ) {
+        wp_send_json_success( array() );
+        return;
+    }
+
+    // Split by newline and filter out empty lines
+    $responses = array_filter( explode( "\n", $predefined_responses ), 'trim' );
+
+    wp_send_json_success( $responses );
+}
+
 // Register AJAX handlers for both logged-in and non-logged-in users.
 // Support both action names for backward compatibility.
 add_action( 'wp_ajax_cheshire_send_message', __NAMESPACE__ . '\cheshirecat_process_message' );
@@ -94,3 +119,5 @@ add_action( 'wp_ajax_cheshire_plugin_ajax', __NAMESPACE__ . '\cheshirecat_proces
 add_action( 'wp_ajax_nopriv_cheshire_plugin_ajax', __NAMESPACE__ . '\cheshirecat_process_message' );
 add_action( 'wp_ajax_cheshire_get_welcome_message', __NAMESPACE__ . '\cheshirecat_get_welcome_message' );
 add_action( 'wp_ajax_nopriv_cheshire_get_welcome_message', __NAMESPACE__ . '\cheshirecat_get_welcome_message' );
+add_action( 'wp_ajax_cheshire_get_predefined_responses', __NAMESPACE__ . '\cheshirecat_get_predefined_responses' );
+add_action( 'wp_ajax_nopriv_cheshire_get_predefined_responses', __NAMESPACE__ . '\cheshirecat_get_predefined_responses' );

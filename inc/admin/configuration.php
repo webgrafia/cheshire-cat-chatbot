@@ -71,6 +71,12 @@ function cheshirecat_configuration_page()
             update_option('cheshire_plugin_reinforcement_message', $cheshire_plugin_reinforcement_message);
         }
 
+        // Predefined responses
+        if (isset($_POST['cheshire_plugin_predefined_responses'])) {
+            $cheshire_plugin_predefined_responses = sanitize_textarea_field(wp_unslash($_POST['cheshire_plugin_predefined_responses']));
+            update_option('cheshire_plugin_predefined_responses', $cheshire_plugin_predefined_responses);
+        }
+
         // Post types
         if (isset($_POST['cheshire_plugin_enabled_post_types']) && is_array($_POST['cheshire_plugin_enabled_post_types'])) {
             $post_types = array_map('sanitize_text_field', wp_unslash($_POST['cheshire_plugin_enabled_post_types']));
@@ -113,6 +119,7 @@ function cheshirecat_configuration_page()
     $cheshire_plugin_reinforcement_message = get_option('cheshire_plugin_reinforcement_message', 'reply with short sentences');
     $cheshire_plugin_content_type_mode = get_option('cheshire_plugin_content_type_mode', 'site_wide');
     $cheshire_plugin_show_in_homepage = get_option('cheshire_plugin_show_in_homepage', 'off');
+    $cheshire_plugin_predefined_responses = get_option('cheshire_plugin_predefined_responses', '');
     ?>
     <div class="wrap">
         <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
@@ -184,6 +191,16 @@ function cheshirecat_configuration_page()
                             <label for="cheshire_plugin_reinforcement_message"><?php esc_html_e('Reinforcement Message:', 'cheshire-cat-chatbot'); ?></label>
                             <textarea name="cheshire_plugin_reinforcement_message" rows="3" style="width: 100%;"><?php echo esc_textarea($cheshire_plugin_reinforcement_message); ?></textarea>
                             <p class="description"><?php esc_html_e('This message will be added to each prompt with format: "#IMPORTANT [your message]". Example: "reply with short sentences"', 'cheshire-cat-chatbot'); ?></p>
+                        </div>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><?php esc_html_e('Predefined Responses', 'cheshire-cat-chatbot'); ?></th>
+                    <td>
+                        <div>
+                            <label for="cheshire_plugin_predefined_responses"><?php esc_html_e('Predefined Responses:', 'cheshire-cat-chatbot'); ?></label>
+                            <textarea name="cheshire_plugin_predefined_responses" rows="5" style="width: 100%;"><?php echo esc_textarea($cheshire_plugin_predefined_responses); ?></textarea>
+                            <p class="description"><?php esc_html_e('Enter one predefined response per line. These will appear as clickable tags in the chat area. When clicked, they will be sent as messages to the chatbot.', 'cheshire-cat-chatbot'); ?></p>
                         </div>
                     </td>
                 </tr>

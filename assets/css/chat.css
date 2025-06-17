@@ -557,3 +557,32 @@
     border-radius: 4px;
     display: block; /* Ensure image is block for margin auto if needed */
 }
+
+/* Predefined responses styles */
+#cheshire-predefined-responses {
+    padding: 8px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+}
+
+.predefined-response-tag {
+    display: inline-block;
+    background-color: var(--chat-primary-color);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.predefined-response-tag:hover {
+    background-color: var(--chat-primary-hover);
+}
