@@ -356,7 +356,8 @@ jQuery(document).ready(function($) {
             type: 'POST',
             data: {
                 action: 'cheshire_get_predefined_responses',
-                nonce: cheshire_ajax_object.nonce
+                nonce: cheshire_ajax_object.nonce,
+                page_id: cheshire_ajax_object.page_id || ''
             },
             success: function(response) {
                 if (response.success && response.data) {
@@ -381,6 +382,17 @@ jQuery(document).ready(function($) {
     $(document).on('click', '.predefined-response-tag', function() {
         var message = $(this).text();
         $('#cheshire-chat-input').val(message);
+
+        // If this is a content response tag, make sure the chat is open
+        if ($(this).hasClass('content-response-tag')) {
+            // Open the chat if it's closed
+            if ($('#cheshire-chat-container').hasClass('cheshire-chat-closed')) {
+                $('#cheshire-chat-container').removeClass('cheshire-chat-closed').addClass('cheshire-chat-open');
+                // Update localStorage
+                localStorage.setItem('cheshire_chat_state', 'open');
+            }
+        }
+
         sendMessage();
     });
 

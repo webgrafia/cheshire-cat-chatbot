@@ -40,6 +40,8 @@ require_once CHESHIRE_CAT_PLUGIN_DIR . 'vendor/autoload.php';
 require_once CHESHIRE_CAT_PLUGIN_DIR . 'inc/admin.php';
 require_once CHESHIRE_CAT_PLUGIN_DIR . 'inc/shortcodes.php';
 require_once CHESHIRE_CAT_PLUGIN_DIR . 'inc/ajax.php';
+require_once CHESHIRE_CAT_PLUGIN_DIR . 'inc/helpers.php';
+require_once CHESHIRE_CAT_PLUGIN_DIR . 'inc/meta-boxes.php';
 require_once CHESHIRE_CAT_PLUGIN_DIR . 'inc/classes/CustomCheshireCatClient.php'; // Load for backward compatibility
 require_once CHESHIRE_CAT_PLUGIN_DIR . 'inc/classes/CustomCheshireCat.php'; // Load for backward compatibility
 
@@ -335,3 +337,115 @@ function cheshirecat_tinymce_enqueue_scripts() {
     );
 }
 add_action('admin_enqueue_scripts', __NAMESPACE__ . '\cheshirecat_tinymce_enqueue_scripts');
+
+/**
+ * Display predefined responses at the end of content for enabled post types.
+ *
+ * @since 0.7
+ * @param string $content The post content.
+ * @return string The modified content with predefined responses.
+ */
+function cheshirecat_add_predefined_responses_to_content( $content ) {
+    // Check if the option is enabled
+    $show_predefined_in_content = get_option( 'cheshire_plugin_show_predefined_in_content', 'off' );
+    if ( $show_predefined_in_content !== 'on' ) {
+        return $content;
+    }
+
+    // Only show on singular posts/pages
+    if ( ! is_singular() ) {
+        return $content;
+    }
+
+    if (  is_product() ) {
+        return $content;
+    }
+
+    // Get current post type
+    $post_type = get_post_type();
+
+    // Check if current post type is enabled
+    $enabled_post_types = get_option( 'cheshire_plugin_enabled_post_types', array( 'post', 'page' ) );
+    if ( ! in_array( $post_type, $enabled_post_types ) ) {
+        return $content;
+    }
+
+    // Get current post ID
+    $post_id = get_the_ID();
+
+    // Get predefined responses with post override support
+    $responses = cheshirecat_get_predefined_responses_with_override( $post_id );
+    if ( empty( $responses ) ) {
+        return $content;
+    }
+
+    // Get the title for the predefined responses section
+    $title = get_option( 'cheshire_plugin_predefined_responses_title', __( 'Frequently Asked Questions', 'cheshire-cat-chatbot' ) );
+    $title = apply_filters( 'cheshire_predefined_responses_title', $title );
+
+    // Build the HTML for predefined responses
+    $html = '<div id="cheshire-predefined-responses-content" class="cheshire-predefined-responses-content" data-title="' . esc_attr( $title ) . '">';
+    foreach ( $responses as $response ) {
+        $html .= '<span class="predefined-response-tag content-response-tag">' . esc_html( $response ) . '</span>';
+    }
+    $html .= '</div>';
+
+    // Add the HTML to the content
+    return $content . $html;
+}
+add_filter( 'the_content', __NAMESPACE__ . '\cheshirecat_add_predefined_responses_to_content' );
+
+/**
+ * Display predefined responses after the WooCommerce product short description.
+ *
+ * @since 0.7
+ * @return void
+ */
+function cheshirecat_add_predefined_responses_after_product_short_description() {
+    // Check if WooCommerce is active
+    if ( ! class_exists( 'WooCommerce' ) ) {
+        return;
+    }
+
+    // Check if the option is enabled
+    $show_predefined_in_content = get_option( 'cheshire_plugin_show_predefined_in_content', 'off' );
+    if ( $show_predefined_in_content !== 'on' ) {
+        return;
+    }
+
+    // Only show on product pages
+    if ( ! is_product() ) {
+        return;
+    }
+
+    // Check if product post type is enabled
+    $enabled_post_types = get_option( 'cheshire_plugin_enabled_post_types', array( 'post', 'page' ) );
+    if ( ! in_array( 'product', $enabled_post_types ) ) {
+        return;
+    }
+
+    // Get current product ID
+    $post_id = get_the_ID();
+
+    // Get predefined responses with post override support
+    $responses = cheshirecat_get_predefined_responses_with_override( $post_id );
+    if ( empty( $responses ) ) {
+        return;
+    }
+
+    // Get the title for the predefined responses section
+    $title = get_option( 'cheshire_plugin_predefined_responses_title', __( 'Frequently Asked Questions', 'cheshire-cat-chatbot' ) );
+    $title = apply_filters( 'cheshire_predefined_responses_title', $title );
+
+    // Build the HTML for predefined responses
+    $html = '<div id="cheshire-predefined-responses-content" class="cheshire-predefined-responses-content" data-title="' . esc_attr( $title ) . '">';
+    foreach ( $responses as $response ) {
+        $html .= '<span class="predefined-response-tag content-response-tag">' . esc_html( $response ) . '</span>';
+    }
+    $html .= '</div>';
+
+    // Output the HTML directly after the short description
+    echo $html;
+}
+// Hook into woocommerce_single_product_summary with priority 40 (well after short description which is 20)
+add_action( 'woocommerce_after_add_to_cart_form', __NAMESPACE__ . '\cheshirecat_add_predefined_responses_after_product_short_description', 400 );

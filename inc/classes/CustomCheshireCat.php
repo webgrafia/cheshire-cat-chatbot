@@ -234,13 +234,46 @@ class Custom_Cheshire_Cat extends CheshireCat {
                             $variation_product = wc_get_product($variation['variation_id']);
                             $attributes = $variation_product->get_variation_attributes();
                             $variation_info .= "- ";
+
+                            // Add variation SKU
+                            $sku = $variation_product->get_sku();
+                            if (!empty($sku)) {
+                                $variation_info .= "SKU: " . $sku . ", ";
+                            }
+
+                            // Add variation ID
+                            $variation_info .= "ID: " . $variation_product->get_id() . ", ";
+
+                            // Add attributes
                             foreach ($attributes as $attribute_name => $attribute_value) {
                                 $taxonomy = str_replace('attribute_', '', $attribute_name);
                                 $term = get_term_by('slug', $attribute_value, $taxonomy);
                                 $attribute_label = wc_attribute_label($taxonomy);
                                 $variation_info .= $attribute_label . ": " . ($term ? $term->name : $attribute_value) . ", ";
                             }
-                            $variation_info .= "Price: " . $variation_product->get_price_html() . "\n";
+
+                            // Add price
+                            $variation_info .= "Price: " . $variation_product->get_price_html();
+
+                            // Add stock status and quantity if available
+                            if ($variation_product->managing_stock()) {
+                                $stock_quantity = $variation_product->get_stock_quantity();
+                                $variation_info .= ", Stock: " . ($stock_quantity !== null ? $stock_quantity : 'N/A');
+                            } else {
+                                $variation_info .= ", Stock: " . ($variation_product->is_in_stock() ? 'In Stock' : 'Out of Stock');
+                            }
+
+                            // Add any custom meta fields that might contain codes
+                            $meta_data = $variation_product->get_meta_data();
+                            foreach ($meta_data as $meta) {
+                                // Filter for relevant meta keys that might contain codes
+                                // Adjust this condition based on your specific meta field naming conventions
+                                if (strpos($meta->key, 'code') !== false || strpos($meta->key, 'cod') !== false) {
+                                    $variation_info .= ", " . ucfirst($meta->key) . ": " . $meta->value;
+                                }
+                            }
+
+                            $variation_info .= "\n";
                         }
                         $context .= "variants: \n" . $variation_info;
                     }

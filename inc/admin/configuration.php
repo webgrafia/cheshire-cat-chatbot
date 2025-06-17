@@ -77,6 +77,20 @@ function cheshirecat_configuration_page()
             update_option('cheshire_plugin_predefined_responses', $cheshire_plugin_predefined_responses);
         }
 
+        // Predefined responses title
+        if (isset($_POST['cheshire_plugin_predefined_responses_title'])) {
+            $cheshire_plugin_predefined_responses_title = sanitize_text_field(wp_unslash($_POST['cheshire_plugin_predefined_responses_title']));
+            update_option('cheshire_plugin_predefined_responses_title', $cheshire_plugin_predefined_responses_title);
+        }
+
+        // Show predefined responses at the end of content
+        if (isset($_POST['cheshire_plugin_show_predefined_in_content'])) {
+            $cheshire_plugin_show_predefined_in_content = sanitize_text_field(wp_unslash($_POST['cheshire_plugin_show_predefined_in_content']));
+            update_option('cheshire_plugin_show_predefined_in_content', $cheshire_plugin_show_predefined_in_content);
+        } else {
+            update_option('cheshire_plugin_show_predefined_in_content', 'off');
+        }
+
         // Post types
         if (isset($_POST['cheshire_plugin_enabled_post_types']) && is_array($_POST['cheshire_plugin_enabled_post_types'])) {
             $post_types = array_map('sanitize_text_field', wp_unslash($_POST['cheshire_plugin_enabled_post_types']));
@@ -120,6 +134,8 @@ function cheshirecat_configuration_page()
     $cheshire_plugin_content_type_mode = get_option('cheshire_plugin_content_type_mode', 'site_wide');
     $cheshire_plugin_show_in_homepage = get_option('cheshire_plugin_show_in_homepage', 'off');
     $cheshire_plugin_predefined_responses = get_option('cheshire_plugin_predefined_responses', '');
+    $cheshire_plugin_show_predefined_in_content = get_option('cheshire_plugin_show_predefined_in_content', 'off');
+    $cheshire_plugin_predefined_responses_title = get_option('cheshire_plugin_predefined_responses_title', __('Frequently Asked Questions', 'cheshire-cat-chatbot'));
     ?>
     <div class="wrap">
         <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
@@ -201,6 +217,16 @@ function cheshirecat_configuration_page()
                             <label for="cheshire_plugin_predefined_responses"><?php esc_html_e('Predefined Responses:', 'cheshire-cat-chatbot'); ?></label>
                             <textarea name="cheshire_plugin_predefined_responses" rows="5" style="width: 100%;"><?php echo esc_textarea($cheshire_plugin_predefined_responses); ?></textarea>
                             <p class="description"><?php esc_html_e('Enter one predefined response per line. These will appear as clickable tags in the chat area. When clicked, they will be sent as messages to the chatbot.', 'cheshire-cat-chatbot'); ?></p>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <label for="cheshire_plugin_predefined_responses_title"><?php esc_html_e('Predefined Responses Title:', 'cheshire-cat-chatbot'); ?></label>
+                            <input type="text" name="cheshire_plugin_predefined_responses_title" id="cheshire_plugin_predefined_responses_title" value="<?php echo esc_attr($cheshire_plugin_predefined_responses_title); ?>" style="width: 100%;" />
+                            <p class="description"><?php esc_html_e('This title will appear above the predefined responses when displayed in content.', 'cheshire-cat-chatbot'); ?></p>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <input type="checkbox" name="cheshire_plugin_show_predefined_in_content" id="cheshire_plugin_show_predefined_in_content" <?php checked($cheshire_plugin_show_predefined_in_content, 'on'); ?> />
+                            <label for="cheshire_plugin_show_predefined_in_content"><?php esc_html_e('Show predefined responses at the end of content', 'cheshire-cat-chatbot'); ?></label>
+                            <p class="description"><?php esc_html_e('Check this box to display predefined responses at the end of content for enabled post types. For regular posts, they will appear at the end of the content. For WooCommerce products, they will appear after the short description in the product summary area.', 'cheshire-cat-chatbot'); ?></p>
                         </div>
                     </td>
                 </tr>

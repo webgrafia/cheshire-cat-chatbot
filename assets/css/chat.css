@@ -577,12 +577,39 @@
     font-size: 12px;
     cursor: pointer;
     transition: background-color 0.2s;
-    max-width: 150px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .predefined-response-tag:hover {
     background-color: var(--chat-primary-hover);
+}
+
+/* Predefined responses in content */
+.cheshire-predefined-responses-content {
+    margin-top: 20px;
+    padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.cheshire-predefined-responses-content:before {
+    content: attr(data-title);
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+.content-response-tag {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.content-response-tag:hover {
+    transform: scale(1.05);
 }

@@ -96,17 +96,17 @@ function cheshirecat_get_predefined_responses() {
     // Verify nonce for security.
     check_ajax_referer( 'cheshire_ajax_nonce', 'nonce' );
 
-    // Get predefined responses from options
-    $predefined_responses = get_option( 'cheshire_plugin_predefined_responses', '' );
+    // Get page ID if provided
+    $page_id = isset( $_POST['page_id'] ) ? absint( $_POST['page_id'] ) : 0;
+
+    // Get predefined responses with post override support
+    $responses = cheshirecat_get_predefined_responses_with_override( $page_id );
 
     // If empty, return empty array
-    if ( empty( $predefined_responses ) ) {
+    if ( empty( $responses ) ) {
         wp_send_json_success( array() );
         return;
     }
-
-    // Split by newline and filter out empty lines
-    $responses = array_filter( explode( "\n", $predefined_responses ), 'trim' );
 
     wp_send_json_success( $responses );
 }
