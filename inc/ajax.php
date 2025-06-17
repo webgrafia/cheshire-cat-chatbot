@@ -96,6 +96,15 @@ function cheshirecat_get_predefined_responses() {
     // Verify nonce for security.
     check_ajax_referer( 'cheshire_ajax_nonce', 'nonce' );
 
+    // Check if predefined responses should be shown in content
+    $show_predefined_in_content = get_option( 'cheshire_plugin_show_predefined_in_content', 'off' );
+
+    // If predefined responses are shown in content, don't show them in chat
+    if ( $show_predefined_in_content === 'on' ) {
+        wp_send_json_success( array() );
+        return;
+    }
+
     // Get page ID if provided
     $page_id = isset( $_POST['page_id'] ) ? absint( $_POST['page_id'] ) : 0;
 

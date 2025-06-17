@@ -11,7 +11,7 @@
  * Plugin Name:       Cheshire Cat Chatbot
  * Plugin URI:        https://cheshirecat.ai/
  * Description:       A WordPress plugin to integrate the Cheshire Cat AI chatbot, offering seamless conversational AI for your site.
- * Version:           0.6.0
+ * Version:           0.6.4
  * Author:            Marco Buttarini
  * Author URI:        https://bititup.it/
  * License:           GPL-3.0-or-later
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'CHESHIRE_CAT_VERSION', '0.6.0' );
+define( 'CHESHIRE_CAT_VERSION', '0.6.4' );
 define( 'CHESHIRE_CAT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CHESHIRE_CAT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 

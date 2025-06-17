@@ -4,7 +4,7 @@ Tags: chatbot, ai, cheshire cat, chat, assistant
 Requires at least: 5.8
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 0.6
+Stable tag: 0.6.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -78,6 +78,28 @@ When editing a post or page, you'll see a Cheshire Cat button in the editor tool
 
 == Changelog ==
 
+= 0.6.4 =
+* Added option to hide predefined questions in chat when they are shown in content
+* Improved user experience by avoiding duplicate questions display
+* Enhanced compatibility with latest WordPress version
+
+= 0.6.3 =
+* Added support for predefined responses in content
+* Improved chat interface and styling
+* Enhanced compatibility with latest WordPress version
+* Fixed various bugs and improved performance
+
+= 0.6.2 =
+* Added predefined responses functionality
+* Improved user experience with better message handling
+* Fixed styling issues in various themes
+* Enhanced compatibility with WooCommerce
+
+= 0.6.1 =
+* Added support for custom predefined responses
+* Improved chat interface responsiveness
+* Fixed minor bugs and styling issues
+
 = 0.6 =
 * Added TinyMCE editor button for inserting AI-generated content directly into posts and pages
 * Implemented modal dialog for entering prompts in the editor
@@ -139,6 +161,18 @@ When editing a post or page, you'll see a Cheshire Cat button in the editor tool
 *   Shortcode for adding the chat to pages and posts.
 
 == Upgrade Notice ==
+
+= 0.6.4 =
+Feature update: Added option to hide predefined questions in chat when they are shown in content, improving user experience by avoiding duplicate display of questions.
+
+= 0.6.3 =
+Feature update: Added support for predefined responses in content, improved chat interface, and fixed various bugs for better performance and compatibility.
+
+= 0.6.2 =
+Feature update: Added predefined responses functionality, improved user experience, and enhanced compatibility with WooCommerce.
+
+= 0.6.1 =
+Feature update: Added support for custom predefined responses, improved chat interface responsiveness, and fixed minor bugs.
 
 = 0.6 =
 Feature update: Added TinyMCE editor button that allows you to insert AI-generated content directly into your posts and pages. Simply click the Cheshire Cat button in the editor toolbar, enter your prompt, and the response will be inserted into your content.
