@@ -16,6 +16,52 @@ jQuery(document).ready(function($) {
     }
 
     /**
+     * Get a cookie value by name.
+     *
+     * @param {string} name - The name of the cookie to retrieve
+     * @return {string|null} The cookie value or null if not found
+     */
+    function getCookie(name) {
+        var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        if (match) return match[2];
+        return null;
+    }
+
+    /**
+     * Get context information about the current page using an AJAX call to the server.
+     * This uses the PHP get_context_information() method directly instead of reimplementing it in JavaScript.
+     *
+     * @param {function} callback - Function to call with the context information when the AJAX call completes
+     * @return {void}
+     */
+    function getContextInformation(callback) {
+        $.ajax({
+            url: cheshire_ajax_object.ajax_url,
+            type: 'POST',
+            data: {
+                action: 'cheshire_get_context_information',
+                nonce: cheshire_ajax_object.nonce,
+                page_id: cheshire_ajax_object.page_id || '',
+                page_url: window.location.href
+            },
+            success: function(response) {
+                if (response.success) {
+                    callback(response.data);
+                } else {
+                    console.error('Error getting context information:', response);
+                    // Return an empty context if there's an error
+                    callback('');
+                }
+            },
+            error: function(error) {
+                console.error('AJAX error when getting context information:', error);
+                // Return an empty context if there's an error
+                callback('');
+            }
+        });
+    }
+
+    /**
      * Safely encode HTML entities to prevent XSS attacks.
      *
      * @param {string} text - The text to encode
@@ -74,6 +120,86 @@ jQuery(document).ready(function($) {
     }
 
     /**
+     * Get related link HTML from declarative memory items
+     * 
+     * @param {Object} data - The response data containing declarative memory items
+     * @param {boolean} isWebSocket - Whether this is for WebSocket mode
+     * @param {string} currentPostId - The ID of the current post (if in a post detail view)
+     * @return {string} The HTML for the related links, or empty string if none found
+     */
+    function getRelatedLinkHtml(data, isWebSocket = false, currentPostId = null) {
+        // console.log(currentPostId);
+        // Check if related links are enabled
+        if (!cheshire_ajax_object || cheshire_ajax_object.enable_related_links !== 'on') {
+            return '';
+        }
+
+        // Get the declarative memory items - check both possible structures
+        let declarativeItems = null;
+
+        if (data.why && data.why.memory && data.why.memory.declarative &&
+                 data.why.memory.declarative.length > 0) {
+            declarativeItems = data.why.memory.declarative;
+        }
+
+        // If no declarative items found, return empty string
+        if (!declarativeItems) {
+            return '';
+        }
+
+        // Get minimum score from settings
+        const minimumScore = parseFloat(cheshire_ajax_object.minimum_link_score) || 0.8;
+
+        // Find all WordPress items with score above minimum
+        let relatedItems = [];
+
+        for (let item of declarativeItems) {
+            // Skip items that have the same ID as the current post
+            if (currentPostId && item.metadata && item.metadata.wp_id && 
+                item.metadata.wp_id === currentPostId) {
+                continue;
+            }
+
+            if (item.metadata &&
+                item.metadata.origin === "WordPress" &&
+                item.metadata.url &&
+                item.metadata.title &&
+                item.score >= minimumScore) {
+                relatedItems.push(item);
+            }
+        }
+
+        // If we found suitable items, create links with their URLs and titles
+        if (relatedItems.length > 0) {
+            // For WebSocket mode, use a simpler format
+            if (isWebSocket) {
+                const linkText = cheshire_ajax_object.link_text || 'Related links';
+                let html = `<br><br><div class="cheshire-related-links" data-title="${linkText}">`;
+
+                for (let item of relatedItems) {
+                    html += `<span class="cheshire-related-links-tag"><a href="${item.metadata.url}" >${item.metadata.title}</a></span>`;
+                }
+
+                html += '</div>';
+                return html;
+            } else {
+                // For regular mode, use the same format
+                const linkText = cheshire_ajax_object.link_text || 'Related links';
+                let html = `<br><br><div class="cheshire-related-links" data-title="${linkText}">`;
+
+                for (let item of relatedItems) {
+                    html += `<span class="cheshire-related-links-tag"><a href="${item.metadata.url}" >${item.metadata.title}</a></span>`;
+                }
+
+                html += '</div>';
+                return html;
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * Extract content from the API response.
      *
      * @param {Object|string} data - The response data
@@ -87,31 +213,16 @@ jQuery(document).ready(function($) {
         }
 
         if (typeof data === 'object') {
-            // Handle AgentOutput format as shown in the issue description
-            if (data.output) {
-                content = data.output;
-            }
-            // Try to find content in other nested structures
-            else if (data.content) {
-                content = data.content;
-            }
-            // Handle other possible response formats
-            else if (data.text) {
+           if (data.text) {
                 content = data.text;
             }
-            else if (data.message) {
-                content = data.message;
-            }
-            else if (data.response) {
-                content = data.response;
-            }
-            else {
-                // If we can't find a specific content field, convert the object to a string
-                try {
-                    content = JSON.stringify(data);
-                } catch (e) {
-                    content = 'Unable to parse response';
-                }
+
+           console.log(cheshire_ajax_object);
+
+            // Add related link HTML if available
+            const relatedLinkHtml = getRelatedLinkHtml(data, false, cheshire_ajax_object.page_id);
+            if (relatedLinkHtml) {
+                content += relatedLinkHtml;
             }
         } else {
             content = data;
@@ -222,6 +333,225 @@ jQuery(document).ready(function($) {
     }
 
     /**
+     * Variables for tracking streaming message state
+     */
+    var currentStreamingMessage = '';
+    var streamingMessageElement = null;
+    var isStreaming = false;
+    var justFinishedStreaming = false;
+
+    /**
+     * Update the streaming message with new token content
+     * 
+     * @param {string} content - The token content to append
+     */
+    function updateStreamingMessage(content) {
+        // If this is the first token, create a new message element
+        if (!isStreaming) {
+            // Hide loading indicator
+            hideLoader();
+
+            // Create a new bot message
+            $('#cheshire-chat-messages').append(
+                '<div class="bot-message"><p></p></div>'
+            );
+
+            // Store reference to the message element
+            streamingMessageElement = $('#cheshire-chat-messages .bot-message:last-child p');
+
+            // Set streaming flag
+            isStreaming = true;
+
+            // Re-enable the send button and restore the original icon
+            $('#cheshire-chat-send').prop('disabled', false).html('<i class="far fa-arrow-alt-circle-right"></i>');
+        }
+
+        // Append the new content to the current message
+        currentStreamingMessage += content;
+
+        // Update the message element with the current content
+        // Sanitize the HTML and convert line breaks
+        var processedMessage = sanitizeHTML(currentStreamingMessage);
+        processedMessage = processedMessage.replace(/\n/g, '<br>');
+        streamingMessageElement.html(processedMessage);
+
+        // Scroll to bottom to show the updated message
+        scrollToBottom();
+    }
+
+    /**
+     * Finalize the streaming message when complete
+     */
+    function finalizeStreamingMessage() {
+        if (isStreaming) {
+            // Store the complete message in localStorage
+            var messages = getStoredMessages();
+            messages.push({
+                message: currentStreamingMessage,
+                type: 'bot',
+                timestamp: new Date().getTime()
+            });
+            storeMessages(messages);
+
+            // Reset streaming state
+            currentStreamingMessage = '';
+            streamingMessageElement = null;
+            isStreaming = false;
+
+            // Set flag to indicate we just finished streaming
+            justFinishedStreaming = true;
+
+            // Reset the flag after a short delay to handle any future messages correctly
+           // setTimeout(function() {
+           //     justFinishedStreaming = false;
+           // }, 1000);
+        }
+    }
+
+    /**
+     * WebSocket connection instance
+     */
+    var websocket = null;
+
+    /**
+     * Close WebSocket connection if it exists
+     */
+    function closeWebSocket() {
+        if (websocket && websocket.readyState === WebSocket.OPEN) {
+            websocket.close();
+            websocket = null;
+            console.log('WebSocket connection closed by user');
+        }
+    }
+
+    /**
+     * Initialize WebSocket connection
+     */
+    function initWebSocket() {
+        // Check if WebSocket is enabled, URL is provided, and chatbot is enabled on this page
+        if (cheshire_ajax_object.enable_websocket !== 'on' || 
+            !cheshire_ajax_object.cheshire_url || 
+            !cheshire_ajax_object.is_chatbot_enabled) {
+            return false;
+        }
+
+        var wsUrl;
+
+        // Use custom WebSocket URL if provided, otherwise convert HTTP URL to WebSocket URL
+        if (cheshire_ajax_object.websocket_url) {
+            wsUrl = cheshire_ajax_object.websocket_url;
+        } else {
+            // Convert HTTP URL to WebSocket URL
+            wsUrl = cheshire_ajax_object.cheshire_url.replace(/^http/, 'ws');
+        }
+
+        // Make sure the URL ends with a slash
+        if (!wsUrl.endsWith('/')) {
+            wsUrl += '/';
+        }
+
+        // Add the WebSocket endpoint
+        wsUrl += 'ws';
+
+        // Add token as query parameter if available
+        if (cheshire_ajax_object.token) {
+            wsUrl += '?token=' + encodeURIComponent(cheshire_ajax_object.token);
+        }
+
+        try {
+            // Create WebSocket connection
+            websocket = new WebSocket(wsUrl);
+
+            // Connection opened
+            websocket.onopen = function(event) {
+                console.log('WebSocket connection established');
+            };
+
+            // Listen for messages
+            websocket.onmessage = function(event) {
+                try {
+                    var response = JSON.parse(event.data);
+                    // Check if this is a token message
+                    if (response.type === 'chat_token') {
+
+                        // This is a token with content, update the streaming message
+                        updateStreamingMessage(response.content.replace(/\n/g, '<br>'));
+                        return;
+                    }
+
+                    // If we get here, this is not a token message
+                    // If we were streaming, finalize the previous message
+                    if (isStreaming) {
+
+                        if (response.type === 'chat') {
+                          //  console.log(response);
+                           // console.log(cheshire_ajax_object);
+                            // Add related link HTML if available
+                            const relatedLinkHtml = getRelatedLinkHtml(response, true, cheshire_ajax_object.page_id);
+                            if (relatedLinkHtml) {
+                                updateStreamingMessage(relatedLinkHtml);
+                            }
+                            finalizeStreamingMessage();
+                        }
+                    }
+
+                    // Hide loading indicator
+                    hideLoader();
+
+                    // Re-enable the send button and restore the original icon
+                    $('#cheshire-chat-send').prop('disabled', false).html('<i class="far fa-arrow-alt-circle-right"></i>');
+
+                    // Only display the complete message if we haven't just finished streaming
+                    // This prevents duplicate messages when the server sends both tokens and a complete message
+                    if (!justFinishedStreaming) {
+                        // Extract and display the content for non-token messages
+                        var content = extractContent(response);
+                        displayMessage(content, 'bot');
+                    }
+                } catch (e) {
+                    console.error('Error parsing WebSocket message:', e);
+                    displayMessage('Error processing response', 'error');
+
+                    // Reset streaming state on error
+                    if (isStreaming) {
+                        finalizeStreamingMessage();
+                    }
+                }
+            };
+
+            // Connection closed
+            websocket.onclose = function(event) {
+                console.log('WebSocket connection closed');
+
+                // Clean up streaming state if we were in the middle of streaming
+                if (isStreaming) {
+                    finalizeStreamingMessage();
+                }
+
+                websocket = null;
+            };
+
+            // Connection error
+            websocket.onerror = function(error) {
+                console.error('WebSocket error:', error);
+                displayMessage('WebSocket connection error', 'error');
+
+                // Clean up streaming state if we were in the middle of streaming
+                if (isStreaming) {
+                    finalizeStreamingMessage();
+                }
+
+                websocket = null;
+            };
+
+            return true;
+        } catch (e) {
+            console.error('Error creating WebSocket:', e);
+            return false;
+        }
+    }
+
+    /**
      * Send a message to the Cheshire Cat API and handle the response.
      */
     function sendMessage() {
@@ -248,46 +578,104 @@ jQuery(document).ready(function($) {
         // Show loading indicator
         showLoader();
 
-        // Send the message to the server
-        $.ajax({
-            url: cheshire_ajax_object.ajax_url,
-            type: 'POST',
-            data: {
-                action: 'cheshire_plugin_ajax',
-                message: message,
-                nonce: cheshire_ajax_object.nonce,
-                page_id: cheshire_ajax_object.page_id || '',
-                page_url: window.location.href
-            },
-            success: function(response) {
-                // Hide loading indicator
-                hideLoader();
+        // Check if we should use WebSocket (only for regular chat, not for editor or prompt tester)
+        if (cheshire_ajax_object.enable_websocket === 'on' && websocket && websocket.readyState === WebSocket.OPEN) {
+            // Get user ID - try to use the same logic as in PHP
+            var userId = 'wp';
 
-                // Re-enable the send button and restore the original icon
-                sendButton.prop('disabled', false);
-                sendButton.html('<i class="far fa-arrow-alt-circle-right"></i>');
-
-                if (response.success) {
-                    // Extract and display the content
-                    var content = extractContent(response.data);
-                    displayMessage(content, 'bot');
-                } else {
-                    // Handle error response
-                    displayMessage(response.data || 'Unknown error', 'error');
-                }
-            },
-            error: function(error) {
-                // Hide loading indicator
-                hideLoader();
-
-                // Re-enable the send button and restore the original icon
-                sendButton.prop('disabled', false);
-                sendButton.html('<i class="far fa-arrow-alt-circle-right"></i>');
-
-                // Handle AJAX error
-                displayMessage(error.statusText || 'Connection error', 'error');
+            // Check if there's a cookie for user ID
+            var userIdCookie = getCookie('cheshire_cat_user_id');
+            if (userIdCookie) {
+                userId = userIdCookie;
             }
-        });
+
+            // Function to prepare and send the WebSocket message
+            function prepareAndSendWebSocketMessage(messageText, contextInfo) {
+                // Start with the original message
+                var modifiedMessage = messageText;
+
+                // Add context information if provided
+                if (contextInfo) {
+                    modifiedMessage += "\n\n" + contextInfo;
+                }
+
+                // Check if reinforcement message is enabled
+                var enableReinforcement = cheshire_ajax_object.enable_reinforcement || 'off';
+
+                // Append reinforcement message to the message if enabled
+                if (enableReinforcement === 'on') {
+                    var reinforcementMessage = cheshire_ajax_object.reinforcement_message || '';
+                    if (reinforcementMessage) {
+                        modifiedMessage += "\n\n#IMPORTANT\n" + reinforcementMessage + "\n";
+                    }
+                }
+
+                // Prepare the message payload with only the essential information
+                var payload = {
+                    text: modifiedMessage,
+                    user_id: userId
+                };
+
+                // Send the message via WebSocket
+                websocket.send(JSON.stringify(payload));
+            }
+
+            var enableContext = cheshire_ajax_object.enable_context || 'off';
+
+            // If context is enabled, get it via AJAX and then send the message
+            if (enableContext === 'on') {
+                getContextInformation(function(contextInfo) {
+                    prepareAndSendWebSocketMessage(message, contextInfo);
+                });
+            } else {
+                // If context is not enabled, just send the message without context
+                prepareAndSendWebSocketMessage(message, null);
+            }
+
+
+
+        } else {
+            // Fallback to AJAX if WebSocket is not available or not enabled
+            $.ajax({
+                url: cheshire_ajax_object.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'cheshire_plugin_ajax',
+                    message: message,
+                    nonce: cheshire_ajax_object.nonce,
+                    page_id: cheshire_ajax_object.page_id || '',
+                    page_url: window.location.href
+                },
+                success: function(response) {
+                    // Hide loading indicator
+                    hideLoader();
+
+                    // Re-enable the send button and restore the original icon
+                    sendButton.prop('disabled', false);
+                    sendButton.html('<i class="far fa-arrow-alt-circle-right"></i>');
+
+                    if (response.success) {
+                        // Extract and display the content
+                        var content = extractContent(response.data);
+                        displayMessage(content, 'bot');
+                    } else {
+                        // Handle error response
+                        displayMessage(response.data || 'Unknown error', 'error');
+                    }
+                },
+                error: function(error) {
+                    // Hide loading indicator
+                    hideLoader();
+
+                    // Re-enable the send button and restore the original icon
+                    sendButton.prop('disabled', false);
+                    sendButton.html('<i class="far fa-arrow-alt-circle-right"></i>');
+
+                    // Handle AJAX error
+                    displayMessage(error.statusText || 'Connection error', 'error');
+                }
+            });
+        }
     }
 
     /**
@@ -357,7 +745,9 @@ jQuery(document).ready(function($) {
             data: {
                 action: 'cheshire_get_predefined_responses',
                 nonce: cheshire_ajax_object.nonce,
-                page_id: cheshire_ajax_object.page_id || ''
+                page_id: cheshire_ajax_object.page_id || '',
+                is_product_category: cheshire_ajax_object.is_product_category || false,
+                product_category_id: cheshire_ajax_object.product_category_id || 0
             },
             success: function(response) {
                 if (response.success && response.data) {
@@ -390,6 +780,8 @@ jQuery(document).ready(function($) {
                 $('#cheshire-chat-container').removeClass('cheshire-chat-closed').addClass('cheshire-chat-open');
                 // Update localStorage
                 localStorage.setItem('cheshire_chat_state', 'open');
+                // Initialize WebSocket when chat is opened
+                initWebSocket();
             }
         }
 
@@ -429,6 +821,8 @@ jQuery(document).ready(function($) {
         $('#cheshire-chat-container').removeClass('cheshire-chat-open').addClass('cheshire-chat-closed');
         // Store the state in localStorage so it persists across page loads
         localStorage.setItem('cheshire_chat_state', 'closed');
+        // Close WebSocket connection when chat is closed
+        closeWebSocket();
     });
 
     // Start new conversation on "New" button click
@@ -442,6 +836,8 @@ jQuery(document).ready(function($) {
             $('#cheshire-chat-container').removeClass('cheshire-chat-closed').addClass('cheshire-chat-open');
             // Update localStorage
             localStorage.setItem('cheshire_chat_state', 'open');
+            // Initialize WebSocket when chat is opened
+            initWebSocket();
         }
     });
 
@@ -450,6 +846,8 @@ jQuery(document).ready(function($) {
         // Always show the chat on the playground page
         if ($('#cheshire-chat-container').hasClass('playground')) {
             $('#cheshire-chat-container').removeClass('cheshire-chat-closed').addClass('cheshire-chat-open');
+            // Initialize WebSocket when chat is opened
+            initWebSocket();
             return;
         }
 
@@ -459,6 +857,8 @@ jQuery(document).ready(function($) {
         // If saved state is 'open' or default state is 'open' and no saved state, open the chat
         if (savedState === 'open' || (!savedState && cheshire_ajax_object.default_state === 'open')) {
             $('#cheshire-chat-container').removeClass('cheshire-chat-closed').addClass('cheshire-chat-open');
+            // Initialize WebSocket when chat is opened
+            initWebSocket();
         }
         // Otherwise, it stays closed (which is the default in HTML now)
 

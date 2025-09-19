@@ -103,6 +103,7 @@ function cheshirecat_style_page()
                 $input_placeholder = sanitize_text_field(wp_unslash($_POST['cheshire_plugin_input_placeholder']));
                 update_option('cheshire_plugin_input_placeholder', $input_placeholder);
             }
+            // Avatar is always enabled, no need to check for the option
         }
     }
 
@@ -116,14 +117,18 @@ function cheshirecat_style_page()
     $cheshire_chat_welcome_message = get_option('cheshire_chat_welcome_message', __('Hello! How can I help you?', 'cheshire-cat-chatbot'));
     $cheshire_chat_avatar_image = get_option('cheshire_chat_avatar_image', '');
     $cheshire_plugin_input_placeholder = get_option('cheshire_plugin_input_placeholder', __('Type your message...', 'cheshire-cat-chatbot'));
+    // Avatar is always enabled
+    $cheshire_plugin_enable_avatar = 'on';
     ?>
-    <div class="wrap">
+    <div class="wrap cheshire-admin">
         <h1><?php if (function_exists('get_admin_page_title')) {
                 echo esc_html(get_admin_page_title());
             } ?></h1>
         <form method="post" enctype="multipart/form-data">
             <?php wp_nonce_field('cheshire_style_save_settings', 'cheshire_style_nonce'); ?>
-            <table class="form-table">
+            <div class="cheshire-section">
+                <h2><?php _e('Chat Appearance', 'cheshire-cat-chatbot'); ?></h2>
+                <table class="form-table">
                 <tr valign="top">
                     <th scope="row"><?php esc_html_e('Chat Header Color', 'cheshire-cat-chatbot'); ?></th>
                     <td>
@@ -165,27 +170,31 @@ function cheshirecat_style_page()
                         <p class="description"><?php esc_html_e('Customize the placeholder text shown in the chat input field.', 'cheshire-cat-chatbot'); ?></p>
                     </td>
                 </tr>
-                <tr valign="top">
-                    <th scope="row"><?php esc_html_e('Chat Avatar Image', 'cheshire-cat-chatbot'); ?></th>
-                    <td>
-                        <?php if (!empty($cheshire_chat_avatar_image)) : ?>
-                            <div style="margin-bottom: 10px;">
-                                <img src="<?php echo esc_url($cheshire_chat_avatar_image); ?>" alt="Avatar" style="max-width: 100px; height: auto;" />
-                                <button type="submit" name="remove_avatar" class="button button-secondary" style="margin-left: 10px;">
-                                    <?php esc_html_e('Remove Avatar', 'cheshire-cat-chatbot'); ?>
-                                </button>
-                            </div>
-                        <?php endif; ?>
-                        <input type="file" name="cheshire_chat_avatar_image" accept="image/*" />
-                        <p class="description"><?php esc_html_e('Upload a custom avatar image. If none is provided, a default robot avatar will be used.', 'cheshire-cat-chatbot'); ?></p>
-                        <p class="description"><strong><?php esc_html_e('Note:', 'cheshire-cat-chatbot'); ?></strong> <?php printf(
-                            /* translators: %s: URL to the Configuration page */
-                            esc_html__('Make sure to enable the avatar feature in the %s page for the avatar to be displayed.', 'cheshire-cat-chatbot'),
-                            '<a href="' . esc_url(admin_url('admin.php?page=cheshire-cat-configuration')) . '">' . esc_html__('Configuration', 'cheshire-cat-chatbot') . '</a>'
-                        ); ?></p>
-                    </td>
-                </tr>
             </table>
+            </div><!-- End of Chat Appearance section -->
+
+            <div class="cheshire-section">
+                <h2><?php _e('Avatar Settings', 'cheshire-cat-chatbot'); ?></h2>
+                <p class="description"><?php esc_html_e('Customize the avatar that appears in the chat interface.', 'cheshire-cat-chatbot'); ?></p>
+                <table class="form-table">
+                    <tr valign="top">
+                        <th scope="row"><?php esc_html_e('Chat Avatar Image', 'cheshire-cat-chatbot'); ?></th>
+                        <td>
+                            <?php if (!empty($cheshire_chat_avatar_image)) : ?>
+                                <div class="avatar-preview">
+                                    <img src="<?php echo esc_url($cheshire_chat_avatar_image); ?>" alt="Avatar" />
+                                    <button type="submit" name="remove_avatar" class="button button-secondary remove-avatar-button">
+                                        <?php esc_html_e('Remove Avatar', 'cheshire-cat-chatbot'); ?>
+                                    </button>
+                                </div>
+                            <?php endif; ?>
+                            <input type="file" name="cheshire_chat_avatar_image" accept="image/*" />
+                            <p class="description"><?php esc_html_e('Upload a custom avatar image. If none is provided, a default robot avatar will be used.', 'cheshire-cat-chatbot'); ?></p>
+                        </td>
+                    </tr>
+                </table>
+            </div><!-- End of Avatar Settings section -->
+
             <?php submit_button(); ?>
         </form>
     </div>

@@ -497,6 +497,50 @@
     color: var(--chat-primary-hover);
 }
 
+.cheshire-related-links{
+   background: white;
+}
+
+.cheshire-related-links-tag a {
+    display: inline-block;
+    background-color: var(--chat-primary-color);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-decoration: none;
+}
+
+.cheshire-related-links-tag a:hover {
+    background-color: var(--chat-primary-hover);
+    color: white;
+}
+
+
+/* Predefined responses in content */
+.cheshire-related-links {
+    margin-bottom: 20px;
+    padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.cheshire-related-links:before {
+    content: attr(data-title);
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
 .bot-message table {
     border-collapse: collapse;
     width: 100%;
@@ -586,6 +630,7 @@
 /* Predefined responses in content */
 .cheshire-predefined-responses-content {
     margin-top: 20px;
+    margin-bottom: 20px;
     padding: 15px;
     display: flex;
     flex-wrap: wrap;

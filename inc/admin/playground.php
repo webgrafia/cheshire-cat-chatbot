@@ -19,30 +19,33 @@ function cheshirecat_playground_page()
         wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'cheshire-cat-chatbot'));
     }
 
-    // Check if avatar is enabled
-    $avatar_enabled = get_option('cheshire_plugin_enable_avatar', 'off');
-    $avatar_class = ($avatar_enabled === 'on') ? 'with-avatar' : '';
+    // Avatar is always enabled
+    $avatar_class = 'with-avatar';
     $avatar_image = get_option('cheshire_chat_avatar_image', '');
     $default_avatar = CHESHIRE_CAT_PLUGIN_URL . 'assets/img/default-avatar.svg';
 
     // Scripts and styles are now enqueued via the admin_enqueue_scripts hook in the main plugin file
     ?>
-    <div class="wrap">
+    <div class="wrap cheshire-admin">
         <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
 
-        <div class="playground-header">
-            <p><?php esc_html_e('Welcome to the Cheshire Cat Chatbot Playground! This is a full-page chat interface where you can test the chatbot as an administrator.', 'cheshire-cat-chatbot'); ?></p>
-            <p><?php esc_html_e('Use this playground to test your chatbot configuration and responses before making it available to your users.', 'cheshire-cat-chatbot'); ?></p>
-        </div>
+        <div class="cheshire-section">
+            <div class="playground-header">
+                <p><?php esc_html_e('Welcome to the Cheshire Cat Chatbot Playground! This is a full-page chat interface where you can test the chatbot as an administrator.', 'cheshire-cat-chatbot'); ?></p>
+                <p><?php esc_html_e('Use this playground to test your chatbot configuration and responses before making it available to your users.', 'cheshire-cat-chatbot'); ?></p>
+            </div>
+        </div><!-- End of intro section -->
 
-        <!-- Tabs -->
-        <div class="nav-tab-wrapper">
-            <a href="#chat-tab" class="nav-tab nav-tab-active"><?php esc_html_e('Chat', 'cheshire-cat-chatbot'); ?></a>
-            <a href="#prompt-tester-tab" class="nav-tab"><?php esc_html_e('Prompt Tester', 'cheshire-cat-chatbot'); ?></a>
-        </div>
+        <div class="cheshire-section">
+            <!-- Tabs -->
+            <div class="nav-tab-wrapper">
+                <a href="#chat-tab" class="nav-tab nav-tab-active"><?php esc_html_e('Chat', 'cheshire-cat-chatbot'); ?></a>
+                <a href="#prompt-tester-tab" class="nav-tab"><?php esc_html_e('Prompt Tester', 'cheshire-cat-chatbot'); ?></a>
+            </div>
 
-        <!-- Chat Tab -->
-        <div id="chat-tab" class="tab-content active">
+            <!-- Chat Tab -->
+            <div id="chat-tab" class="tab-content active">
+                <h2><?php _e('Chat Interface', 'cheshire-cat-chatbot'); ?></h2>
             <div id="cheshire-chat-container" class="<?php echo esc_attr($avatar_class . ' playground'); ?>">
                 <div id="cheshire-chat-messages">
                     <?php \webgrafia\cheshirecat\cheshirecat_display_welcome_message(); ?>
@@ -51,80 +54,36 @@ function cheshirecat_playground_page()
                     <input type="text" id="cheshire-chat-input" placeholder="<?php echo esc_attr(get_option('cheshire_plugin_input_placeholder', __('Type your message...', 'cheshire-cat-chatbot'))); ?>">
                     <button id="cheshire-chat-send"></button>
                 </div>
-                <?php if ($avatar_enabled === 'on') : ?>
                 <div id="cheshire-chat-avatar">
                     <img src="<?php echo esc_url(!empty($avatar_image) ? $avatar_image : $default_avatar); ?>" alt="Chat Avatar">
                 </div>
-                <?php endif; ?>
             </div>
         </div>
 
-        <!-- Prompt Tester Tab -->
-        <div id="prompt-tester-tab" class="tab-content">
-            <div class="prompt-tester-container">
-                <div class="prompt-input-container">
-                    <label for="prompt-input"><?php esc_html_e('Enter your prompt:', 'cheshire-cat-chatbot'); ?></label>
-                    <textarea id="prompt-input" rows="10" placeholder="<?php esc_html_e('Type your prompt here...', 'cheshire-cat-chatbot'); ?>"></textarea>
-                    <button id="prompt-send" class="button button-primary"><?php esc_html_e('Send', 'cheshire-cat-chatbot'); ?></button>
-                </div>
-                <div class="prompt-response-container">
-                    <div class="response-header">
-                        <label><?php esc_html_e('Response:', 'cheshire-cat-chatbot'); ?></label>
-                        <button id="copy-response" class="button" title="<?php esc_attr_e('Copy to clipboard', 'cheshire-cat-chatbot'); ?>">
-                            <span class="dashicons dashicons-clipboard"></span>
-                        </button>
+            <!-- Prompt Tester Tab -->
+            <div id="prompt-tester-tab" class="tab-content">
+                <h2><?php _e('Prompt Tester', 'cheshire-cat-chatbot'); ?></h2>
+                <p class="description"><?php esc_html_e('Test specific prompts and see the raw responses from the Cheshire Cat AI.', 'cheshire-cat-chatbot'); ?></p>
+                <div class="prompt-tester-container">
+                    <div class="prompt-input-container">
+                        <label for="prompt-input"><?php esc_html_e('Enter your prompt:', 'cheshire-cat-chatbot'); ?></label>
+                        <textarea id="prompt-input" rows="10" placeholder="<?php esc_html_e('Type your prompt here...', 'cheshire-cat-chatbot'); ?>"></textarea>
+                        <button id="prompt-send" class="button button-primary"><?php esc_html_e('Send', 'cheshire-cat-chatbot'); ?></button>
                     </div>
-                    <textarea id="prompt-response" rows="10" readonly></textarea>
+                    <div class="prompt-response-container">
+                        <div class="response-header">
+                            <label><?php esc_html_e('Response:', 'cheshire-cat-chatbot'); ?></label>
+                            <button id="copy-response" class="button" title="<?php esc_attr_e('Copy to clipboard', 'cheshire-cat-chatbot'); ?>">
+                                <span class="dashicons dashicons-clipboard"></span>
+                            </button>
+                        </div>
+                        <textarea id="prompt-response" rows="10" readonly></textarea>
+                    </div>
                 </div>
             </div>
-        </div>
+        </div><!-- End of tabs section -->
     </div>
 
-    <style>
-        /* Tab styles */
-        .tab-content {
-            display: none;
-            padding: 20px 0;
-        }
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Prompt tester styles */
-        .prompt-tester-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .prompt-input-container, .prompt-response-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .prompt-input-container label, .prompt-response-container label {
-            font-weight: bold;
-        }
-        #prompt-input, #prompt-response {
-            width: 100%;
-            padding: 10px;
-            font-family: monospace;
-        }
-        #prompt-response {
-            background-color: #f9f9f9;
-        }
-        #prompt-send {
-            align-self: flex-start;
-        }
-        .response-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        #copy-response {
-            padding: 0 5px;
-            height: 30px;
-        }
-    </style>
 
     <script>
         jQuery(document).ready(function($) {
@@ -154,7 +113,7 @@ function cheshirecat_playground_page()
                 // Disable button and show loading state
                 var $button = $(this);
                 var originalText = $button.text();
-                $button.prop('disabled', true).text('<?php esc_html_e('Sending...', 'cheshire-cat-chatbot'); ?>');
+                $button.prop('disabled', true).addClass('loading');
 
                 // Clear previous response
                 $('#prompt-response').val('');
@@ -170,8 +129,8 @@ function cheshirecat_playground_page()
                         from_editor: true
                     },
                     success: function(response) {
-                        // Re-enable button
-                        $button.prop('disabled', false).text(originalText);
+                        // Re-enable button and remove loading state
+                        $button.prop('disabled', false).removeClass('loading').text(originalText);
 
                         if (response.success && response.data) {
                             // Display the response
@@ -216,8 +175,8 @@ function cheshirecat_playground_page()
                         }
                     },
                     error: function(xhr, status, error) {
-                        // Re-enable button
-                        $button.prop('disabled', false).text(originalText);
+                        // Re-enable button and remove loading state
+                        $button.prop('disabled', false).removeClass('loading').text(originalText);
 
                         // Show error message
                         $('#prompt-response').val('<?php esc_html_e('Error: ', 'cheshire-cat-chatbot'); ?>' + error);

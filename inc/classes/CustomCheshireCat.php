@@ -72,14 +72,26 @@ class Custom_Cheshire_Cat extends CheshireCat {
     }
 
     /**
+     * Public method to get context information about the current WordPress page.
+     * This is a wrapper for the protected get_context_information method.
+     *
+     * @since 0.6.5
+     * @return string The context information formatted as a string.
+     */
+    public function getContextInformation() {
+        return $this->get_context_information();
+    }
+
+    /**
      * Get context information about the current WordPress page.
      *
      * @since 0.5
      * @return string The context information formatted as a string.
      */
     protected function get_context_information() {
-        $context = "## Origin of request, simulate you can read it online: \n";
+        $context = "## Origin of request: \n";
         $context .= "website: " . get_bloginfo('name') . "\n";
+        $context .= "If the user asks a question, assume that he is talking about the page he is on (the origin of request) and simulate you can read it online\n";
 
         // Get the post object based on page_id if available
         $post = null;
@@ -179,7 +191,7 @@ class Custom_Cheshire_Cat extends CheshireCat {
                     // Get product categories
                     $product_categories = wc_get_product_category_list($post->ID);
                     if (!empty($product_categories)) {
-                        $context .= "categories: " . wp_strip_all_tags($product_categories) . "\n";
+                        $context .= "product_categories: " . wp_strip_all_tags($product_categories) . "\n";
                     }
 
                     // Get custom tabs from woocommerce-product-tabs plugin
@@ -301,6 +313,15 @@ class Custom_Cheshire_Cat extends CheshireCat {
                         $context .= "content: " . wp_strip_all_tags($description) . "\n";
                     }
                 }
+            } else if (function_exists('is_product_category') && is_product_category()) {
+                $context .= "pagetype: product_category\n";
+                $term = get_queried_object();
+                if ($term) {
+                    $context .= "title: " . wp_strip_all_tags($term->name) . "\n";
+                    if (!empty($term->description)) {
+                        $context .= "content: " . wp_strip_all_tags($term->description) . "\n";
+                    }
+                }
             } else if (function_exists('is_search') && is_search()) {
                 $context .= "pagetype: search\n";
                 $context .= "title: " . sprintf(__('Search Results for: %s', 'cheshire-cat-chatbot'), get_search_query()) . "\n";
@@ -414,7 +435,17 @@ class Custom_Cheshire_Cat extends CheshireCat {
         }
 
         // Only add context and reinforcement if not coming from the editor
-        if (!$this->from_editor) {
+        // The from_editor property should be a boolean value at this point
+        // Simply negate it to determine if we should add context and reinforcement
+        $should_add_context_and_reinforcement = !$this->from_editor;
+
+        // if the user is editor create a random user to avoid cheshire memory
+        if($this->from_editor){
+            $user_id = 'editor_' . uniqid();
+        }
+
+        if ($should_add_context_and_reinforcement) {
+
             // Check if context information is enabled
             $enable_context = get_option('cheshire_plugin_enable_context', 'off');
 
@@ -428,6 +459,7 @@ class Custom_Cheshire_Cat extends CheshireCat {
             $enable_reinforcement = get_option('cheshire_plugin_enable_reinforcement', 'off');
 
             // Append reinforcement message to the message if enabled
+            // Per issue requirement: do NOT use reinforcement message in WYSIWYG editor or prompt tester
             if ($enable_reinforcement === 'on') {
                 $reinforcement_message = get_option('cheshire_plugin_reinforcement_message', '');
                 if (!empty($reinforcement_message)) {
@@ -503,18 +535,22 @@ class Custom_Cheshire_Cat extends CheshireCat {
             $response = $this->client->getAvailablePlugins();
 
             if ( is_null( $response ) ) {
-                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                    error_log( 'Cheshire Cat API plugins check returned null response' );
-                }
                 return [];
             }
 
             return json_decode( $response->getBody()->getContents(), true );
         } catch ( \Exception $e ) {
-            if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-                error_log( 'Cheshire Cat API plugins check error: ' . $e->getMessage() );
-            }
             return [];
         }
+    }
+
+    /**
+     * Get the HTTP client instance.
+     *
+     * @since 0.8.0
+     * @return Custom_Cheshire_Cat_Client The HTTP client instance.
+     */
+    public function getClient() {
+        return $this->client;
     }
 }

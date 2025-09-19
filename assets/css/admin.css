@@ -1,0 +1,601 @@
+/* Cheshire Cat Admin Styles
+ * Beautifies the admin pages for the Cheshire Cat Chatbot plugin
+ */
+
+/* General Admin Styling */
+.wrap.cheshire-admin {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.cheshire-admin h1 {
+    color: #23282d;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.cheshire-admin p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+/* Section Styling */
+.cheshire-section {
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.cheshire-section h2 {
+    color: #23282d;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.cheshire-section h3 {
+    color: #23282d;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Form Elements Styling */
+.cheshire-admin .form-table {
+    margin-top: 0;
+    border-radius: 5px;
+}
+
+.cheshire-admin .form-table th {
+    padding: 20px 10px 20px 0;
+    width: 200px;
+    font-weight: 600;
+    color: #23282d;
+}
+
+.cheshire-admin .form-table td {
+    padding: 15px 10px;
+}
+
+.cheshire-admin input[type="text"],
+.cheshire-admin input[type="number"],
+.cheshire-admin select,
+.cheshire-admin textarea {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+}
+
+.cheshire-admin input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.cheshire-admin .description {
+    font-style: italic;
+    color: #777;
+    margin-top: 5px;
+}
+
+/* Button Styling */
+.cheshire-admin .button-primary {
+    background: #0073aa;
+    border-color: #006799;
+    color: #fff;
+    text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
+    box-shadow: 0 1px 0 #006799;
+    padding: 8px 15px;
+    height: auto;
+    line-height: 1.4;
+    font-size: 14px;
+}
+
+.cheshire-admin .button-primary:hover,
+.cheshire-admin .button-primary:focus {
+    background: #008ec2;
+    border-color: #006799;
+    color: #fff;
+}
+
+/* Settings Sections */
+.cheshire-admin .settings-section {
+    margin-bottom: 30px;
+}
+
+.cheshire-admin .settings-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 782px) {
+    .cheshire-admin .form-table th {
+        width: 100%;
+        display: block;
+        padding: 10px 0 5px;
+    }
+
+    .cheshire-admin .form-table td {
+        width: 100%;
+        display: block;
+        padding: 0 0 10px;
+    }
+}
+
+/* Success Messages */
+.cheshire-admin .notice-success {
+    border-left-color: #46b450;
+    background-color: #ecf7ed;
+}
+
+/* Code Blocks */
+.cheshire-admin code {
+    background: #f0f0f1;
+    padding: 3px 5px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+/* Meowww Page Styles */
+/* Section Title */
+.cc-section-title {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px solid #e1e4e8;
+}
+
+/* Common styles for plugin and LLM lists */
+.cc-plugins-list, .cc-llm-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* Common styles for plugin and LLM cards */
+.cc-plugin-card, .cc-llm-card {
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cc-plugin-card:hover, .cc-llm-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Selected LLM card styles */
+.cc-llm-card-selected {
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 1px #1a73e8, 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+.cc-llm-card-selected:hover {
+    box-shadow: 0 0 0 1px #1a73e8, 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cc-selected-badge {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: normal;
+    color: white;
+    background-color: #1a73e8;
+    border-radius: 12px;
+    vertical-align: middle;
+}
+
+.cc-selected-llm {
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #e8f0fe;
+    border-left: 4px solid #1a73e8;
+    border-radius: 4px;
+}
+
+.cc-selected-llm p {
+    margin: 0;
+    color: #1a73e8;
+}
+
+/* Common styles for plugin and LLM headers */
+.cc-plugin-header, .cc-llm-header {
+    margin-bottom: 15px;
+    border-bottom: 2px solid #f0f2f5;
+    padding-bottom: 15px;
+}
+
+.cc-plugin-header h3, .cc-llm-header h3 {
+    margin: 0;
+    color: #1a73e8;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.cc-plugin-description {
+    margin-bottom: 20px;
+    color: #444;
+    line-height: 1.6;
+}
+
+.cc-plugin-author, .cc-plugin-version {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cc-plugin-author strong, .cc-plugin-version strong {
+    color: #444;
+}
+
+/* Common styles for plugin and LLM settings */
+.cc-plugin-settings, .cc-llm-settings {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f2f5;
+}
+
+.cc-plugin-settings h4, .cc-llm-settings h4 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    color: #1a73e8;
+}
+
+.cc-settings-list {
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.cc-setting-item {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #e1e4e8;
+}
+
+.cc-setting-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.cc-setting-key {
+    font-weight: 600;
+    color: #555;
+    margin-right: 5px;
+}
+
+.cc-setting-value {
+    color: #666;
+    word-break: break-word;
+}
+
+.cc-setting-value pre {
+    margin: 5px 0 0 0;
+    padding: 8px;
+    background-color: #f1f3f4;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.cc-no-settings {
+    color: #888;
+    font-style: italic;
+    margin: 0;
+}
+
+/* LLM description styles */
+.cc-llm-description {
+    margin: 10px 0 15px;
+    color: #555;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+/* LLM link styles */
+.cc-llm-link {
+    margin: 10px 0 15px;
+}
+
+.cc-llm-link a {
+    display: inline-flex;
+    align-items: center;
+    color: #1a73e8;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.cc-llm-link a:hover {
+    text-decoration: underline;
+}
+
+.cc-llm-link .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    margin-left: 4px;
+}
+
+/* LLM properties styles */
+.cc-llm-properties {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f2f5;
+}
+
+.cc-llm-properties h4 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    color: #1a73e8;
+}
+
+.cc-default-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.cc-prop-type {
+    color: #888;
+    font-size: 12px;
+    font-style: italic;
+}
+
+/* Debug output styles */
+.debug-output {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+}
+
+.debug-output h3 {
+    margin-top: 0;
+    color: #d73a49;
+    font-size: 16px;
+}
+
+.debug-output pre {
+    background-color: #f1f3f4;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.5;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Toggle debug button styles */
+#toggle-debug {
+    margin-left: 10px;
+    vertical-align: middle;
+    font-size: 12px;
+    background-color: #f0f0f1;
+    border-color: #c3c4c7;
+}
+
+#toggle-debug:hover {
+    background-color: #e5e5e5;
+}
+
+/* Debug notice styles */
+.debug-notice {
+    background-color: #fcf8e3;
+    border: 1px solid #faebcc;
+    color: #8a6d3b;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.debug-notice p {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+}
+
+.debug-notice button {
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    color: #fff;
+}
+
+.debug-notice button:hover {
+    background-color: #449d44;
+    border-color: #398439;
+}
+
+/* Playground Page Styles */
+/* Tab styles */
+.tab-content {
+    display: none;
+    padding: 20px 0;
+    margin-top: 0;
+}
+.tab-content.active {
+    display: block;
+}
+.nav-tab-wrapper {
+    margin-bottom: 0;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Prompt tester styles */
+.prompt-tester-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.prompt-input-container, .prompt-response-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.prompt-input-container label, .prompt-response-container label {
+    font-weight: bold;
+}
+#prompt-input, #prompt-response {
+    width: 100%;
+    max-width: 100%;
+    min-height: 150px;
+    padding: 15px;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    resize: vertical;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#prompt-input:focus, #prompt-response:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: none;
+}
+#prompt-response {
+    background-color: #f9f9f9;
+}
+#prompt-send {
+    align-self: flex-start;
+    position: relative;
+    padding: 8px 16px;
+    min-width: 100px;
+    text-align: center;
+    margin-top: 10px;
+}
+#prompt-send.loading {
+    color: transparent;
+}
+#prompt-send.loading:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -10px;
+    margin-left: -10px;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: loader-spin 1s infinite linear;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+@keyframes loader-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.response-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#copy-response {
+    padding: 0 5px;
+    height: 30px;
+}
+
+/* Declarative Memory Sync Page Styles */
+.post-types-container {
+    margin-bottom: 20px;
+}
+.sync-actions {
+    margin-top: 20px;
+}
+#sync-progress-container {
+    margin-top: 30px;
+}
+.progress-bar-container {
+    background-color: #f0f0f0;
+    height: 30px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+#sync-progress-bar {
+    background-color: #0078d7;
+    height: 100%;
+    width: 0;
+    border-radius: 5px;
+    transition: width 0.3s;
+}
+#sync-current-item {
+    margin-top: 10px;
+    font-style: italic;
+}
+#sync-results {
+    margin-top: 20px;
+}
+
+/* Configuration Page Styles */
+#declarative_memory_options {
+    margin-top: 15px;
+}
+#cheshire_plugin_minimum_link_score {
+    width: 80px;
+}
+#cheshire_plugin_link_text,
+#cheshire_plugin_predefined_responses_title {
+    width: 100%;
+}
+#cheshire_plugin_max_predefined_questions {
+    width: 80px;
+}
+.configuration-margin-top {
+    margin-top: 10px;
+}
+.configuration-margin-bottom {
+    margin-bottom: 10px;
+}
+
+/* Overview Page Styles */
+#websocket_url_field {
+    margin-top: 10px;
+}
+
+/* Style Page Styles */
+.avatar-preview {
+    margin-bottom: 10px;
+}
+.avatar-preview img {
+    max-width: 100px;
+    height: auto;
+}
+.remove-avatar-button {
+    margin-left: 10px;
+}

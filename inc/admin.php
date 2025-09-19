@@ -13,3 +13,5 @@ require_once __DIR__ . '/admin/overview.php';
 require_once __DIR__ . '/admin/style.php';
 require_once __DIR__ . '/admin/configuration.php';
 require_once __DIR__ . '/admin/playground.php';
+require_once __DIR__ . '/admin/meowww.php';
+require_once __DIR__ . '/admin/declarative-memory-sync.php';

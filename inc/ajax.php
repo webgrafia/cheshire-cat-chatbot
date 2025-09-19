@@ -37,8 +37,16 @@ function cheshirecat_process_message() {
     $page_id = isset( $_POST['page_id'] ) ? absint( $_POST['page_id'] ) : 0;
     $page_url = isset( $_POST['page_url'] ) ? esc_url_raw( wp_unslash( $_POST['page_url'] ) ) : '';
 
-    // Check if request is coming from the editor
-    $from_editor = isset( $_POST['from_editor'] ) && ($_POST['from_editor'] === 'true' || $_POST['from_editor'] === true);
+    // Check if request is coming from the editor or prompt tester
+    // Explicitly check for various true values to handle different types
+    $from_editor = false;
+    if (isset($_POST['from_editor'])) {
+        $value = $_POST['from_editor'];
+        if ($value === true || $value === 'true' || $value === '1' || $value === 1 || $value === 'yes' || $value === 'on') {
+            $from_editor = true;
+        }
+    }
+
 
     // Get Cheshire Cat configuration.
     $cheshire_plugin_url   = get_option( 'cheshire_plugin_url' );
@@ -96,20 +104,24 @@ function cheshirecat_get_predefined_responses() {
     // Verify nonce for security.
     check_ajax_referer( 'cheshire_ajax_nonce', 'nonce' );
 
+    // Get page ID if provided
+    $page_id = isset( $_POST['page_id'] ) ? absint( $_POST['page_id'] ) : 0;
+
+    // Get product category information if provided
+    $is_product_category = isset( $_POST['is_product_category'] ) && $_POST['is_product_category'] === '1';
+    $product_category_id = isset( $_POST['product_category_id'] ) ? absint( $_POST['product_category_id'] ) : 0;
+
     // Check if predefined responses should be shown in content
     $show_predefined_in_content = get_option( 'cheshire_plugin_show_predefined_in_content', 'off' );
 
     // If predefined responses are shown in content, don't show them in chat
-    if ( $show_predefined_in_content === 'on' ) {
+    if (( $show_predefined_in_content === 'on' ) && ($page_id)) {
         wp_send_json_success( array() );
         return;
     }
 
-    // Get page ID if provided
-    $page_id = isset( $_POST['page_id'] ) ? absint( $_POST['page_id'] ) : 0;
-
     // Get predefined responses with post override support
-    $responses = cheshirecat_get_predefined_responses_with_override( $page_id );
+    $responses = cheshirecat_get_predefined_responses_with_override( $page_id, $is_product_category, $product_category_id );
 
     // If empty, return empty array
     if ( empty( $responses ) ) {
@@ -118,6 +130,40 @@ function cheshirecat_get_predefined_responses() {
     }
 
     wp_send_json_success( $responses );
+}
+
+/**
+ * Handle AJAX request for getting context information.
+ *
+ * @since 0.6.5
+ * @return void
+ */
+function cheshirecat_get_context_information() {
+    // Verify nonce for security.
+    check_ajax_referer( 'cheshire_ajax_nonce', 'nonce' );
+
+    // Get page information if provided
+    $page_id = isset( $_POST['page_id'] ) ? absint( $_POST['page_id'] ) : 0;
+    $page_url = isset( $_POST['page_url'] ) ? esc_url_raw( wp_unslash( $_POST['page_url'] ) ) : '';
+
+    // Get Cheshire Cat configuration.
+    $cheshire_plugin_url   = get_option( 'cheshire_plugin_url' );
+    $cheshire_plugin_token = get_option( 'cheshire_plugin_token' );
+
+    // Create an instance of Custom_Cheshire_Cat
+    $cheshire_cat = new inc\classes\Custom_Cheshire_Cat( $cheshire_plugin_url, $cheshire_plugin_token );
+
+    // Set page context information
+    $cheshire_cat->setPageContext($page_id, $page_url);
+
+    // Set from_editor to false since this is for WebSocket context
+    $cheshire_cat->setFromEditor(false);
+
+    // Get the context information
+    // Since get_context_information is protected, we need to expose it through a public method
+    $context_info = $cheshire_cat->getContextInformation();
+
+    wp_send_json_success( $context_info );
 }
 
 // Register AJAX handlers for both logged-in and non-logged-in users.
@@ -130,3 +176,5 @@ add_action( 'wp_ajax_cheshire_get_welcome_message', __NAMESPACE__ . '\cheshireca
 add_action( 'wp_ajax_nopriv_cheshire_get_welcome_message', __NAMESPACE__ . '\cheshirecat_get_welcome_message' );
 add_action( 'wp_ajax_cheshire_get_predefined_responses', __NAMESPACE__ . '\cheshirecat_get_predefined_responses' );
 add_action( 'wp_ajax_nopriv_cheshire_get_predefined_responses', __NAMESPACE__ . '\cheshirecat_get_predefined_responses' );
+add_action( 'wp_ajax_cheshire_get_context_information', __NAMESPACE__ . '\cheshirecat_get_context_information' );
+add_action( 'wp_ajax_nopriv_cheshire_get_context_information', __NAMESPACE__ . '\cheshirecat_get_context_information' );

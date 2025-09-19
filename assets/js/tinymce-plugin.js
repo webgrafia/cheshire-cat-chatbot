@@ -1,5 +1,10 @@
 // TinyMCE plugin for Cheshire Cat Chatbot
 (function() {
+    // Check if the required object exists
+    if (typeof cheshire_tinymce_object === 'undefined') {
+        console.error('Cheshire Cat TinyMCE plugin: cheshire_tinymce_object is not defined');
+        return;
+    }
     tinymce.create('tinymce.plugins.CheshireCatPlugin', {
         init: function(editor, url) {
             // Add button to the editor

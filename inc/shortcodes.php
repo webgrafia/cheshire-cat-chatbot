@@ -18,9 +18,8 @@ function cheshirecat_chat_shortcode()
 
     ob_start();
 
-    // Check if avatar is enabled
-    $avatar_enabled = get_option('cheshire_plugin_enable_avatar', 'off');
-    $avatar_class = ($avatar_enabled === 'on') ? 'with-avatar' : '';
+    // Avatar is always enabled
+    $avatar_class = 'with-avatar';
 
     // Check default state
     $default_state = get_option('cheshire_plugin_default_state', 'open');
@@ -51,11 +50,9 @@ function cheshirecat_chat_shortcode()
             <button id="cheshire-chat-send"></button>
         </div>
     </div>
-    <?php if ($avatar_enabled === 'on') : ?>
     <div id="cheshire-chat-avatar">
         <img src="<?php echo esc_url(!empty($avatar_image) ? $avatar_image : $default_avatar); ?>" alt="Chat Avatar">
     </div>
-    <?php endif; ?>
     <?php
     return ob_get_clean();
 }

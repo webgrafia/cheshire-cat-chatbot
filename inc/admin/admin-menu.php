@@ -28,15 +28,6 @@ function cheshirecat_admin_menu()
         'cheshire-cat', // Menu slug (same as parent to load the overview page)
         __NAMESPACE__ . '\cheshirecat_overview_page' // Callback function
     );
-    // Add the "Style" submenu
-    add_submenu_page(
-        'cheshire-cat', // Parent slug
-        __('Style', 'cheshire-cat-chatbot'), // Page title
-        __('Style', 'cheshire-cat-chatbot'), // Menu title
-        'manage_options', // Capability
-        'cheshire-cat-style', // Menu slug
-        __NAMESPACE__ . '\cheshirecat_style_page' // Callback function
-    );
     // Add the "Configuration" submenu
     add_submenu_page(
         'cheshire-cat', // Parent slug
@@ -45,6 +36,15 @@ function cheshirecat_admin_menu()
         'manage_options', // Capability
         'cheshire-cat-configuration', // Menu slug
         __NAMESPACE__ . '\cheshirecat_configuration_page' // Callback function
+    );
+    // Add the "Style" submenu
+    add_submenu_page(
+        'cheshire-cat', // Parent slug
+        __('Style', 'cheshire-cat-chatbot'), // Page title
+        __('Style', 'cheshire-cat-chatbot'), // Menu title
+        'manage_options', // Capability
+        'cheshire-cat-style', // Menu slug
+        __NAMESPACE__ . '\cheshirecat_style_page' // Callback function
     );
 
     // Add the "Playground" submenu
@@ -55,6 +55,27 @@ function cheshirecat_admin_menu()
         'manage_options', // Capability
         'cheshire-cat-playground', // Menu slug
         __NAMESPACE__ . '\cheshirecat_playground_page' // Callback function
+    );
+
+
+    // Add the "Declarative Memory Sync" submenu
+    add_submenu_page(
+        'cheshire-cat', // Parent slug
+        __('Declarative Memory', 'cheshire-cat-chatbot'), // Page title
+        __('Declarative Memory', 'cheshire-cat-chatbot'), // Menu title
+        'manage_options', // Capability
+        'cheshire-cat-declarative-memory-sync', // Menu slug
+        __NAMESPACE__ . '\cheshirecat_declarative_memory_sync_page' // Callback function
+    );
+
+    // Add the "Meowww" submenu
+    add_submenu_page(
+        'cheshire-cat', // Parent slug
+        __('Meowww', 'cheshire-cat-chatbot'), // Page title
+        __('Meowww', 'cheshire-cat-chatbot'), // Menu title
+        'manage_options', // Capability
+        'cheshire-cat-meowww', // Menu slug
+        __NAMESPACE__ . '\cheshirecat_meowww_page' // Callback function
     );
 }
 add_action('admin_menu', __NAMESPACE__ . '\cheshirecat_admin_menu');
