@@ -25,9 +25,35 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param bool    $update  Whether this is an existing post being updated.
  * @return void
  */
+
 function cheshirecat_send_to_declarative_memory( $post_id, $post, $update ) {
     // If this is an autosave, our form has not been submitted, so we don't want to do anything
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+
+    // Skip Customizer contexts and its data posts
+    if (
+        // Customizer preview/save flows
+        ( function_exists('is_customize_preview') && is_customize_preview() )
+        || isset( $_POST['customize_changeset_uuid'] )
+        || isset( $_POST['customized'] )
+        || ( defined('DOING_CUSTOMIZE_PREVIEW') && DOING_CUSTOMIZE_PREVIEW )
+        || ( defined('DOING_CUSTOMIZE_SELETIVE_REFRESH') && DOING_CUSTOMIZE_SELETIVE_REFRESH ) // safeguard
+        || ( defined('DOING_AJAX') && DOING_AJAX && isset($_POST['action']) && strpos( (string) $_POST['action'], 'customize' ) === 0 )
+        || ( defined('REST_REQUEST') && REST_REQUEST && isset($_GET['customize_changeset_uuid']) )
+    ) {
+        return;
+    }
+
+    // Hard filter: ignore post types used by Customizer and system internals
+    $ptype = get_post_type( $post_id );
+    if ( in_array( $ptype, array( 'customize_changeset', 'custom_css', 'revision', 'nav_menu_item' ), true ) ) {
+        return;
+    }
+
+    // Optionale: ignora anche gli attachment (salvataggi media durante customizer)
+    if ( $ptype === 'attachment' ) {
         return;
     }
 
@@ -108,22 +134,18 @@ function cheshirecat_delete_from_declarative_memory( $post_id, $cheshire_cat ) {
         $client = $cheshire_cat->getClient();
 
         // Set up the filter to find the point by wp_id
-        $filter = [
-            'filter' => [
-                'metadata' => [
-                    'wp_id' => (string) $post_id
-                ]
-            ]
+        $metadata = [
+            'wp_id' => (string) $post_id
         ];
 
         // Use the deleteMemoryPointsByMetadata method to delete points by metadata
-        $response = $client->deleteMemoryPointsByMetadata('declarative', $filter);
+        $response = $client->deleteMemoryPointsByMetadata('declarative', $metadata);
 
         // Log the response for debugging
         if (defined('WP_DEBUG') && WP_DEBUG) {
-            error_log('Cheshire Cat declarative memory deletion response: ' . 
-                      ($response ? $response->getStatusCode() : 'null') . 
-                      ' - Filter: ' . json_encode($filter));
+            error_log('Cheshire Cat declarative memory deletion response: ' .
+                ($response ? $response->getStatusCode() : 'null') .
+                ' - Metadata: ' . json_encode($metadata));
         }
 
         // Check if the request was successful
@@ -220,9 +242,9 @@ function cheshirecat_upload_to_declarative_memory( $post_id, $post, $cheshire_ca
 
         // Log the response for debugging
         if (defined('WP_DEBUG') && WP_DEBUG) {
-            error_log('Cheshire Cat declarative memory upload response: ' . 
-                      ($response ? $response->getStatusCode() : 'null') . 
-                      ' - Data: ' . json_encode($data));
+            error_log('Cheshire Cat declarative memory upload response: ' .
+                ($response ? $response->getStatusCode() : 'null') .
+                ' - Data: ' . json_encode($data));
         }
 
         // Check if the request was successful
@@ -251,6 +273,19 @@ function cheshirecat_upload_to_declarative_memory( $post_id, $post, $cheshire_ca
  * @return void
  */
 function cheshirecat_handle_post_deletion( $post_id ) {
+    // Skip Customizer contexts and its data posts
+    if (
+        ( function_exists('is_customize_preview') && is_customize_preview() )
+        || isset( $_POST['customize_changeset_uuid'] )
+        || isset( $_POST['customized'] )
+        || ( defined('DOING_CUSTOMIZE_PREVIEW') && DOING_CUSTOMIZE_PREVIEW )
+        || ( defined('DOING_CUSTOMIZE_SELETIVE_REFRESH') && DOING_CUSTOMIZE_SELETIVE_REFRESH )
+        || ( defined('DOING_AJAX') && DOING_AJAX && isset($_POST['action']) && strpos( (string) $_POST['action'], 'customize' ) === 0 )
+        || ( defined('REST_REQUEST') && REST_REQUEST && isset($_GET['customize_changeset_uuid']) )
+    ) {
+        return;
+    }
+
     // Check if declarative memory upload is enabled
     $enable_declarative_memory = get_option( 'cheshire_plugin_enable_declarative_memory', 'off' );
     if ( $enable_declarative_memory !== 'on' ) {
@@ -260,6 +295,23 @@ function cheshirecat_handle_post_deletion( $post_id ) {
     // Check if this is a revision
     if ( wp_is_post_revision( $post_id ) ) {
         return;
+    }
+
+    // Hard filter: ignore post types used by Customizer and system internals
+    $ptype = get_post_type( $post_id );
+    if ( in_array( $ptype, array( 'customize_changeset', 'custom_css', 'revision', 'nav_menu_item' ), true ) ) {
+        return;
+    }
+    if ( $ptype === 'attachment' ) {
+        return;
+    }
+
+    // If post type filtering is configured, ensure this post type is allowed
+    $selected_post_types = get_option( 'cheshire_plugin_declarative_memory_post_types', array() );
+    if ( is_array( $selected_post_types ) && ! empty( $selected_post_types ) ) {
+        if ( ! in_array( $ptype, $selected_post_types, true ) ) {
+            return;
+        }
     }
 
     // Get Cheshire Cat configuration
@@ -298,6 +350,19 @@ function cheshirecat_handle_post_deletion( $post_id ) {
 function cheshirecat_handle_post_trash( $new_status, $old_status, $post ) {
     // Only proceed if the post is being moved to trash from a published state
     if ( $new_status !== 'trash' || $old_status !== 'publish' ) {
+        return;
+    }
+
+    // Skip Customizer contexts and its data posts
+    if (
+        ( function_exists('is_customize_preview') && is_customize_preview() )
+        || isset( $_POST['customize_changeset_uuid'] )
+        || isset( $_POST['customized'] )
+        || ( defined('DOING_CUSTOMIZE_PREVIEW') && DOING_CUSTOMIZE_PREVIEW )
+        || ( defined('DOING_CUSTOMIZE_SELETIVE_REFRESH') && DOING_CUSTOMIZE_SELETIVE_REFRESH )
+        || ( defined('DOING_AJAX') && DOING_AJAX && isset($_POST['action']) && strpos( (string) $_POST['action'], 'customize' ) === 0 )
+        || ( defined('REST_REQUEST') && REST_REQUEST && isset($_GET['customize_changeset_uuid']) )
+    ) {
         return;
     }
 

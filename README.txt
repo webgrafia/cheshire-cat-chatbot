@@ -4,7 +4,7 @@ Tags: chatbot, ai, cheshire cat, chat, assistant
 Requires at least: 5.8
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 0.9.5
+Stable tag: 0.9.9
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -83,6 +83,17 @@ When editing a post or page, you'll see a Cheshire Cat button in the editor tool
 
 == Changelog ==
 
+= 0.9.9 =
+* Fix: Skip post deletion actions for Customizer and unsupported post types
+
+= 0.9.8 =
+* Fix: Extend checks to properly skip all Customizer-related contexts and specific post types
+
+= 0.9.7 =
+* Fix: Resolved bug related to customizer
+
+= 0.9.6 =
+* Fix: Resolved bug related to declarative memory deletion
 
 = 0.9.5 =
 * New: Option to select enabled post types for Declarative Memory uploads in configuration
