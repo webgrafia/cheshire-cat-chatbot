@@ -47,6 +47,104 @@ require_once CHESHIRE_CAT_PLUGIN_DIR . 'inc/taxonomy-fields.php';
 require_once CHESHIRE_CAT_PLUGIN_DIR . 'inc/classes/CustomCheshireCatClient.php'; // Load for backward compatibility
 require_once CHESHIRE_CAT_PLUGIN_DIR . 'inc/classes/CustomCheshireCat.php'; // Load for backward compatibility
 
+function generateButtonColors($hex) {
+    $hex = ltrim($hex, '#');
+    if (strlen($hex) === 3) {
+        $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+    }
+
+    $r = hexdec(substr($hex, 0, 2));
+    $g = hexdec(substr($hex, 2, 2));
+    $b = hexdec(substr($hex, 4, 2));
+
+    // === Calcoli ===
+    $lum = (0.2126 * $r + 0.7152 * $g + 0.0722 * $b) / 255;
+    $max = max($r, $g, $b);
+    $min = min($r, $g, $b);
+    $sat = $max ? ($max - $min) / $max : 0;
+    $isGray = $sat < 0.1;
+
+    // === Costanti regolabili ===
+    $textDelta      = 160;
+    $hoverTextDelta = 220;
+    $bgHoverDelta   = 90;
+
+    // === Funzioni di supporto ===
+    $clamp = fn($v) => max(0, min(255, $v));
+    $adjust = function($r, $g, $b, $delta) use ($clamp) {
+        return sprintf("#%02x%02x%02x", $clamp($r + $delta), $clamp($g + $delta), $clamp($b + $delta));
+    };
+
+    // === CASI SPECIALI ===
+
+    // 🔹 Colore molto chiaro → testo scuro
+    if ($lum > 0.85) {
+        return [
+            'text'       => $adjust($r, $g, $b, -$textDelta),
+            'hoverText'  => $adjust($r, $g, $b, -$hoverTextDelta),
+            'hoverBg'    => $adjust($r, $g, $b, -$bgHoverDelta),
+        ];
+    }
+
+    // 🔹 Grigio chiaro → testo leggermente più scuro
+    if ($isGray && $lum > 0.6) {
+        return [
+            'text'       => $adjust($r, $g, $b, -70),
+            'hoverText'  => $adjust($r, $g, $b, -120),
+            'hoverBg'    => $adjust($r, $g, $b, -40),
+        ];
+    }
+
+    // 🔹 Saturo e scuro → testo chiaro
+    if ($sat > 0.5 && $lum < 0.3) {
+        return [
+            'text'       => $adjust($r, $g, $b, $textDelta),
+            'hoverText'  => $adjust($r, $g, $b, $hoverTextDelta),
+            'hoverBg'    => $adjust($r, $g, $b, $bgHoverDelta),
+        ];
+    }
+
+    // 🔹 Saturo e brillante → testo medio scuro
+    if ($sat > 0.6 && $lum > 0.5) {
+        return [
+            'text'       => $adjust($r, $g, $b, -100),
+            'hoverText'  => $adjust($r, $g, $b, -160),
+            'hoverBg'    => $adjust($r, $g, $b, -40),
+        ];
+    }
+
+    // 🔹 Saturo normale → testo un po' più scuro, bg hover più chiaro
+    if ($sat > 0.6) {
+        return [
+            'text'       => $adjust($r, $g, $b, -80),
+            'hoverText'  => $adjust($r, $g, $b, -140),
+            'hoverBg'    => $adjust($r, $g, $b, 60),
+        ];
+    }
+
+    // 🔹 Colore scuro e poco saturo
+    if ($lum < 0.3 && $sat < 0.5) {
+        return [
+            'text'       => $adjust($r, $g, $b, $textDelta),
+            'hoverText'  => $adjust($r, $g, $b, $hoverTextDelta),
+            'hoverBg'    => $adjust($r, $g, $b, $bgHoverDelta),
+        ];
+    }
+
+    // 🔹 Default → contrasto medio
+    return [
+        'text'       => $adjust($r, $g, $b, -60),
+        'hoverText'  => $adjust($r, $g, $b, -100),
+        'hoverBg'    => $adjust($r, $g, $b, -30),
+    ];
+}
+
+
+
+
+
+
+
 /**
  * Check if the chatbot should be enabled on the current page.
  *
@@ -223,7 +321,7 @@ function cheshirecat_enqueue_scripts() {
     // Add dynamic CSS based on user settings.
     wp_add_inline_style( 'cheshire-chat-css', cheshirecat_generate_dynamic_css() );
 }
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\cheshirecat_enqueue_scripts' );
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\cheshirecat_enqueue_scripts', 99 );
 
 /**
  * Add websocket URL to JavaScript data
@@ -266,28 +364,46 @@ function cheshirecat_admin_enqueue_scripts($hook) {
         );
     }
 
-    // Only enqueue chat-specific scripts and styles on the playground page
-    if (strpos($hook, 'cheshire') === false || strpos($hook, 'playground') === false) {
+    // Determine which Cheshire admin subpage we're on
+    $is_playground = (strpos($hook, 'cheshire-cat-playground') !== false);
+    $is_style_page = (strpos($hook, 'cheshire-cat-style') !== false);
+
+    // Only proceed for Playground or Style pages
+    if (!$is_playground && !$is_style_page) {
         return;
     }
 
     $version = CHESHIRE_CAT_VERSION;
 
-    // Enqueue main chat script.
-    wp_enqueue_script(
-        'cheshire-chat-js', 
-        CHESHIRE_CAT_PLUGIN_URL . 'assets/js/chat.js', 
-        array( 'jquery' ), 
-        $version, 
-        true
+    // Enqueue main chat styles for both Style and Playground pages
+    wp_enqueue_style(
+        'cheshire-chat-css',
+        CHESHIRE_CAT_PLUGIN_URL . 'assets/css/chat.css',
+        array(),
+        $version
     );
 
-    // Enqueue main chat styles.
+    // Font Awesome is used by icons in the preview/chat UI
     wp_enqueue_style(
-        'cheshire-chat-css', 
-        CHESHIRE_CAT_PLUGIN_URL . 'assets/css/chat.css', 
-        array(), 
+        'font-awesome-css',
+        CHESHIRE_CAT_PLUGIN_URL . 'assets/css/font-awesome/all.min.css',
+        array(),
         $version
+    );
+
+    // For Playground specifically, also enqueue scripts and localize data
+    if (!$is_playground) {
+        // On Style page we don't need JS nor localization
+        return;
+    }
+
+    // Enqueue main chat script.
+    wp_enqueue_script(
+        'cheshire-chat-js',
+        CHESHIRE_CAT_PLUGIN_URL . 'assets/js/chat.js',
+        array( 'jquery' ),
+        $version,
+        true
     );
 
     // Get current page/post ID (in admin, this will be 0)
@@ -346,9 +462,6 @@ function cheshirecat_admin_enqueue_scripts($hook) {
         $version
     );
 
-    // Add dynamic CSS based on user settings.
-    wp_add_inline_style( 'cheshire-chat-css', cheshirecat_generate_dynamic_css() );
-
     // Add custom CSS for the playground
     $playground_css = "
         #cheshire-chat-container.playground {
@@ -378,6 +491,9 @@ function cheshirecat_admin_enqueue_scripts($hook) {
         }
     ";
     wp_add_inline_style( 'cheshire-chat-css', $playground_css );
+
+    // Add dynamic CSS based on user settings.
+    wp_add_inline_style( 'cheshire-chat-css-more', cheshirecat_generate_dynamic_css() );
 }
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\cheshirecat_admin_enqueue_scripts' );
 
@@ -408,55 +524,119 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\cheshirecat_admin_add_web
  */
 function cheshirecat_generate_dynamic_css() {
     // Get saved style options with defaults.
-    $chat_background_color   = get_option( 'cheshire_chat_background_color', '#ffffff' );
-    $chat_text_color         = get_option( 'cheshire_chat_text_color', '#333333' );
-    $chat_user_message_color = get_option( 'cheshire_chat_user_message_color', '#4caf50' );
-    $chat_bot_message_color  = get_option( 'cheshire_chat_bot_message_color', '#ffffff' );
-    $chat_button_color       = get_option( 'cheshire_chat_button_color', '#0078d7' );
-    $chat_header_color       = get_option( 'cheshire_chat_header_color', '#ffffff' );
-    $chat_font_family        = get_option( 'cheshire_chat_font_family', 'Arial, sans-serif' );
-
-    // Build the custom CSS.
+    $cheshire_chat_background_color = get_option('cheshire_chat_background_color', '#ffffff');
+    $cheshire_chat_text_color = get_option('cheshire_chat_text_color', '#ffffff');
+    $cheshire_chat_user_text_color = get_option('cheshire_chat_user_text_color', '#ffffff');
+    $cheshire_chat_user_message_color = get_option('cheshire_chat_user_message_color', '#4caf50');
+    $cheshire_chat_bot_text_color = get_option('cheshire_chat_bot_text_color', '#333333');
+    $cheshire_chat_bot_message_color = get_option('cheshire_chat_bot_message_color', '#ffffff');
+    $cheshire_chat_header_color = get_option('cheshire_chat_header_color', '#ffffff');
+    $cheshire_chat_footer_color = get_option('cheshire_chat_footer_color', '#ffffff');
+    $cheshire_chat_font_family = get_option('cheshire_chat_font_family', 'Arial, sans-serif');
+    $cheshire_chat_welcome_message = get_option('cheshire_chat_welcome_message', __('Hello! How can I help you?', 'cheshire-cat-chatbot'));
+    $cheshire_chat_avatar_image = get_option('cheshire_chat_avatar_image', '');
+    $cheshire_plugin_input_placeholder = get_option('cheshire_plugin_input_placeholder', __('Type your message...', 'cheshire-cat-chatbot'));
+    $cheshire_chat_header_buttons_color = get_option('cheshire_chat_header_buttons_color', '#999999');
+    $cheshire_chat_header_buttons_color_hover = get_option('cheshire_chat_header_buttons_color_hover', '#666666');
+    $cheshire_chat_header_buttons_color_hover_background = get_option('cheshire_chat_header_buttons_color_hover_background', '#f2f2f2');
+    $cheshire_chat_header_buttons_color_focus = get_option('cheshire_chat_header_buttons_color_focus', '#0078d7');
+    $cheshire_chat_button_color = get_option('cheshire_chat_button_color', '#0078d7');
+    $cheshire_chat_button_color_hover = get_option('cheshire_chat_button_color_hover', '#005bb5');
+    $cheshire_chat_button_color_hover_background = get_option('cheshire_chat_button_color_hover_background', '#f2f2f2');
+    $cheshire_chat_button_color_focus = get_option('cheshire_chat_button_color_focus', '#b3d7f3');
+    $cheshire_chat_button_color_active = get_option('cheshire_chat_button_color_active', '#004494');
+    $cheshire_chat_input_color = get_option('cheshire_chat_input_color', '#ffffff');
+    $cheshire_chat_input_text_color = get_option('cheshire_chat_input_text_color', '#2c3338');
     $custom_css = "
-         :root {
-                --chat-primary-color: " . esc_attr( $chat_button_color ) . ";
-                --chat-primary-hover: " . esc_attr( $chat_bot_message_color ) . ";
-                --chat-primary-active: " . esc_attr( $chat_user_message_color ) . ";
-          }
+        :root {
+            --chat-primary-color:" . esc_attr( $cheshire_chat_button_color) . ";
+            --chat-primary-hover:" . esc_attr( $cheshire_chat_bot_message_color) . ";
+            --chat-primary-active:" . esc_attr( $cheshire_chat_user_message_color) . ";
+            --chat-user-msg-bg:" . esc_attr( $cheshire_chat_user_message_color) . ";
+            --chat-user-msg-color:" . esc_attr( $cheshire_chat_user_text_color) . ";
+            --chat-bot-msg-bg:" . esc_attr( $cheshire_chat_bot_message_color) . ";
+            --chat-bot-msg-color:" . esc_attr( $cheshire_chat_bot_text_color) . ";
+            --chat-error-msg-bg: #ffcccc;
+            --chat-error-msg-border: #ffaaaa;
+            --chat-error-msg-color: #991111;
+            --chat-border-color: #ddd;
+            --chat-header-bg-color:" . esc_attr( $cheshire_chat_header_color) . ";
+            --chat-bg-color:" . esc_attr( $cheshire_chat_footer_color) . ";
+            --chat-footer-bg-color:" . esc_attr( $cheshire_chat_footer_color) . ";
+            --chat-messages-bg:" . esc_attr( $cheshire_chat_background_color) . ";
+            --chat-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --chat-input-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            --chat-input-focus-shadow: inset 0 2px 6px rgba(0, 120, 215, 0.2);
+            --chat-header-buttons-color:" . esc_attr( $cheshire_chat_header_buttons_color) . ";
+            --chat-header-buttons-color-hover:" . esc_attr( $cheshire_chat_header_buttons_color_hover) . ";
+            --chat-header-buttons-color-hover-background:" . esc_attr( $cheshire_chat_header_buttons_color_hover_background) . ";
+            --chat-header-buttons-color-focus:" . esc_attr( $cheshire_chat_header_buttons_color_focus) . ";
+            --chat-input-color:" . esc_attr( $cheshire_chat_input_color) . ";
+            --chat-input-text-color:" . esc_attr( $cheshire_chat_input_text_color) . ";
+            --chat-button-color-hover:" . esc_attr( $cheshire_chat_button_color_hover) . ";
+            --chat-button-color-hover-background:" . esc_attr( $cheshire_chat_button_color_hover_background) . ";
+            --chat-button-color-focus:" . esc_attr( $cheshire_chat_button_color_focus) . ";
+            --chat-button-color-active:" . esc_attr( $cheshire_chat_button_color_active) . ";
+        }
 
-        #cheshire-chat-container {
-            background-color: " . esc_attr( $chat_background_color ) . ";
-            font-family: " . esc_attr( $chat_font_family ) . ";
+        .cheshire-admin .user-message p {
+            color: var(--chat-user-msg-color);
         }
-        #cheshire-chat-messages {
-            background-color: " . esc_attr( $chat_background_color ) . ";
-        }
-        .user-message {
-            background-color: " . esc_attr( $chat_user_message_color ) . ";
-            color: #fff;
-        }
-        .bot-message {
-            background-color: " . esc_attr( $chat_bot_message_color ) . ";
-            color: " . esc_attr( $chat_text_color ) . ";
-        }
-        #cheshire-chat-send {
-            color: " . esc_attr( $chat_button_color ) . ";
-        }
-        #cheshire-chat-input {
-            color: " . esc_attr( $chat_text_color ) . ";
-        }
-        .error-message {
-            color: " . esc_attr( $chat_text_color ) . ";
-        }
-        #cheshire-chat-container.with-avatar:after {
-            background-color: " . esc_attr( $chat_background_color ) . ";
-        }
-        #cheshire-chat-header {
-            background-color: " . esc_attr( $chat_header_color ) . ";
+
+        .cheshire-admin .box-message p {
+            color: var(--chat-bot-msg-color);
         }
 
         #cheshire-chat-close, #cheshire-chat-new {
-            color: " . esc_attr( $chat_button_color ) . ";
+            color: var(--chat-header-buttons-color);
+        }
+
+        #cheshire-chat-close:hover,
+        #cheshire-chat-new:hover {
+            background-color: var(--chat-header-buttons-color-hover-background);
+            color: var(--chat-header-buttons-color-hover);
+        }
+
+        #cheshire-chat-close:focus,
+        #cheshire-chat-new:focus {
+            outline: 2px solid var(--chat-header-buttons-color-focus);
+            outline-offset: 2px;
+        }
+
+        #cheshire-chat-input {
+            background-color: var(--chat-input-color);
+            color: var(--chat-input-text-color);
+        }
+
+        #cheshire-chat-input::placeholder {
+            color: var(--chat-input-text-color);
+        }
+
+        #cheshire-chat-send {
+            color: var(--chat-primary-color);
+        }
+
+        #cheshire-chat-send:hover {
+            color: var(--chat-button-color-hover);
+            background-color: var(--chat-button-color-hover-background);
+        }
+
+        #cheshire-chat-send:active {
+            color: var(--chat-button-color-active);
+        }
+
+        #cheshire-chat-send:focus {
+            box-shadow: 0 0 0 2px var(--chat-button-color-focus);
+        }
+
+        /* ----------------------------------------
+           10. Accessibility Improvements
+        ---------------------------------------- */
+        #cheshire-chat-input:focus,
+        #cheshire-chat-send:focus,
+        #cheshire-chat-close:focus { /* Added close button */
+            outline: 2px solid var(--chat-button-color);
+            outline-offset: 2px;
         }
     ";
 

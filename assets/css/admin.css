@@ -63,7 +63,7 @@
 
 .cheshire-admin .form-table th {
     padding: 20px 10px 20px 0;
-    width: 200px;
+    width: 250px;
     font-weight: 600;
     color: #23282d;
 }
@@ -140,6 +140,14 @@
         width: 100%;
         display: block;
         padding: 0 0 10px;
+    }
+
+    .hide-mobile {
+        display: none !important;
+    }
+
+    .mobile-width {
+        width: 100%!important;
     }
 }
 
@@ -598,4 +606,121 @@
 }
 .remove-avatar-button {
     margin-left: 10px;
+}
+
+.button-warning {
+    background: #ffba00!important;
+    border-color: #e0a800!important;
+    color: #222!important;
+    text-shadow: 0 -1px 1px #e0a800, 1px 0 1px #e0a800, 0 1px 1px #e0a800, -1px 0 1px #e0a800;
+    box-shadow: 0 1px 0 #e0a800;
+    padding: 8px 15px;
+    height: auto;
+    line-height: 1.4;
+    font-size: 14px!important;
+}
+
+.button-warning:hover,
+.button-warning:focus {
+    background: #ffc733 !important;
+    border-color: #e6b820 !important;
+    color: #111!important;
+    text-shadow: 0 -1px 1px #f0c540, 1px 0 1px #f0c540, 0 1px 1px #f0c540, -1px 0 1px #f0c540;
+    box-shadow: 0 1px 0 #f0c540;
+}
+
+.chechire-plugin-block {
+    position: relative;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    background-color: #ffffff;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+.chechire-plugin-block h3 {
+    position: absolute;
+    top: -14px;
+    left: 5px;
+    margin: 0;
+    padding: 4px 12px;
+    font-size: 14px;
+    background-color: #f0f0f1;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    color: #1d2327;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.td-chat-container {
+    position: relative;
+}
+
+.chat-modal {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    justify-content: center;  /* centra orizzontalmente */
+    align-items: center;      /* centra verticalmente */
+
+    border: 1px solid #ccd0d4;
+    border-radius: 4px !important;
+    background-color: #ffffff;
+    padding: 0 !important;
+
+    /* RIMUOVI questa riga per far funzionare il centramento */
+    margin: 55px 0 16px 20px !important;
+}
+
+.cheshire-chat-open {
+    /* Questo è l'elemento da centrare */
+    display: block !important;
+    position: relative !important;
+    margin: 25% 0 0 10%;
+}
+
+.cheshire-accordion-toggle {
+    all: unset;
+    cursor: pointer;
+    font-weight: bold;
+    align-items: center;
+    gap: 6px;
+    padding: 0.5em;
+    display: block;
+    background: #f7f7f7;
+    border: 1px solid #e2e2e2;
+    width: 100%;
+}
+
+.cheshire-accordion-toggle .dashicons {
+    transition: transform 0.2s ease;
+    font-size: 18px;
+}
+
+.cheshire-accordion-content {
+    display: none;
+}
+
+.cheshire-accordion-content.visible {
+    display: table-row;
+}
+
+.cheshire-accordion-swatch {
+    display: inline-block;
+    float: right;
+}
+
+.cheshire-accordion-swatch span {
+    width: 14px;
+    height: 14px;
+    border: 1px solid #cfcfcf;
+    border-radius: 3px;
+    display: inline-block;
 }

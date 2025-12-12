@@ -38,7 +38,7 @@ function cheshirecat_admin_menu()
         __NAMESPACE__ . '\cheshirecat_configuration_page' // Callback function
     );
     // Add the "Style" submenu
-    add_submenu_page(
+    $style_hooks = add_submenu_page(
         'cheshire-cat', // Parent slug
         __('Style', 'cheshire-cat-chatbot'), // Page title
         __('Style', 'cheshire-cat-chatbot'), // Menu title
@@ -46,6 +46,8 @@ function cheshirecat_admin_menu()
         'cheshire-cat-style', // Menu slug
         __NAMESPACE__ . '\cheshirecat_style_page' // Callback function
     );
+
+    $cheshire_admin_hooks[$style_hooks] = 'admin_style.js';
 
     // Add the "Playground" submenu
     add_submenu_page(
@@ -77,5 +79,18 @@ function cheshirecat_admin_menu()
         'cheshire-cat-meowww', // Menu slug
         __NAMESPACE__ . '\cheshirecat_meowww_page' // Callback function
     );
+
+    // Salviamo il hook_suffix per usarlo nel passo 2
+    add_action("admin_enqueue_scripts", function($hook) use ($cheshire_admin_hooks) {
+        if (isset($cheshire_admin_hooks[$hook])) {
+            wp_enqueue_script(
+                $hook,
+                plugin_dir_url(dirname(__FILE__, 2)) . 'assets/js/' . $cheshire_admin_hooks[$hook],
+                ['jquery'],
+                '1.0',
+                false
+            );
+        }
+    });
 }
 add_action('admin_menu', __NAMESPACE__ . '\cheshirecat_admin_menu');
