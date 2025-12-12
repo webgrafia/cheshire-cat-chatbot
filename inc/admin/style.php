@@ -676,7 +676,7 @@ function cheshirecat_style_page()
                                         <button id="cheshire-chat-new" aria-label="New conversation" title="Start a new conversation" onclick="return false;">
                                             <i class="fas fa-plus"></i>
                                         </button>
-                                        <button id="cheshire-chat-close" aria-label="Chiudi chat" onclick="return false;">
+                                        <button id="cheshire-chat-close" aria-label="Close chat" onclick="return false;">
                                             <i class="fas fa-times"></i>
                                         </button>
                                     </div>
@@ -685,15 +685,12 @@ function cheshirecat_style_page()
                                             <p><?php echo get_option('cheshire_chat_welcome_message'); ?></p>
                                         </div>
                                         <div class="user-message">
-                                            <p>Un test, eh? Come un gioco nel mondo delle meraviglie! Posso aiutarti in qualche modo?</p>
-                                        </div>
-                                        <div class="error-message">
-                                            <p>Error: URL o token dello Stregatto non impostato.</p>
+                                            <p>Just a test—like a little game in Wonderland. How may I help you?</p>
                                         </div>
                                     </div>
                                     <div id="cheshire-predefined-responses">
-                                        <span class="predefined-response-tag">Risposta 1</span>
-                                        <span class="predefined-response-tag">Risposta 2</span>
+                                        <span class="predefined-response-tag">White Rabbit</span>
+                                        <span class="predefined-response-tag">Drink Me</span>
                                     </div>
                                     <div id="cheshire-chat-input-container">
                                         <input type="text" id="cheshire-chat-input" placeholder="<?php echo esc_attr(get_option('cheshire_plugin_input_placeholder')); ?>">
