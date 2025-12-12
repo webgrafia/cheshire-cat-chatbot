@@ -492,8 +492,8 @@ function cheshirecat_admin_enqueue_scripts($hook) {
     ";
     wp_add_inline_style( 'cheshire-chat-css', $playground_css );
 
-    // Add dynamic CSS based on user settings.
-    wp_add_inline_style( 'cheshire-chat-css-more', cheshirecat_generate_dynamic_css() );
+    // Add dynamic CSS based on user settings. Attach to the enqueued base chat stylesheet handle.
+    wp_add_inline_style( 'cheshire-chat-css', cheshirecat_generate_dynamic_css() );
 }
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\cheshirecat_admin_enqueue_scripts' );
 
