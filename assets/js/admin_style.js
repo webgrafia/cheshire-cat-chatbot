@@ -49,13 +49,15 @@
         // ===== Mappa delle corrispondenze =====
         const colorVarMap = {
             'cheshire_chat_button_color': '--chat-primary-color',
-            'cheshire_chat_bot_message_color': '--chat-primary-hover',
-            'cheshire_chat_user_message_color': '--chat-primary-active',
+            // Bot message color drives both the bot bubble background and the primary-hover used by chips text
+            'cheshire_chat_bot_message_color': ['--chat-primary-hover', '--chat-bot-msg-bg'],
+            // User message color drives both user bubble background and primary-active
+            'cheshire_chat_user_message_color': ['--chat-primary-active', '--chat-user-msg-bg'],
             'cheshire_chat_user_text_color': '--chat-user-msg-color',
-            'cheshire_chat_bot_message_color': '--chat-bot-msg-bg',
             'cheshire_chat_bot_text_color': '--chat-bot-msg-color',
             'cheshire_chat_header_color': '--chat-header-bg-color',
-            'cheshire_chat_footer_color': '--chat-bg-color',
+            // Footer color maps to both chat bg and footer bg
+            'cheshire_chat_footer_color': ['--chat-bg-color', '--chat-footer-bg-color'],
             'cheshire_chat_background_color': '--chat-messages-bg',
             'cheshire_chat_header_buttons_color': '--chat-header-buttons-color',
             'cheshire_chat_header_buttons_color_hover': '--chat-header-buttons-color-hover',
@@ -67,9 +69,6 @@
             'cheshire_chat_button_color_hover_background': '--chat-button-color-hover-background',
             'cheshire_chat_button_color_focus': '--chat-button-color-focus',
             'cheshire_chat_button_color_active': '--chat-button-color-active',
-            // duplicazioni utili
-            'cheshire_chat_user_message_color': '--chat-user-msg-bg',
-            'cheshire_chat_footer_color': '--chat-footer-bg-color',
         };
 
         const inputVarMap = {
@@ -93,7 +92,7 @@
 
             let cssVar;
 
-            // Caso 1: nella mappa
+            // Caso 1: nella mappa (può essere stringa o array di stringhe)
             if (colorVarMap[nameAttr]) {
                 cssVar = colorVarMap[nameAttr];
             }
@@ -104,7 +103,12 @@
                     .replace(/_/g, '-');
             }
 
-            updateCSSVar(cssVar, colorValue);
+            // Aggiorna una o più variabili CSS
+            if (Array.isArray(cssVar)) {
+                cssVar.forEach(v => updateCSSVar(v, colorValue));
+            } else {
+                updateCSSVar(cssVar, colorValue);
+            }
 
             // ===== Reset selezione tema su "No theme" solo per modifiche manuali =====
             if (!isApplyingTheme) {

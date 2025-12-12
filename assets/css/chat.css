@@ -501,24 +501,24 @@
 }
 
 .cheshire-related-links{
-   background: white;
+   background-color: var(--chat-messages-bg);
 }
 
 .cheshire-related-links-tag a {
     display: inline-block;
     background-color: var(--chat-primary-color);
-    color: white;
+    color: var(--chat-primary-hover);
     padding: 5px 10px;
-    border-radius: 15px;
+    border-radius: var(--chat-msg-border-radius);
     font-size: 12px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, color 0.2s;
     text-decoration: none;
 }
 
 .cheshire-related-links-tag a:hover {
     background-color: var(--chat-primary-hover);
-    color: white;
+    color: var(--chat-primary-color);
 }
 
 
@@ -529,9 +529,9 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    border: 1px solid #eee;
+    background-color: var(--chat-messages-bg);
+    border-radius: var(--chat-border-radius);
+    border: 1px solid var(--chat-border-color);
 }
 
 .cheshire-related-links:before {
@@ -541,7 +541,13 @@
     margin-bottom: 10px;
     font-weight: bold;
     font-size: 16px;
-    color: #333;
+    color: var(--chat-bot-msg-color);
+}
+
+/* Accessibility: focus state for related links tags */
+.cheshire-related-links-tag a:focus {
+    outline: 2px solid var(--chat-button-color-focus);
+    outline-offset: 2px;
 }
 
 .bot-message table {
@@ -620,10 +626,10 @@
     background-color: var(--chat-primary-color);
     color: var(--chat-primary-hover);
     padding: 5px 10px;
-    border-radius: 15px;
+    border-radius: var(--chat-msg-border-radius);
     font-size: 12px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .predefined-response-tag:hover {
