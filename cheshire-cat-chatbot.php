@@ -547,6 +547,10 @@ function cheshirecat_generate_dynamic_css() {
     $cheshire_chat_button_color_active = get_option('cheshire_chat_button_color_active', '#004494');
     $cheshire_chat_input_color = get_option('cheshire_chat_input_color', '#ffffff');
     $cheshire_chat_input_text_color = get_option('cheshire_chat_input_text_color', '#2c3338');
+    $cheshire_chat_error_msg_bg= get_option('cheshire_chat_error_msg_bg', '#ffcccc');
+    $cheshire_chat_error_msg_border = get_option('cheshire_chat_error_msg_border', '#ffaaaa');
+    $cheshire_chat_error_msg_color = get_option('cheshire_chat_error_msg_color', '#991111');
+    $cheshire_chat_border_color = get_option('cheshire_chat_border_color', '#dddddd');
     $custom_css = "
         :root {
             --chat-primary-color:" . esc_attr( $cheshire_chat_button_color) . ";
@@ -556,10 +560,10 @@ function cheshirecat_generate_dynamic_css() {
             --chat-user-msg-color:" . esc_attr( $cheshire_chat_user_text_color) . ";
             --chat-bot-msg-bg:" . esc_attr( $cheshire_chat_bot_message_color) . ";
             --chat-bot-msg-color:" . esc_attr( $cheshire_chat_bot_text_color) . ";
-            --chat-error-msg-bg: #ffcccc;
-            --chat-error-msg-border: #ffaaaa;
-            --chat-error-msg-color: #991111;
-            --chat-border-color: #ddd;
+            --chat-error-msg-bg:" . esc_attr( $cheshire_chat_error_msg_bg) . ";
+            --chat-error-msg-border:" . esc_attr( $cheshire_chat_error_msg_border) . ";
+            --chat-error-msg-color:" . esc_attr( $cheshire_chat_error_msg_color) . ";
+            --chat-border-color:" . esc_attr( $cheshire_chat_border_color ) . ";
             --chat-header-bg-color:" . esc_attr( $cheshire_chat_header_color) . ";
             --chat-bg-color:" . esc_attr( $cheshire_chat_footer_color) . ";
             --chat-footer-bg-color:" . esc_attr( $cheshire_chat_footer_color) . ";
@@ -579,11 +583,11 @@ function cheshirecat_generate_dynamic_css() {
             --chat-button-color-active:" . esc_attr( $cheshire_chat_button_color_active) . ";
         }
 
-        .cheshire-admin .user-message p {
+        #cheshire-chat-messages .user-message p {
             color: var(--chat-user-msg-color);
         }
 
-        .cheshire-admin .box-message p {
+        #cheshire-chat-messages .bot-message p {
             color: var(--chat-bot-msg-color);
         }
 
@@ -637,6 +641,11 @@ function cheshirecat_generate_dynamic_css() {
         #cheshire-chat-close:focus { /* Added close button */
             outline: 2px solid var(--chat-button-color);
             outline-offset: 2px;
+        }
+        
+        #cheshire-chat-messages .error-message p {
+            color: var(--chat-error-msg-color);
+            font-weight: 600;
         }
     ";
 

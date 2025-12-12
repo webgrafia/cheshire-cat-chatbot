@@ -69,7 +69,7 @@
             'cheshire_chat_button_color_active': '--chat-button-color-active',
             // duplicazioni utili
             'cheshire_chat_user_message_color': '--chat-user-msg-bg',
-            'cheshire_chat_footer_color': '--chat-footer-bg-color'
+            'cheshire_chat_footer_color': '--chat-footer-bg-color',
         };
 
         const inputVarMap = {
@@ -81,6 +81,9 @@
             'cheshire_chat_bot_msg_bg' : 'cheshire_chat_bot_message_color',
             'cheshire_chat_footer_bg_color' : 'cheshire_chat_footer_color',
         };
+
+        // Flag per distinguere cambi programmati (applicazione tema) da input manuali
+        let isApplyingTheme = false;
 
         // ===== Gestione di tutti gli input color =====
         $('input[type="color"]').on('input change', function () {
@@ -102,6 +105,16 @@
             }
 
             updateCSSVar(cssVar, colorValue);
+
+            // ===== Reset selezione tema su "No theme" solo per modifiche manuali =====
+            if (!isApplyingTheme) {
+                const $themeSel = $('#cheshire_chat_selected_theme');
+                if ($themeSel.length && $themeSel.val() !== '') {
+                    // Imposta il valore vuoto così il salvataggio registrerà "No theme"
+                    $themeSel.val('');
+                    // Non triggeriamo change per evitare il ricaricamento di un tema
+                }
+            }
         });
 
         // ===== Theme selection & JSON loading =====
@@ -112,20 +125,25 @@
             function applyThemeToInputs(themeData) {
                 if (!themeData || typeof themeData !== 'object') return;
 
+                // Segnala che stiamo applicando il tema (cambi programmati)
+                isApplyingTheme = true;
+
                 Object.keys(themeData).forEach(function (jsonKey) {
                     const val = themeData[jsonKey];
                     if (typeof val !== 'string' || val.trim() === '') return;
 
                     const inputName = 'cheshire_' + jsonKey.replace(/-/g, '_');
 
+
                     const $input = $('input[name="' + inputName + '"]');
 
                     // Aggiorna input se presente
                     if ($input.length) {
+                        console.log(inputName, val)
                         $input.val(val);
                         $input.trigger('input').trigger('change');
                     } else {
-                        console.log(inputName)
+                        //console.log(inputName)
                         if(inputVarMap[inputName]) {
                             //console.log(inputVarMap[inputName])
                             let $_input = $('input[name="' + inputVarMap[inputName] + '"]');
@@ -145,6 +163,9 @@
 
                     updateCSSVar(mappedVar, val);
                 });
+
+                // Fine applicazione tema
+                isApplyingTheme = false;
             }
 
             function fetchAndApplyTheme(fileName) {

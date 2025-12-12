@@ -120,6 +120,10 @@ function cheshirecat_style_page()
             update_option('cheshire_chat_button_color_active', '#004494');
             update_option('cheshire_chat_input_color', '#ffffff');
             update_option('cheshire_chat_input_text_color', '#2c3338');
+            update_option('cheshire_chat_error_msg_bg', '#ffcccc');
+            update_option('cheshire_chat_error_msg_border', '#ffaaaa');
+            update_option('cheshire_chat_error_msg_color', '#991111');
+            update_option('cheshire_chat_border_color', '#dddddd');
 
             // Add admin notice
             add_settings_error(
@@ -234,6 +238,26 @@ function cheshirecat_style_page()
                 $cheshire_chat_input_text_color = sanitize_text_field(wp_unslash($_POST['cheshire_chat_input_text_color']));
                 update_option('cheshire_chat_input_text_color', $cheshire_chat_input_text_color);
             }
+            if (isset($_POST['cheshire_chat_error_msg_bg'])) {
+                $cheshire_chat_error_msg_bg = sanitize_text_field(wp_unslash($_POST['cheshire_chat_error_msg_bg']));
+                update_option('cheshire_chat_error_msg_bg', $cheshire_chat_error_msg_bg);
+            }
+            if (isset($_POST['cheshire_chat_error_msg_border'])) {
+                $cheshire_chat_error_msg_border = sanitize_text_field(wp_unslash($_POST['cheshire_chat_error_msg_border']));
+                update_option('cheshire_chat_error_msg_border', $cheshire_chat_error_msg_border);
+            }
+            if (isset($_POST['cheshire_chat_error_msg_color'])) {
+                $cheshire_chat_error_msg_color = sanitize_text_field(wp_unslash($_POST['cheshire_chat_error_msg_color']));
+                update_option('cheshire_chat_error_msg_color', $cheshire_chat_error_msg_color);
+            }
+            if (isset($_POST['cheshire_chat_border_color'])) {
+                $cheshire_chat_border_color = sanitize_text_field(wp_unslash($_POST['cheshire_chat_border_color']));
+                update_option('cheshire_chat_border_color', $cheshire_chat_border_color);
+            }
+            if (isset($_POST['cheshire_chat_bot_text_color'])) {
+                $cheshire_chat_bot_text_color = sanitize_text_field(wp_unslash($_POST['cheshire_chat_bot_text_color']));
+                update_option('cheshire_chat_bot_text_color', $cheshire_chat_bot_text_color);
+            }
 
 
             if (isset($_POST['cheshire_chat_welcome_message'])) {
@@ -281,6 +305,10 @@ function cheshirecat_style_page()
     $cheshire_chat_button_color_active = get_option('cheshire_chat_button_color_active', '#004494');
     $cheshire_chat_input_color = get_option('cheshire_chat_input_color', '#ffffff');
     $cheshire_chat_input_text_color = get_option('cheshire_chat_input_text_color', '#2c3338');
+    $cheshire_chat_error_msg_bg= get_option('cheshire_chat_error_msg_bg', '#ffcccc');
+    $cheshire_chat_error_msg_border = get_option('cheshire_chat_error_msg_border', '#ffaaaa');
+    $cheshire_chat_error_msg_color = get_option('cheshire_chat_error_msg_color', '#991111');
+    $cheshire_chat_border_color = get_option('cheshire_chat_border_color', '#ddddd');
     // Avatar is always enabled
     $cheshire_plugin_enable_avatar = 'on';
 
@@ -326,10 +354,10 @@ function cheshirecat_style_page()
             --chat-user-msg-color: <?php echo esc_attr( $cheshire_chat_user_text_color  ); ?>;
             --chat-bot-msg-bg: <?php echo esc_attr( $cheshire_chat_bot_message_color  ); ?>;
             --chat-bot-msg-color: <?php echo esc_attr( $cheshire_chat_bot_text_color  ); ?>;
-            --chat-error-msg-bg: #ffcccc;
-            --chat-error-msg-border: #ffaaaa;
-            --chat-error-msg-color: #991111;
-            --chat-border-color: #ddd;
+            --chat-error-msg-bg: <?php echo esc_attr( $cheshire_chat_error_msg_bg ); ?>;
+            --chat-error-msg-border: <?php echo esc_attr( $cheshire_chat_error_msg_border ); ?>;
+            --chat-error-msg-color: <?php echo esc_attr( $cheshire_chat_error_msg_color ); ?>;
+            --chat-border-color: <?php echo esc_attr( $cheshire_chat_border_color ); ?>;
             --chat-header-bg-color: <?php echo esc_attr($cheshire_chat_header_color); ?>;
             --chat-bg-color: <?php echo esc_attr($cheshire_chat_footer_color); ?>;
             --chat-footer-bg-color: <?php echo esc_attr($cheshire_chat_footer_color); ?>;
@@ -349,11 +377,11 @@ function cheshirecat_style_page()
             --chat-button-color-active: <?php echo esc_attr( $cheshire_chat_button_color_active ); ?>;
         }
 
-        .cheshire-admin .user-message p {
+        #cheshire-chat-messages .user-message p {
             color: var(--chat-user-msg-color);
         }
 
-        .cheshire-admin .box-message p {
+        #cheshire-chat-messages .bot-message p {
             color: var(--chat-bot-msg-color);
         }
 
@@ -408,6 +436,11 @@ function cheshirecat_style_page()
             outline: 2px solid var(--chat-button-color);
             outline-offset: 2px;
         }
+
+        #cheshire-chat-messages .error-message p {
+            color: var(--chat-error-msg-color);
+            font-weight: 600;
+        }
     </style>
     <div class="wrap cheshire-admin">
         <h1><?php if (function_exists('get_admin_page_title')) {
@@ -422,7 +455,7 @@ function cheshirecat_style_page()
                     <tr>
                         <td style="width: 60%" class="mobile-width">
                             <div class="chechire-plugin-block">
-                                <h3><?php esc_html_e('Themes', 'cheshire-cat-chatbot'); ?></h3>
+                                <h3><?php esc_html_e('Main', 'cheshire-cat-chatbot'); ?></h3>
                                 <table class="form-table">
                                     <tr valign="top">
                                         <th scope="row"><?php esc_html_e('Theme Selected', 'cheshire-cat-chatbot'); ?></th>
@@ -437,6 +470,43 @@ function cheshirecat_style_page()
                                                     <?php endforeach; ?>
                                                 <?php endif; ?>
                                             </select>
+                                        </td>
+                                    </tr>
+                                    <tr valign="top">
+                                        <th scope="row"><?php esc_html_e('Chat Border Color', 'cheshire-cat-chatbot'); ?></th>
+                                        <td class="text-right">
+                                            <input type="color" name="cheshire_chat_border_color" value="<?php echo esc_attr($cheshire_chat_border_color); ?>" />
+                                        </td>
+                                    </tr>
+                                    <tr class="cheshire-accordion-error">
+                                        <th colspan="2">
+                                            <button type="button" class="cheshire-accordion-toggle">
+                                                <span class="dashicons dashicons-plus"></span>
+                                                <?php esc_html_e('Messaggio di errore', 'cheshire-cat-chatbot'); ?>
+                                                <div class="cheshire-accordion-swatch">
+                                                    <span style="background: <?php echo esc_attr($cheshire_chat_header_buttons_color); ?>;"></span>
+                                                    <span style="background: <?php echo esc_attr($cheshire_chat_header_buttons_color_hover); ?>;"></span>
+                                                    <span style="background: <?php echo esc_attr($cheshire_chat_header_buttons_color_hover_background); ?>;"></span>
+                                                </div>
+                                            </button>
+                                        </th>
+                                    </tr>
+                                    <tr class="cheshire-accordion-content">
+                                        <th scope="row"><?php esc_html_e('Chat Header Error Message Background', 'cheshire-cat-chatbot'); ?></th>
+                                        <td class="text-right">
+                                            <input type="color" name="cheshire_chat_error_msg_bg" value="<?php echo esc_attr($cheshire_chat_error_msg_bg); ?>" />
+                                        </td>
+                                    </tr>
+                                    <tr class="cheshire-accordion-content">
+                                        <th scope="row"><?php esc_html_e('Chat Header Error Message Border', 'cheshire-cat-chatbot'); ?></th>
+                                        <td class="text-right">
+                                            <input type="color" name="cheshire_chat_error_msg_border" value="<?php echo esc_attr($cheshire_chat_error_msg_border); ?>" />
+                                        </td>
+                                    </tr>
+                                    <tr class="cheshire-accordion-content">
+                                        <th scope="row"><?php esc_html_e('Chat Header Error Message Text Color', 'cheshire-cat-chatbot'); ?></th>
+                                        <td class="text-right">
+                                            <input type="color" name="cheshire_chat_error_msg_color" value="<?php echo esc_attr($cheshire_chat_error_msg_color); ?>" />
                                         </td>
                                     </tr>
                                 </table>
