@@ -75,6 +75,21 @@ function cheshirecat_process_message() {
     try {
         // Send message and get response.
         $response = $cheshire_cat->sendMessage( $message );
+        if (get_option('cheshire_plugin_show_timeout_message', 'off') === 'on') {
+            $http_error = $cheshire_cat->getClient()->getLastHttpError();
+            if (is_wp_error($http_error) && $http_error->get_error_code() === 'http_request_failed') {
+                $error_message = $http_error->get_error_message();
+                if (strpos($error_message, 'cURL error 28:') === 0 || $error_message === 'fsocket timed out') {
+                    // Keep error data as a string for existing consumers; identify timeouts for the widget.
+                    wp_send_json([
+                        'success' => false,
+                        'data' => __('The response timed out.', 'cheshire-cat-chatbot'),
+                        'code' => 'cheshire_http_timeout',
+                    ]);
+                    return;
+                }
+            }
+        }
         wp_send_json_success( $response );
     } catch ( \Exception $e ) {
         // Handle errors.

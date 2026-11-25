@@ -664,6 +664,9 @@ jQuery(document).ready(function ($) {
                         // Extract and display the content
                         var content = extractContent(response.data);
                         displayMessage(content, 'bot');
+                    } else if (response.code === 'cheshire_http_timeout') {
+                        // Show timeouts with the normal reply style, without the error prefix.
+                        displayMessage(response.data, 'bot');
                     } else {
                         // Handle error response
                         displayMessage(response.data || 'Unknown error', 'error');

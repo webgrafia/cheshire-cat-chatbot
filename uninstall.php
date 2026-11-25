@@ -19,6 +19,8 @@ $option_names = array(
     'cheshire_plugin_token',
     'cheshire_plugin_cat_version',
     'cheshire_plugin_api_key',
+    'cheshire_plugin_http_timeout',
+    'cheshire_plugin_show_timeout_message',
     'cheshire_plugin_global_chat',
     'cheshire_plugin_enable_avatar',
     'cheshire_plugin_enable_context',

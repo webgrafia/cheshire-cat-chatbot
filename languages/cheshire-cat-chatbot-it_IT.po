@@ -467,3 +467,23 @@ msgid ""
 msgstr ""
 "Avrai bisogno delle seguenti informazioni dalla configurazione "
 "dell'intelligenza artificiale del tuo Stregatto:"
+
+#: inc/admin/overview.php
+msgid "HTTP timeout (seconds)"
+msgstr "Timeout HTTP (secondi)"
+
+#: inc/admin/overview.php
+msgid "Applies to HTTP requests, not WebSocket. Enter 5 to 300 seconds (default: 15). Other server limits may expire sooner."
+msgstr "Si applica alle richieste HTTP, non a WebSocket. Inserisci da 5 a 300 secondi (valore predefinito: 15). Altri limiti del server possono scadere prima."
+
+#: inc/admin/overview.php
+msgid "Show timeout message"
+msgstr "Mostra messaggio di timeout"
+
+#: inc/admin/overview.php
+msgid "Show a message to the user in the chat when an HTTP request times out."
+msgstr "Mostra un messaggio all'utente nella chat quando una richiesta HTTP supera il tempo massimo di attesa"
+
+#: inc/ajax.php
+msgid "The response timed out."
+msgstr "Tempo d’attesa della risposta scaduto"

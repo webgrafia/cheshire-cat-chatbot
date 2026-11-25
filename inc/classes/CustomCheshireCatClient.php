@@ -52,12 +52,22 @@ class Custom_Cheshire_Cat_Client {
     protected $api_key;
     protected $cat_version;
     protected $timeout = 15;
+    protected $last_http_error = null;
 
     public function __construct( $base_url, $token, $cat_version = 'v1', $api_key = '' ) {
         $this->cat_version = $cat_version;
         $this->base_url    = $this->normalizeUrl( $base_url );
         $this->token       = $token;
         $this->api_key     = $api_key;
+        $this->timeout     = filter_var(
+            get_option('cheshire_plugin_http_timeout', 15),
+            FILTER_VALIDATE_INT,
+            ['options' => ['min_range' => 5, 'max_range' => 300]]
+        ) ?: 15;
+    }
+
+    public function getLastHttpError() {
+        return $this->last_http_error;
     }
 
     protected function normalizeUrl( $url ) {
@@ -104,6 +114,7 @@ class Custom_Cheshire_Cat_Client {
     }
 
     private function handleRequest($method, $uri, $options = []) {
+        $this->last_http_error = null;
         $url = rtrim($this->getBaseUrl(), '/') . '/' . ltrim($uri, '/');
         
         $args = [
@@ -120,6 +131,7 @@ class Custom_Cheshire_Cat_Client {
         $response = wp_remote_request($url, $args);
 
         if (is_wp_error($response)) {
+            $this->last_http_error = $response;
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 error_log('Cheshire Cat API Error (' . $method . ' ' . $uri . '): ' . $response->get_error_message());
             }
