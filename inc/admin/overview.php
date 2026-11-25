@@ -58,6 +58,14 @@ function cheshirecat_overview_page()
             update_option('cheshire_plugin_websocket_url', $cheshire_plugin_websocket_url);
         }
 
+        $cheshire_plugin_http_timeout = filter_var(
+            isset($_POST['cheshire_plugin_http_timeout']) ? wp_unslash($_POST['cheshire_plugin_http_timeout']) : null,
+            FILTER_VALIDATE_INT,
+            ['options' => ['min_range' => 5, 'max_range' => 300]]
+        ) ?: 15;
+        update_option('cheshire_plugin_http_timeout', $cheshire_plugin_http_timeout);
+        update_option('cheshire_plugin_show_timeout_message', isset($_POST['cheshire_plugin_show_timeout_message']) && $_POST['cheshire_plugin_show_timeout_message'] === 'on' ? 'on' : 'off');
+
         add_settings_error(
             'cheshire_cat_overview_options',
             'cheshire_cat_settings_updated',
@@ -73,6 +81,12 @@ function cheshirecat_overview_page()
     $cheshire_plugin_api_key = get_option('cheshire_plugin_api_key', '');
     $cheshire_plugin_enable_websocket = get_option('cheshire_plugin_enable_websocket', 'off');
     $cheshire_plugin_websocket_url = get_option('cheshire_plugin_websocket_url', '');
+    $cheshire_plugin_http_timeout = filter_var(
+        get_option('cheshire_plugin_http_timeout', 15),
+        FILTER_VALIDATE_INT,
+        ['options' => ['min_range' => 5, 'max_range' => 300]]
+    ) ?: 15;
+    $cheshire_plugin_show_timeout_message = get_option('cheshire_plugin_show_timeout_message', 'off');
 
     // Visibilità iniziale dei campi (evita flash al caricamento della pagina)
     $is_v2          = ( $cheshire_plugin_cat_version === 'v2' );
@@ -161,6 +175,20 @@ function cheshirecat_overview_page()
                             <p class="description">
                                 <?php esc_html_e('Bearer token for Cheshire Cat v1 authentication. Required only when WebSocket mode is enabled, because the browser connects directly to Cheshire Cat and must authenticate itself. In REST/AJAX mode the PHP backend handles authentication server-side and the token is never exposed to the browser.', 'cheshire-cat-chatbot'); ?>
                             </p>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row"><label for="cheshire_plugin_http_timeout"><?php esc_html_e('HTTP timeout (seconds)', 'cheshire-cat-chatbot'); ?></label></th>
+                        <td>
+                            <input type="number" id="cheshire_plugin_http_timeout" name="cheshire_plugin_http_timeout" value="<?php echo esc_attr($cheshire_plugin_http_timeout); ?>" min="5" max="300" step="1" class="small-text" />
+                            <p class="description"><?php esc_html_e('Applies to HTTP requests, not WebSocket. Enter 5 to 300 seconds (default: 15). Other server limits may expire sooner.', 'cheshire-cat-chatbot'); ?></p>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row"><?php esc_html_e('Show timeout message', 'cheshire-cat-chatbot'); ?></th>
+                        <td>
+                            <input type="checkbox" id="cheshire_plugin_show_timeout_message" name="cheshire_plugin_show_timeout_message" value="on" <?php checked($cheshire_plugin_show_timeout_message, 'on'); ?> />
+                            <label for="cheshire_plugin_show_timeout_message"><?php esc_html_e('Show a message to the user in the chat when an HTTP request times out.', 'cheshire-cat-chatbot'); ?></label>
                         </td>
                     </tr>
                 </table>
